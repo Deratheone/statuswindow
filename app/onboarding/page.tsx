@@ -372,7 +372,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex flex-col items-center justify-center p-2 sm:p-4">
       <Link
         href="/"
         className="absolute top-4 left-4 text-white flex items-center gap-2 hover:text-purple-400 transition-colors"
@@ -381,7 +381,7 @@ export default function OnboardingPage() {
         <span>Return to the Main Gate</span>
       </Link>
 
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-[95%] sm:max-w-2xl">
         <div className="flex justify-center mb-6">
           <div className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-yellow-400" />
@@ -533,7 +533,7 @@ export default function OnboardingPage() {
                   <RadioGroup
                     value={formData.strengthFrequency}
                     onValueChange={(value) => setFormData({ ...formData, strengthFrequency: value })}
-                    className="grid grid-cols-5 gap-2"
+                    className="grid grid-cols-2 sm:grid-cols-5 gap-2"
                   >
                     <div className="flex flex-col items-center">
                       <RadioGroupItem value="never" id="strength-never" className="sr-only" />
@@ -605,7 +605,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>Select physical activities you currently practice:</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {strengthActivities.map((activity) => (
                       <div key={activity.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -623,7 +623,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>What physical achievements do you seek?</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {strengthGoals.map((goal) => (
                       <div key={goal.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -681,7 +681,7 @@ export default function OnboardingPage() {
                   <RadioGroup
                     value={formData.intelligenceFrequency}
                     onValueChange={(value) => setFormData({ ...formData, intelligenceFrequency: value })}
-                    className="grid grid-cols-5 gap-2"
+                    className="grid grid-cols-2 sm:grid-cols-5 gap-2"
                   >
                     <div className="flex flex-col items-center">
                       <RadioGroupItem value="never" id="intelligence-never" className="sr-only" />
@@ -753,7 +753,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>Select learning activities you currently practice:</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {intelligenceActivities.map((activity) => (
                       <div key={activity.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -771,7 +771,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>What knowledge do you seek to gain?</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {intelligenceGoals.map((goal) => (
                       <div key={goal.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -829,7 +829,7 @@ export default function OnboardingPage() {
                   <RadioGroup
                     value={formData.manaFrequency}
                     onValueChange={(value) => setFormData({ ...formData, manaFrequency: value })}
-                    className="grid grid-cols-5 gap-2"
+                    className="grid grid-cols-2 sm:grid-cols-5 gap-2"
                   >
                     <div className="flex flex-col items-center">
                       <RadioGroupItem value="never" id="mana-never" className="sr-only" />
@@ -901,7 +901,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>Select wellness activities you currently practice:</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {manaActivities.map((activity) => (
                       <div key={activity.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -917,7 +917,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>What aspects of mental wellness do you wish to improve?</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {manaGoals.map((goal) => (
                       <div key={goal.id} className="flex items-center space-x-2">
                         <Checkbox
@@ -955,7 +955,7 @@ export default function OnboardingPage() {
                   <RadioGroup
                     value={formData.dailyTime}
                     onValueChange={(value) => setFormData({ ...formData, dailyTime: value })}
-                    className="grid grid-cols-2 gap-2"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-2"
                   >
                     <div className="flex flex-col items-center">
                       <RadioGroupItem value="5-15min" id="time-5-15" className="sr-only" />
@@ -1017,7 +1017,7 @@ export default function OnboardingPage() {
                   <RadioGroup
                     value={formData.preferredTime}
                     onValueChange={(value) => setFormData({ ...formData, preferredTime: value })}
-                    className="grid grid-cols-4 gap-2"
+                    className="grid grid-cols-2 sm:grid-cols-4 gap-2"
                   >
                     <div className="flex flex-col items-center">
                       <RadioGroupItem value="morning" id="time-morning" className="sr-only" />
@@ -1216,7 +1216,7 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>What dragons currently block your path?</Label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {obstacleOptions.map((obstacle) => (
                       <div key={obstacle.id} className="flex items-center space-x-2">
                         <Checkbox

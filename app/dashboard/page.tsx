@@ -164,8 +164,8 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <div className="container mx-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-2 py-4 sm:p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Status Window */}
           <div className="lg:col-span-1">
             <StatusWindow userData={userData} />
@@ -217,15 +217,23 @@ export default function DashboardPage() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="dashboard">
-              <TabsList className="bg-slate-800/70 border border-purple-500/30">
-                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-                <TabsTrigger value="quests">Quests</TabsTrigger>
-                <TabsTrigger value="log-activity">Log Activity</TabsTrigger>
-                <TabsTrigger value="progress">Progress</TabsTrigger>
+              <TabsList className="bg-slate-800/70 border border-purple-500/30 flex flex-wrap h-auto">
+                <TabsTrigger value="dashboard" className="flex-1">
+                  Dashboard
+                </TabsTrigger>
+                <TabsTrigger value="quests" className="flex-1">
+                  Quests
+                </TabsTrigger>
+                <TabsTrigger value="log-activity" className="flex-1">
+                  Log
+                </TabsTrigger>
+                <TabsTrigger value="progress" className="flex-1">
+                  Progress
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="dashboard" className="mt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2">

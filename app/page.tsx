@@ -28,7 +28,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center gap-12">
+      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20 flex flex-col md:flex-row items-center gap-8 sm:gap-12">
         <div className="flex-1 space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
             Level Up Your <span className="text-yellow-400">Real Life</span>
@@ -124,13 +124,13 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
             Epic Features
           </span>
         </h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           <div className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all">
             <Dumbbell className="h-10 w-10 text-red-400 mb-4" />
             <h3 className="text-xl font-bold mb-2">Character Development</h3>
@@ -156,13 +156,13 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
             How It Works
           </span>
         </h2>
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="text-center">
             <div className="w-16 h-16 rounded-full bg-purple-900 flex items-center justify-center mx-auto mb-4 border-2 border-purple-500">
               <span className="text-2xl">1</span>
@@ -195,7 +195,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <div className="bg-gradient-to-r from-slate-800 to-purple-900 rounded-xl p-8 md:p-12 text-center shadow-[0_0_30px_rgba(168,85,247,0.3)]">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Begin Your Adventure?</h2>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">

@@ -64,7 +64,7 @@ export default function QuestsPage() {
         <div></div>
       </nav>
 
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto px-2 py-4 sm:p-4">
         <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export default function QuestsPage() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="active">
-              <TabsList className="bg-slate-700/50 border border-slate-600">
+              <TabsList className="bg-slate-700/50 border border-slate-600 w-full">
                 <TabsTrigger value="active">Active Quests</TabsTrigger>
                 <TabsTrigger value="completed">Completed Quests</TabsTrigger>
               </TabsList>

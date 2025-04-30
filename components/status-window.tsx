@@ -45,16 +45,16 @@ export function StatusWindow({ userData }: StatusWindowProps) {
       )}
 
       <CardContent className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-6">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl sm:mb-0 mb-2">
             {userData.avatar}
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <h2 className="text-xl font-bold">{userData.characterName}</h2>
             <div className="text-sm text-gray-400">
               {userData.characterClass.charAt(0).toUpperCase() + userData.characterClass.slice(1)}
             </div>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2 mt-1 justify-center sm:justify-start">
               <span className="text-yellow-400 text-sm font-medium">Level {userData.level}</span>
               <div className="h-1.5 w-24 bg-gray-700 rounded-full">
                 <div
@@ -117,7 +117,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
         </div>
 
         <div className="mt-6 pt-4 border-t border-gray-700">
-          <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="grid grid-cols-3 gap-1 sm:gap-2 text-center">
             <div>
               <div className="text-sm text-gray-400">Strength</div>
               <div className="text-lg font-bold text-red-400">{userData.stats.strength}</div>

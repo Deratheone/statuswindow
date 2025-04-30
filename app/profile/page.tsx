@@ -182,8 +182,8 @@ export default function ProfilePage() {
         <div></div>
       </nav>
 
-      <div className="container mx-auto p-4">
-        <Card className="max-w-2xl mx-auto border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+      <div className="container mx-auto px-2 py-4 sm:p-4">
+        <Card className="w-full max-w-[95%] sm:max-w-2xl mx-auto border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
           <CardHeader>
             <CardTitle>Edit Profile</CardTitle>
             <CardDescription className="text-gray-400">Update your character information</CardDescription>
@@ -203,7 +203,7 @@ export default function ProfilePage() {
 
               <div className="space-y-2">
                 <Label>Choose Your Avatar</Label>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-1 sm:gap-2">
                   {avatarOptions.map((avatar) => (
                     <button
                       key={avatar}

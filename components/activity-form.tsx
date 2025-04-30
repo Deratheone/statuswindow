@@ -61,7 +61,7 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
         <RadioGroup
           value={activityData.type}
           onValueChange={(value) => setActivityData({ ...activityData, type: value })}
-          className="grid grid-cols-3 gap-2"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-2"
         >
           <div className="flex flex-col items-center">
             <RadioGroupItem value="strength" id="activity-strength" className="sr-only" />

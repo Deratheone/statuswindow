@@ -86,14 +86,14 @@ export default function ActivitiesPage() {
         <div></div>
       </nav>
 
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto px-2 py-4 sm:p-4">
         <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
           <CardHeader>
             <CardTitle>Activity History</CardTitle>
             <CardDescription className="text-gray-400">View and filter your past activities</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="flex flex-col md:flex-row gap-3 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -121,22 +121,32 @@ export default function ActivitiesPage() {
                 {filteredActivities.map((activity) => (
                   <div
                     key={activity.id}
-                    className="flex items-center gap-4 p-4 rounded-md bg-slate-700/50 border border-slate-600"
+                    className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-md bg-slate-700/50 border border-slate-600"
                   >
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-600">
-                      {activity.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
-                      {activity.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
-                      {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-600">
+                        {activity.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
+                        {activity.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
+                        {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
+                      </div>
+                      <div className="flex-1 sm:hidden">
+                        <div className="font-medium">{activity.name}</div>
+                      </div>
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 hidden sm:block">
                       <div className="font-medium">{activity.name}</div>
                       <div className="text-sm text-gray-400">{new Date(activity.timestamp).toLocaleString()}</div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-bold">
-                        +{activity.value} {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                    <div className="flex justify-between w-full sm:w-auto sm:text-right mt-2 sm:mt-0">
+                      <div className="text-sm text-gray-400 sm:hidden">
+                        {new Date(activity.timestamp).toLocaleString()}
                       </div>
-                      <div className="text-sm text-gray-400">+{activity.value * 5} XP</div>
+                      <div>
+                        <div className="font-bold">
+                          +{activity.value} {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                        </div>
+                        <div className="text-sm text-gray-400">+{activity.value * 5} XP</div>
+                      </div>
                     </div>
                   </div>
                 ))}
