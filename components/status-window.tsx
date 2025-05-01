@@ -12,6 +12,9 @@ export function StatusWindow({ userData }: StatusWindowProps) {
   const [levelUpAnimation, setLevelUpAnimation] = useState(false)
   const [prevLevel, setPrevLevel] = useState(userData.level)
 
+  // Calculate stat max based on level (100 base + 20 per level above 1)
+  const statMax = 100 + (userData.level - 1) * 20
+
   useEffect(() => {
     // Check if level has increased
     if (userData.level > prevLevel) {
@@ -46,8 +49,16 @@ export function StatusWindow({ userData }: StatusWindowProps) {
 
       <CardContent className="p-6">
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl sm:mb-0 mb-2">
-            {userData.avatar}
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl sm:mb-0 mb-2 overflow-hidden">
+            {userData.avatar && userData.avatar.startsWith("data:") ? (
+              <img
+                src={userData.avatar || "/placeholder.svg"}
+                alt="User avatar"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span>{userData.avatar}</span>
+            )}
           </div>
           <div className="text-center sm:text-left">
             <h2 className="text-xl font-bold">{userData.characterName}</h2>
@@ -75,12 +86,14 @@ export function StatusWindow({ userData }: StatusWindowProps) {
               <span className="flex items-center gap-1">
                 <Dumbbell className="h-4 w-4 text-red-400" /> Strength
               </span>
-              <span className="text-red-400">{userData.stats.strength}/100</span>
+              <span className="text-red-400">
+                {userData.stats.strength}/{statMax}
+              </span>
             </div>
             <div className="h-2 bg-gray-700 rounded-full">
               <div
                 className="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, userData.stats.strength)}%` }}
+                style={{ width: `${Math.min(100, (userData.stats.strength / statMax) * 100)}%` }}
               ></div>
             </div>
           </div>
@@ -90,12 +103,14 @@ export function StatusWindow({ userData }: StatusWindowProps) {
               <span className="flex items-center gap-1">
                 <Brain className="h-4 w-4 text-blue-400" /> Intelligence
               </span>
-              <span className="text-blue-400">{userData.stats.intelligence}/100</span>
+              <span className="text-blue-400">
+                {userData.stats.intelligence}/{statMax}
+              </span>
             </div>
             <div className="h-2 bg-gray-700 rounded-full">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, userData.stats.intelligence)}%` }}
+                style={{ width: `${Math.min(100, (userData.stats.intelligence / statMax) * 100)}%` }}
               ></div>
             </div>
           </div>
@@ -105,12 +120,14 @@ export function StatusWindow({ userData }: StatusWindowProps) {
               <span className="flex items-center gap-1">
                 <Sparkles className="h-4 w-4 text-purple-400" /> Mana
               </span>
-              <span className="text-purple-400">{userData.stats.mana}/100</span>
+              <span className="text-purple-400">
+                {userData.stats.mana}/{statMax}
+              </span>
             </div>
             <div className="h-2 bg-gray-700 rounded-full">
               <div
                 className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, userData.stats.mana)}%` }}
+                style={{ width: `${Math.min(100, (userData.stats.mana / statMax) * 100)}%` }}
               ></div>
             </div>
           </div>

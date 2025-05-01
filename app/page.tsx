@@ -49,11 +49,11 @@ export default function LandingPage() {
                 Start Your Journey <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="#features">
+            <a href="#how-it-works">
               <Button size="lg" variant="outline" className="border-purple-500 text-purple-300 hover:bg-purple-900/20">
                 Learn More
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
         <div className="flex-1 relative">
@@ -159,7 +159,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
+      <section id="how-it-works" className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
             How It Works
