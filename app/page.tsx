@@ -6,21 +6,24 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
       {/* Navigation */}
-      <nav className="container mx-auto p-4 flex justify-between items-center">
+      <nav className="container mx-auto p-4 flex flex-wrap justify-between items-center">
         <div className="flex items-center gap-2">
           <Sparkles className="h-6 w-6 text-yellow-400" />
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+          <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
             StatusWindow
           </h1>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-2 sm:gap-4 mt-1 sm:mt-0">
           <Link href="/login">
-            <Button variant="ghost" className="text-white hover:text-yellow-400">
+            <Button variant="ghost" size="sm" className="text-white hover:text-yellow-400">
               Login
             </Button>
           </Link>
           <Link href="/onboarding">
-            <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none">
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
+            >
               Get Started
             </Button>
           </Link>
