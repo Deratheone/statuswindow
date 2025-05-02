@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Save, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { AvatarUpload } from "@/components/avatar-upload"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -203,21 +204,29 @@ export default function ProfilePage() {
 
               <div className="space-y-2">
                 <Label>Choose Your Avatar</Label>
-                <div className="grid grid-cols-5 gap-1 sm:gap-2">
-                  {avatarOptions.map((avatar) => (
-                    <button
-                      key={avatar}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, avatar })}
-                      className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
-                        formData.avatar === avatar
-                          ? "bg-purple-600 border-2 border-purple-400"
-                          : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                      }`}
-                    >
-                      {avatar}
-                    </button>
-                  ))}
+                <div className="flex flex-col items-center">
+                  <AvatarUpload
+                    currentAvatar={formData.avatar}
+                    onAvatarChange={(avatar) => setFormData({ ...formData, avatar })}
+                    size="lg"
+                  />
+                  <div className="mt-4 text-sm text-gray-400">Or select from preset avatars:</div>
+                  <div className="grid grid-cols-5 gap-1 sm:gap-2 mt-2 w-full">
+                    {avatarOptions.map((avatar) => (
+                      <button
+                        key={avatar}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, avatar })}
+                        className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
+                          formData.avatar === avatar
+                            ? "bg-purple-600 border-2 border-purple-400"
+                            : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
+                        }`}
+                      >
+                        {avatar}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 

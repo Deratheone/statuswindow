@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, ArrowRight, Brain, Dumbbell, Sparkles, Shield, Book, Feather } from "lucide-react"
+import { AvatarUpload } from "@/components/avatar-upload"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -447,21 +448,29 @@ export default function OnboardingPage() {
 
                 <div className="space-y-2">
                   <Label>Choose Your Avatar</Label>
-                  <div className="grid grid-cols-5 gap-2">
-                    {avatarOptions.map((avatar) => (
-                      <button
-                        key={avatar}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, avatar })}
-                        className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
-                          formData.avatar === avatar
-                            ? "bg-purple-600 border-2 border-purple-400"
-                            : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                        }`}
-                      >
-                        {avatar}
-                      </button>
-                    ))}
+                  <div className="flex flex-col items-center">
+                    <AvatarUpload
+                      currentAvatar={formData.avatar}
+                      onAvatarChange={(avatar) => setFormData({ ...formData, avatar })}
+                      size="md"
+                    />
+                    <div className="mt-4 text-sm text-gray-400">Or select from preset avatars:</div>
+                    <div className="grid grid-cols-5 gap-2 mt-2 w-full">
+                      {avatarOptions.map((avatar) => (
+                        <button
+                          key={avatar}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, avatar })}
+                          className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
+                            formData.avatar === avatar
+                              ? "bg-purple-600 border-2 border-purple-400"
+                              : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
+                          }`}
+                        >
+                          {avatar}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -1251,8 +1260,16 @@ export default function OnboardingPage() {
 
                 <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-6">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl">
-                      {formData.avatar}
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl overflow-hidden">
+                      {formData.avatar && formData.avatar.startsWith("data:") ? (
+                        <img
+                          src={formData.avatar || "/placeholder.svg"}
+                          alt="Avatar"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{formData.avatar}</span>
+                      )}
                     </div>
                     <div>
                       <h2 className="text-xl font-bold">{formData.characterName}</h2>
