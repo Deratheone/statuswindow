@@ -77,9 +77,13 @@ export default function QuestsPage() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="active">
-              <TabsList className="bg-slate-700/50 border border-slate-600 w-full">
-                <TabsTrigger value="active">Active Quests</TabsTrigger>
-                <TabsTrigger value="completed">Completed Quests</TabsTrigger>
+              <TabsList className="bg-slate-700/50 border border-slate-600 w-full flex flex-wrap h-auto">
+                <TabsTrigger value="active" className="flex-1 py-2">
+                  Active Quests
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="flex-1 py-2">
+                  Completed Quests
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="active" className="mt-6">

@@ -182,14 +182,14 @@ export default function DashboardPage() {
                   <div className="space-y-3">
                     {recentActivities.map((activity) => (
                       <div key={activity.id} className="flex items-center gap-3 p-2 rounded-md bg-slate-700/50">
-                        {activity.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
-                        {activity.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
-                        {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
-                        <div className="flex-1">
-                          <div className="font-medium">{activity.name}</div>
-                          <div className="text-sm text-gray-400">{new Date(activity.timestamp).toLocaleString()}</div>
+                        {activity.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 flex-shrink-0" />}
+                        {activity.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />}
+                        {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium truncate">{activity.name}</div>
+                          <div className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString()}</div>
                         </div>
-                        <div className="text-sm font-bold">
+                        <div className="text-sm font-bold whitespace-nowrap">
                           +{activity.value} {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
                         </div>
                       </div>
@@ -218,16 +218,16 @@ export default function DashboardPage() {
           <div className="lg:col-span-2">
             <Tabs defaultValue="dashboard">
               <TabsList className="bg-slate-800/70 border border-purple-500/30 flex flex-wrap h-auto">
-                <TabsTrigger value="dashboard" className="flex-1">
+                <TabsTrigger value="dashboard" className="flex-1 py-2">
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger value="quests" className="flex-1">
+                <TabsTrigger value="quests" className="flex-1 py-2">
                   Quests
                 </TabsTrigger>
-                <TabsTrigger value="log-activity" className="flex-1">
+                <TabsTrigger value="log-activity" className="flex-1 py-2">
                   Log
                 </TabsTrigger>
-                <TabsTrigger value="progress" className="flex-1">
+                <TabsTrigger value="progress" className="flex-1 py-2">
                   Progress
                 </TabsTrigger>
               </TabsList>

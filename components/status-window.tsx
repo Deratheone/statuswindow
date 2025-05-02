@@ -65,7 +65,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
             <div className="text-sm text-gray-400">
               {userData.characterClass.charAt(0).toUpperCase() + userData.characterClass.slice(1)}
             </div>
-            <div className="flex items-center gap-2 mt-1 justify-center sm:justify-start">
+            <div className="flex items-center gap-2 mt-1 justify-center sm:justify-start flex-wrap">
               <span className="text-yellow-400 text-sm font-medium">Level {userData.level}</span>
               <div className="h-1.5 w-24 bg-gray-700 rounded-full">
                 <div

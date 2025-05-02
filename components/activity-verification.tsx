@@ -81,13 +81,13 @@ export function ActivityVerification({ isOpen, onClose, activityData, onVerify }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-slate-800 text-white border-purple-500/30">
+      <DialogContent className="bg-slate-800 text-white border-purple-500/30 max-w-[95vw] sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {activityData.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
             {activityData.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
             {activityData.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
-            Verify Activity: {activityData.name}
+            <span className="truncate">Verify Activity: {activityData.name}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -131,7 +131,7 @@ export function ActivityVerification({ isOpen, onClose, activityData, onVerify }
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={handleClose} className="border-gray-600 text-gray-300">
             Cancel
           </Button>

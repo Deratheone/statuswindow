@@ -106,19 +106,19 @@ export function QuestBoard({ userData, filter = "all" }: QuestBoardProps) {
           >
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                {quest.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
-                {quest.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
-                {quest.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
-                {quest.title}
+                {quest.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 flex-shrink-0" />}
+                {quest.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />}
+                {quest.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
+                <span className="truncate">{quest.title}</span>
                 {quest.completed && (
-                  <span className="ml-auto flex items-center text-green-400 text-sm font-normal">
+                  <span className="ml-auto flex items-center text-green-400 text-sm font-normal whitespace-nowrap">
                     <Check className="h-4 w-4 mr-1" /> Completed
                   </span>
                 )}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-400 mb-4">{quest.description}</p>
+              <p className="text-gray-400 mb-4 line-clamp-2">{quest.description}</p>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-sm">
