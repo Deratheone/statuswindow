@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Award, Brain, Dumbbell, Sparkles } from "lucide-react"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 export default function LandingPage() {
   return (
@@ -230,6 +231,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }
