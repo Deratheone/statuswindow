@@ -11,13 +11,16 @@ import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
 import { ProgressChart } from "@/components/progress-chart"
+import { InventorySystem } from "@/components/inventory-system"
 import { generateDefaultQuests } from "@/lib/quest-generator"
+import { playSFX } from "@/utils/audio"
 
 export default function DashboardPage() {
   const router = useRouter()
   const [userData, setUserData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [recentActivities, setRecentActivities] = useState<any[]>([])
+  const [systemMessage, setSystemMessage] = useState<string | null>(null)
 
   useEffect(() => {
     // Check if user is logged in
@@ -50,6 +53,13 @@ export default function DashboardPage() {
     setRecentActivities(activities.slice(-5).reverse())
 
     setLoading(false)
+
+    // Preload audio
+    const audioFiles = ["xp-gain", "level-up", "stat-increase", "item-use"]
+    audioFiles.forEach((file) => {
+      const audio = new Audio(`/sfx/${file}.mp3`)
+      audio.preload = "auto"
+    })
   }, [router])
 
   const handleLogout = () => {
@@ -86,13 +96,21 @@ export default function DashboardPage() {
     user.stats[statType] += statValue
 
     // Add XP
+    const oldXP = user.xp
     user.xp += statValue * 5
+
+    // Play XP gain sound
+    playSFX("xp-gain")
 
     // Check for level up
     if (user.xp >= user.xpToNextLevel) {
       user.level += 1
       user.xp = user.xp - user.xpToNextLevel
       user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
+
+      // Show system message for level up
+      setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
+      setTimeout(() => setSystemMessage(null), 5000)
     }
 
     // Update quests progress
@@ -107,6 +125,10 @@ export default function DashboardPage() {
           // Award bonus for completing quest
           user.stats[statType] += quest.reward
           user.xp += quest.xpReward
+
+          // Show system message for quest completion
+          setSystemMessage(`Quest completed: ${quest.title}! Rewards claimed.`)
+          setTimeout(() => setSystemMessage(null), 5000)
         }
 
         return {
@@ -128,6 +150,40 @@ export default function DashboardPage() {
     setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
   }
 
+  const handleUseItem = (item: any) => {
+    if (!userData) return
+
+    const currentUser = localStorage.getItem("statusWindowCurrentUser")
+    if (!currentUser) return
+
+    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const user = users[currentUser]
+
+    if (!user) return
+
+    // Apply item effects
+    if (item.id === "potion-clarity") {
+      user.stats.intelligence += Math.floor(user.stats.intelligence * 0.1)
+      setSystemMessage("Potion of Clarity used! Intelligence temporarily increased by 10%.")
+    } else if (item.id === "scroll-acceleration") {
+      // This would be handled by the UI for video speed
+      setSystemMessage("Scroll of Acceleration used! Video speed doubled for 30 minutes.")
+    } else if (item.id === "potion-strength") {
+      user.stats.strength += Math.floor(user.stats.strength * 0.15)
+      setSystemMessage("Potion of Strength used! Strength temporarily increased by 15%.")
+    }
+
+    // Save updated user data
+    users[currentUser] = user
+    localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+
+    // Update state
+    setUserData(user)
+
+    // Clear message after 5 seconds
+    setTimeout(() => setSystemMessage(null), 5000)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
@@ -138,6 +194,13 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
+      {/* System message notification */}
+      {systemMessage && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-blue-900/90 border-2 border-blue-700 px-4 py-2 rounded-md text-blue-100 shadow-lg">
+          {systemMessage}
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="container mx-auto p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
@@ -170,9 +233,23 @@ export default function DashboardPage() {
           <div className="lg:col-span-1">
             <StatusWindow userData={userData} />
 
-            <Card className="mt-6 border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <div className="mt-4 flex justify-between">
+              <InventorySystem userData={userData} onUseItem={handleUseItem} />
+
+              <Link href="/quests">
+                <Button
+                  variant="outline"
+                  className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50"
+                >
+                  <Award className="h-4 w-4 mr-2" />
+                  Quests
+                </Button>
+              </Link>
+            </div>
+
+            <Card className="mt-6 border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
+                <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                   <Trophy className="h-5 w-5 text-yellow-400" />
                   Recent Activities
                 </CardTitle>
@@ -181,22 +258,25 @@ export default function DashboardPage() {
                 {recentActivities.length > 0 ? (
                   <div className="space-y-3">
                     {recentActivities.map((activity) => (
-                      <div key={activity.id} className="flex items-center gap-3 p-2 rounded-md bg-slate-700/50">
+                      <div
+                        key={activity.id}
+                        className="flex items-center gap-3 p-2 rounded-md bg-blue-900/30 border border-blue-800/50"
+                      >
                         {activity.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 flex-shrink-0" />}
                         {activity.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />}
                         {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{activity.name}</div>
-                          <div className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString()}</div>
+                          <div className="font-medium truncate text-blue-100">{activity.name}</div>
+                          <div className="text-xs text-blue-300">{new Date(activity.timestamp).toLocaleString()}</div>
                         </div>
-                        <div className="text-sm font-bold whitespace-nowrap">
+                        <div className="text-sm font-bold whitespace-nowrap text-yellow-400">
                           +{activity.value} {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-400 py-4">
+                  <div className="text-center text-blue-300 py-4">
                     No activities yet. Start logging to see your progress!
                   </div>
                 )}
@@ -204,7 +284,7 @@ export default function DashboardPage() {
                 <Link href="/activities">
                   <Button
                     variant="outline"
-                    className="w-full mt-4 border-purple-500/50 text-purple-300 hover:bg-purple-900/20"
+                    className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
                   >
                     View All Activities
                     <ChevronRight className="ml-2 h-4 w-4" />
@@ -217,26 +297,38 @@ export default function DashboardPage() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="dashboard">
-              <TabsList className="bg-slate-800/70 border border-purple-500/30 flex flex-wrap h-auto">
-                <TabsTrigger value="dashboard" className="flex-1 py-2">
+              <TabsList className="bg-blue-900/30 border border-blue-800/50 flex flex-wrap h-auto">
+                <TabsTrigger
+                  value="dashboard"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                >
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger value="quests" className="flex-1 py-2">
+                <TabsTrigger
+                  value="quests"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                >
                   Quests
                 </TabsTrigger>
-                <TabsTrigger value="log-activity" className="flex-1 py-2">
+                <TabsTrigger
+                  value="log-activity"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                >
                   Log
                 </TabsTrigger>
-                <TabsTrigger value="progress" className="flex-1 py-2">
+                <TabsTrigger
+                  value="progress"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                >
                   Progress
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="dashboard" className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                  <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                  <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg flex items-center gap-2">
+                      <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Award className="h-5 w-5 text-yellow-400" />
                         Active Quests
                       </CardTitle>
@@ -248,17 +340,17 @@ export default function DashboardPage() {
                             .filter((quest: any) => !quest.completed)
                             .slice(0, 3)
                             .map((quest: any) => (
-                              <div key={quest.id} className="p-3 rounded-md bg-slate-700/50">
-                                <div className="font-medium">{quest.title}</div>
-                                <div className="text-sm text-gray-400 mt-1">{quest.description}</div>
+                              <div key={quest.id} className="p-3 rounded-md bg-blue-900/30 border border-blue-800/50">
+                                <div className="font-medium text-blue-100">{quest.title}</div>
+                                <div className="text-sm text-blue-300 mt-1">{quest.description}</div>
                                 <div className="mt-2 space-y-1">
-                                  <div className="flex justify-between text-sm">
+                                  <div className="flex justify-between text-sm text-blue-200">
                                     <span>Progress</span>
                                     <span>
                                       {quest.progress}/{quest.target}
                                     </span>
                                   </div>
-                                  <div className="h-1.5 bg-gray-700 rounded-full">
+                                  <div className="h-1.5 bg-blue-900 rounded-full border border-blue-800">
                                     <div
                                       className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full transition-all duration-300"
                                       style={{ width: `${Math.min(100, (quest.progress / quest.target) * 100)}%` }}
@@ -273,7 +365,7 @@ export default function DashboardPage() {
                             ))}
                         </div>
                       ) : (
-                        <div className="text-center text-gray-400 py-4">
+                        <div className="text-center text-blue-300 py-4">
                           No active quests. Check the Quest Board for new challenges!
                         </div>
                       )}
@@ -281,7 +373,7 @@ export default function DashboardPage() {
                       <Link href="/quests">
                         <Button
                           variant="outline"
-                          className="w-full mt-4 border-purple-500/50 text-purple-300 hover:bg-purple-900/20"
+                          className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
                         >
                           View All Quests
                           <ChevronRight className="ml-2 h-4 w-4" />
@@ -290,9 +382,9 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                  <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg flex items-center gap-2">
+                      <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Plus className="h-5 w-5 text-green-400" />
                         Quick Add Activity
                       </CardTitle>
@@ -302,9 +394,9 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="md:col-span-2 border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                  <Card className="md:col-span-2 border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg flex items-center gap-2">
+                      <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Trophy className="h-5 w-5 text-yellow-400" />
                         Stats Overview
                       </CardTitle>
@@ -321,10 +413,10 @@ export default function DashboardPage() {
               </TabsContent>
 
               <TabsContent value="log-activity" className="mt-6">
-                <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                   <CardHeader>
-                    <CardTitle>Log New Activity</CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardTitle className="text-blue-100">Log New Activity</CardTitle>
+                    <CardDescription className="text-blue-300">
                       Record your activities to gain XP and improve your stats
                     </CardDescription>
                   </CardHeader>
@@ -335,10 +427,10 @@ export default function DashboardPage() {
               </TabsContent>
 
               <TabsContent value="progress" className="mt-6">
-                <Card className="border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                   <CardHeader>
-                    <CardTitle>Progress Analytics</CardTitle>
-                    <CardDescription className="text-gray-400">Track your growth over time</CardDescription>
+                    <CardTitle className="text-blue-100">Progress Analytics</CardTitle>
+                    <CardDescription className="text-blue-300">Track your growth over time</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ProgressChart userData={userData} detailed />

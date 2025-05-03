@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./status-animations.css";
 
 @layer base {
   :root {
@@ -42,6 +43,14 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Manhwa theme colors */
+    --manhwa-blue: #1e40af;
+    --manhwa-dark-blue: #172554;
+    --manhwa-light-blue: #60a5fa;
+    --manhwa-yellow: #fbbf24;
+    --manhwa-red: #ef4444;
+    --manhwa-purple: #a855f7;
   }
 
   .dark {
