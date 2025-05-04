@@ -10,9 +10,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Save, Sparkles } from "lucide-react"
+import { ArrowLeft, Check, Save, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { AvatarUpload } from "@/components/avatar-upload"
+import { motion } from "framer-motion"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -38,6 +39,8 @@ export default function ProfilePage() {
     newPassword: "",
     confirmPassword: "",
   })
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in
@@ -76,6 +79,7 @@ export default function ProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSaving(true)
 
     // Validate form
     if (!formData.characterName) {
@@ -84,6 +88,7 @@ export default function ProfilePage() {
         description: "Character name is required",
         variant: "destructive",
       })
+      setIsSaving(false)
       return
     }
 
@@ -95,6 +100,7 @@ export default function ProfilePage() {
           description: "New passwords do not match",
           variant: "destructive",
         })
+        setIsSaving(false)
         return
       }
 
@@ -104,6 +110,7 @@ export default function ProfilePage() {
           description: "Current password is required to change password",
           variant: "destructive",
         })
+        setIsSaving(false)
         return
       }
 
@@ -113,6 +120,7 @@ export default function ProfilePage() {
           description: "Current password is incorrect",
           variant: "destructive",
         })
+        setIsSaving(false)
         return
       }
     }
@@ -138,10 +146,21 @@ export default function ProfilePage() {
     users[currentUser] = user
     localStorage.setItem("statusWindowUsers", JSON.stringify(users))
 
+    // Show success state
+    setSaveSuccess(true)
+
+    // Show toast notification
     toast({
       title: "Success",
       description: "Profile updated successfully",
+      variant: "default",
     })
+
+    // Reset success state after animation
+    setTimeout(() => {
+      setSaveSuccess(false)
+      setIsSaving(false)
+    }, 2000)
 
     // Update state
     setUserData(user)
@@ -293,12 +312,41 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-              >
-                <Save className="mr-2 h-4 w-4" /> Save Changes
-              </Button>
+              <motion.div whileHover={!isSaving && !saveSuccess ? { scale: 1.02 } : {}} className="relative">
+                <Button
+                  type="submit"
+                  className={`w-full ${
+                    saveSuccess
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  }`}
+                  disabled={isSaving || saveSuccess}
+                >
+                  {saveSuccess ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" /> Changes Saved
+                    </>
+                  ) : isSaving ? (
+                    <>
+                      <span className="animate-pulse">Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" /> Save Changes
+                    </>
+                  )}
+                </Button>
+
+                {saveSuccess && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute inset-0 flex items-center justify-center bg-green-600 rounded-md"
+                  >
+                    <Check className="mr-2 h-5 w-5" /> Changes Saved
+                  </motion.div>
+                )}
+              </motion.div>
             </form>
           </CardContent>
         </Card>

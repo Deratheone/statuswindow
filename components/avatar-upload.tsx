@@ -62,8 +62,9 @@ export function AvatarUpload({ currentAvatar, onAvatarChange, size = "md" }: Ava
             <button
               type="button"
               onClick={handleRemoveImage}
-              className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+              className="absolute top-0 right-0 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-md z-10"
               aria-label="Remove image"
+              style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}
             >
               <X className="h-4 w-4" />
             </button>
