@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Sparkles } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -40,14 +40,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex flex-col items-center justify-center p-4">
-      <Link
-        href="/"
-        className="absolute top-4 left-4 text-white flex items-center gap-2 hover:text-purple-400 transition-colors"
-      >
-        <ArrowLeft className="h-5 w-5" />
-        <span>Back to Home</span>
-      </Link>
-
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
           <div className="flex items-center gap-2">

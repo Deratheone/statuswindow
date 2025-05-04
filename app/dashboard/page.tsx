@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy } from "lucide-react"
+import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy } from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
@@ -190,6 +190,12 @@ export default function DashboardPage() {
     router.push("/quests")
   }
 
+  // Function to navigate to progress page
+  const handleProgressClick = () => {
+    // Instead of changing tabs, navigate to a dedicated progress page
+    router.push("/progress")
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
@@ -210,16 +216,12 @@ export default function DashboardPage() {
       {/* Navigation */}
       <nav className="container mx-auto p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Link href="/" className="text-white flex items-center gap-2 hover:text-purple-400 transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back</span>
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-yellow-400" />
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
-            StatusWindow
-          </h1>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-6 w-6 text-yellow-400" />
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+              StatusWindow
+            </h1>
+          </div>
         </div>
         <div className="flex gap-2">
           <Link href="/profile">
@@ -322,12 +324,14 @@ export default function DashboardPage() {
                 >
                   Log
                 </TabsTrigger>
-                <TabsTrigger
-                  value="progress"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
-                >
-                  Progress
-                </TabsTrigger>
+                <Link href="/progress">
+                  <Button
+                    variant="ghost"
+                    className="flex-1 h-full w-full py-2 text-sm font-medium text-white hover:bg-blue-800/50"
+                  >
+                    Progress
+                  </Button>
+                </Link>
               </TabsList>
 
               <TabsContent value="dashboard" className="mt-6">
@@ -427,18 +431,6 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <ActivityForm onSubmit={handleActivitySubmit} />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="progress" className="mt-6">
-                <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
-                  <CardHeader>
-                    <CardTitle className="text-blue-100">Progress Analytics</CardTitle>
-                    <CardDescription className="text-blue-300">Track your growth over time</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ProgressChart userData={userData} detailed />
                   </CardContent>
                 </Card>
               </TabsContent>

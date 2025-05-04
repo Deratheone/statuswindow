@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -25,6 +25,18 @@ const classOptions = [
   { value: "mystic", label: "Mystic", description: "Balanced in mind, body, and spirit" },
   { value: "adventurer", label: "Adventurer", description: "Jack of all trades, adaptable to any challenge" },
 ]
+
+// Loading component
+function LoadingSpinner() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-12 w-12 rounded-full border-4 border-t-purple-500 border-r-transparent border-b-blue-500 border-l-transparent animate-spin"></div>
+        <div className="text-white text-xl">Loading profile...</div>
+      </div>
+    </div>
+  )
+}
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -59,17 +71,19 @@ export default function ProfilePage() {
       return
     }
 
-    setUserData(user)
-    setFormData({
-      characterName: user.characterName || "",
-      avatar: user.avatar || "🧙‍♂️",
-      characterClass: user.characterClass || "mystic",
-      password: "",
-      newPassword: "",
-      confirmPassword: "",
-    })
-
-    setLoading(false)
+    // Set user data with a small delay to allow the page to render first
+    setTimeout(() => {
+      setUserData(user)
+      setFormData({
+        characterName: user.characterName || "",
+        avatar: user.avatar || "🧙‍♂️",
+        characterClass: user.characterClass || "mystic",
+        password: "",
+        newPassword: "",
+        confirmPassword: "",
+      })
+      setLoading(false)
+    }, 100)
   }, [router])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,11 +187,7 @@ export default function ProfilePage() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    )
+    return <LoadingSpinner />
   }
 
   return (
@@ -203,153 +213,158 @@ export default function ProfilePage() {
       </nav>
 
       <div className="container mx-auto px-2 py-4 sm:p-4">
-        <Card className="w-full max-w-[95%] sm:max-w-2xl mx-auto border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
-          <CardHeader>
-            <CardTitle>Edit Profile</CardTitle>
-            <CardDescription className="text-gray-400">Update your character information</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="characterName">Character Name</Label>
-                <Input
-                  id="characterName"
-                  name="characterName"
-                  value={formData.characterName}
-                  onChange={handleInputChange}
-                  className="bg-slate-700/50 border-slate-600 text-white"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Choose Your Avatar</Label>
-                <div className="flex flex-col items-center">
-                  <AvatarUpload
-                    currentAvatar={formData.avatar}
-                    onAvatarChange={(avatar) => setFormData({ ...formData, avatar })}
-                    size="lg"
+        <Suspense fallback={<LoadingSpinner />}>
+          <Card className="w-full max-w-[95%] sm:max-w-2xl mx-auto border-purple-500/30 bg-slate-800/70 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <CardHeader>
+              <CardTitle>Edit Profile</CardTitle>
+              <CardDescription className="text-gray-400">Update your character information</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="characterName">Character Name</Label>
+                  <Input
+                    id="characterName"
+                    name="characterName"
+                    value={formData.characterName}
+                    onChange={handleInputChange}
+                    className="bg-slate-700/50 border-slate-600 text-white"
                   />
-                  <div className="mt-4 text-sm text-gray-400">Or select from preset avatars:</div>
-                  <div className="grid grid-cols-5 gap-1 sm:gap-2 mt-2 w-full">
-                    {avatarOptions.map((avatar) => (
-                      <button
-                        key={avatar}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, avatar })}
-                        className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
-                          formData.avatar === avatar
-                            ? "bg-purple-600 border-2 border-purple-400"
-                            : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                        }`}
-                      >
-                        {avatar}
-                      </button>
-                    ))}
-                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label>Choose Your Class</Label>
-                <RadioGroup
-                  value={formData.characterClass}
-                  onValueChange={(value) => setFormData({ ...formData, characterClass: value })}
-                  className="space-y-2"
-                >
-                  {classOptions.map((option) => (
-                    <div key={option.value} className="flex items-start space-x-2 p-2 rounded-md hover:bg-slate-700/50">
-                      <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
-                      <div className="grid gap-1">
-                        <Label htmlFor={option.value} className="font-medium">
-                          {option.label}
-                        </Label>
-                        <p className="text-sm text-gray-400">{option.description}</p>
-                      </div>
+                <div className="space-y-2">
+                  <Label>Choose Your Avatar</Label>
+                  <div className="flex flex-col items-center">
+                    <AvatarUpload
+                      currentAvatar={formData.avatar}
+                      onAvatarChange={(avatar) => setFormData({ ...formData, avatar })}
+                      size="lg"
+                    />
+                    <div className="mt-4 text-sm text-gray-400">Or select from preset avatars:</div>
+                    <div className="grid grid-cols-5 gap-1 sm:gap-2 mt-2 w-full">
+                      {avatarOptions.map((avatar) => (
+                        <button
+                          key={avatar}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, avatar })}
+                          className={`text-2xl h-12 w-12 flex items-center justify-center rounded-md ${
+                            formData.avatar === avatar
+                              ? "bg-purple-600 border-2 border-purple-400"
+                              : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
+                          }`}
+                        >
+                          {avatar}
+                        </button>
+                      ))}
                     </div>
-                  ))}
-                </RadioGroup>
-              </div>
-
-              <div className="border-t border-slate-700 pt-6">
-                <h3 className="text-lg font-medium mb-4">Change Password</h3>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Current Password</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      name="newPassword"
-                      type="password"
-                      value={formData.newPassword}
-                      onChange={handleInputChange}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className="bg-slate-700/50 border-slate-600 text-white"
-                    />
                   </div>
                 </div>
-              </div>
 
-              <motion.div whileHover={!isSaving && !saveSuccess ? { scale: 1.02 } : {}} className="relative">
-                <Button
-                  type="submit"
-                  className={`w-full ${
-                    saveSuccess
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                  }`}
-                  disabled={isSaving || saveSuccess}
-                >
-                  {saveSuccess ? (
-                    <>
-                      <Check className="mr-2 h-4 w-4" /> Changes Saved
-                    </>
-                  ) : isSaving ? (
-                    <>
-                      <span className="animate-pulse">Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="mr-2 h-4 w-4" /> Save Changes
-                    </>
-                  )}
-                </Button>
-
-                {saveSuccess && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute inset-0 flex items-center justify-center bg-green-600 rounded-md"
+                <div className="space-y-2">
+                  <Label>Choose Your Class</Label>
+                  <RadioGroup
+                    value={formData.characterClass}
+                    onValueChange={(value) => setFormData({ ...formData, characterClass: value })}
+                    className="space-y-2"
                   >
-                    <Check className="mr-2 h-5 w-5" /> Changes Saved
-                  </motion.div>
-                )}
-              </motion.div>
-            </form>
-          </CardContent>
-        </Card>
+                    {classOptions.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-start space-x-2 p-2 rounded-md hover:bg-slate-700/50"
+                      >
+                        <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
+                        <div className="grid gap-1">
+                          <Label htmlFor={option.value} className="font-medium">
+                            {option.label}
+                          </Label>
+                          <p className="text-sm text-gray-400">{option.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div className="border-t border-slate-700 pt-6">
+                  <h3 className="text-lg font-medium mb-4">Change Password</h3>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Current Password</Label>
+                      <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        name="newPassword"
+                        type="password"
+                        value={formData.newPassword}
+                        onChange={handleInputChange}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        className="bg-slate-700/50 border-slate-600 text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <motion.div whileHover={!isSaving && !saveSuccess ? { scale: 1.02 } : {}} className="relative">
+                  <Button
+                    type="submit"
+                    className={`w-full ${
+                      saveSuccess
+                        ? "bg-green-600 hover:bg-green-700"
+                        : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    }`}
+                    disabled={isSaving || saveSuccess}
+                  >
+                    {saveSuccess ? (
+                      <>
+                        <Check className="mr-2 h-4 w-4" /> Changes Saved
+                      </>
+                    ) : isSaving ? (
+                      <>
+                        <span className="animate-pulse">Saving...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save className="mr-2 h-4 w-4" /> Save Changes
+                      </>
+                    )}
+                  </Button>
+
+                  {saveSuccess && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute inset-0 flex items-center justify-center bg-green-600 rounded-md"
+                    >
+                      <Check className="mr-2 h-5 w-5" /> Changes Saved
+                    </motion.div>
+                  )}
+                </motion.div>
+              </form>
+            </CardContent>
+          </Card>
+        </Suspense>
       </div>
     </div>
   )
