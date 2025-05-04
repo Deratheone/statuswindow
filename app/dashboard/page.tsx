@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [recentActivities, setRecentActivities] = useState<any[]>([])
   const [systemMessage, setSystemMessage] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState("dashboard")
 
   useEffect(() => {
     // Check if user is logged in
@@ -184,6 +185,11 @@ export default function DashboardPage() {
     setTimeout(() => setSystemMessage(null), 5000)
   }
 
+  // Function to navigate to quests page
+  const navigateToQuests = () => {
+    router.push("/quests")
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
@@ -236,15 +242,15 @@ export default function DashboardPage() {
             <div className="mt-4 flex justify-between">
               <InventorySystem userData={userData} onUseItem={handleUseItem} />
 
-              <Link href="/quests">
-                <Button
-                  variant="outline"
-                  className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50"
-                >
-                  <Award className="h-4 w-4 mr-2" />
-                  Quests
-                </Button>
-              </Link>
+              {/* Fixed Quest Button - Now using onClick handler instead of Link */}
+              <Button
+                variant="outline"
+                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50"
+                onClick={navigateToQuests}
+              >
+                <Award className="h-4 w-4 mr-2" />
+                Quests
+              </Button>
             </div>
 
             <Card className="mt-6 border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
@@ -296,7 +302,7 @@ export default function DashboardPage() {
 
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <Tabs defaultValue="dashboard">
+            <Tabs defaultValue="dashboard" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="bg-blue-900/30 border border-blue-800/50 flex flex-wrap h-auto">
                 <TabsTrigger
                   value="dashboard"
@@ -370,15 +376,14 @@ export default function DashboardPage() {
                         </div>
                       )}
 
-                      <Link href="/quests">
-                        <Button
-                          variant="outline"
-                          className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
-                        >
-                          View All Quests
-                          <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
+                      <Button
+                        variant="outline"
+                        className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
+                        onClick={navigateToQuests}
+                      >
+                        View All Quests
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </CardContent>
                   </Card>
 
