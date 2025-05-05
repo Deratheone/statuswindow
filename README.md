@@ -1,4 +1,4 @@
-Here's the complete `README.md` content ready to copy/paste:
+
 
 ```markdown
 # Status Window - Solo Leveling Style RPG Tracker
