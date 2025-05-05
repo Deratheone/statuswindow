@@ -64,16 +64,26 @@ export default function DashboardPage() {
     })
   }, [router])
 
+  // Direct navigation function that uses window.location for reliability
+  const navigateTo = (path: string, message: string) => {
+    try {
+      setSystemMessage(message)
+      // Use direct window location navigation for reliability
+      window.location.href = path
+    } catch (error) {
+      console.error("Navigation error:", error)
+      setSystemMessage("Error navigating. Please try again.")
+      setTimeout(() => setSystemMessage(null), 3000)
+    }
+  }
+
   const handleLogout = () => {
     try {
       setIsLoggingOut(true)
       setSystemMessage("Logging out...")
-
-      // Add a small delay to ensure the UI updates before navigation
-      setTimeout(() => {
-        localStorage.removeItem("statusWindowCurrentUser")
-        router.push("/login")
-      }, 300)
+      localStorage.removeItem("statusWindowCurrentUser")
+      // Use direct window location navigation for reliability
+      window.location.href = "/login"
     } catch (error) {
       console.error("Logout error:", error)
       setSystemMessage("Error logging out. Please try again.")
@@ -83,20 +93,19 @@ export default function DashboardPage() {
   }
 
   const navigateToSettings = () => {
-    try {
-      setIsNavigating(true)
-      setSystemMessage("Opening settings...")
+    navigateTo("/profile", "Opening settings...")
+  }
 
-      // Add a small delay to ensure the UI updates before navigation
-      setTimeout(() => {
-        router.push("/profile")
-      }, 300)
-    } catch (error) {
-      console.error("Navigation error:", error)
-      setSystemMessage("Error opening settings. Please try again.")
-      setTimeout(() => setSystemMessage(null), 3000)
-      setIsNavigating(false)
-    }
+  const navigateToQuests = () => {
+    navigateTo("/quests", "Opening quests...")
+  }
+
+  const navigateToProgress = () => {
+    navigateTo("/progress", "Opening progress...")
+  }
+
+  const navigateToActivities = () => {
+    navigateTo("/activities", "Opening activities...")
   }
 
   const handleActivitySubmit = (activity: any) => {
@@ -216,42 +225,6 @@ export default function DashboardPage() {
     setTimeout(() => setSystemMessage(null), 5000)
   }
 
-  // Function to navigate to quests page
-  const navigateToQuests = () => {
-    try {
-      setIsNavigating(true)
-      setSystemMessage("Opening quests...")
-
-      // Add a small delay to ensure the UI updates before navigation
-      setTimeout(() => {
-        router.push("/quests")
-      }, 300)
-    } catch (error) {
-      console.error("Navigation error:", error)
-      setSystemMessage("Error opening quests. Please try again.")
-      setTimeout(() => setSystemMessage(null), 3000)
-      setIsNavigating(false)
-    }
-  }
-
-  // Function to navigate to progress page
-  const navigateToProgress = () => {
-    try {
-      setIsNavigating(true)
-      setSystemMessage("Opening progress...")
-
-      // Add a small delay to ensure the UI updates before navigation
-      setTimeout(() => {
-        router.push("/progress")
-      }, 300)
-    } catch (error) {
-      console.error("Navigation error:", error)
-      setSystemMessage("Error opening progress. Please try again.")
-      setTimeout(() => setSystemMessage(null), 3000)
-      setIsNavigating(false)
-    }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
@@ -368,7 +341,7 @@ export default function DashboardPage() {
                 <Button
                   variant="outline"
                   className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
-                  onClick={() => router.push("/activities")}
+                  onClick={navigateToActivities}
                   disabled={isNavigating}
                 >
                   View All Activities
@@ -406,7 +379,9 @@ export default function DashboardPage() {
                   onClick={navigateToProgress}
                   disabled={isNavigating}
                 >
-                  Progress
+                  <a href="/progress" className="w-full h-full flex items-center justify-center">
+                    Progress
+                  </a>
                 </Button>
               </TabsList>
 
