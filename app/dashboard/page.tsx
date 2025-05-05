@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -22,6 +21,8 @@ export default function DashboardPage() {
   const [recentActivities, setRecentActivities] = useState<any[]>([])
   const [systemMessage, setSystemMessage] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("dashboard")
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in
@@ -64,8 +65,38 @@ export default function DashboardPage() {
   }, [router])
 
   const handleLogout = () => {
-    localStorage.removeItem("statusWindowCurrentUser")
-    router.push("/login")
+    try {
+      setIsLoggingOut(true)
+      setSystemMessage("Logging out...")
+
+      // Add a small delay to ensure the UI updates before navigation
+      setTimeout(() => {
+        localStorage.removeItem("statusWindowCurrentUser")
+        router.push("/login")
+      }, 300)
+    } catch (error) {
+      console.error("Logout error:", error)
+      setSystemMessage("Error logging out. Please try again.")
+      setTimeout(() => setSystemMessage(null), 3000)
+      setIsLoggingOut(false)
+    }
+  }
+
+  const navigateToSettings = () => {
+    try {
+      setIsNavigating(true)
+      setSystemMessage("Opening settings...")
+
+      // Add a small delay to ensure the UI updates before navigation
+      setTimeout(() => {
+        router.push("/profile")
+      }, 300)
+    } catch (error) {
+      console.error("Navigation error:", error)
+      setSystemMessage("Error opening settings. Please try again.")
+      setTimeout(() => setSystemMessage(null), 3000)
+      setIsNavigating(false)
+    }
   }
 
   const handleActivitySubmit = (activity: any) => {
@@ -187,18 +218,47 @@ export default function DashboardPage() {
 
   // Function to navigate to quests page
   const navigateToQuests = () => {
-    router.push("/quests")
+    try {
+      setIsNavigating(true)
+      setSystemMessage("Opening quests...")
+
+      // Add a small delay to ensure the UI updates before navigation
+      setTimeout(() => {
+        router.push("/quests")
+      }, 300)
+    } catch (error) {
+      console.error("Navigation error:", error)
+      setSystemMessage("Error opening quests. Please try again.")
+      setTimeout(() => setSystemMessage(null), 3000)
+      setIsNavigating(false)
+    }
   }
 
   // Function to navigate to progress page
   const navigateToProgress = () => {
-    router.push("/progress")
+    try {
+      setIsNavigating(true)
+      setSystemMessage("Opening progress...")
+
+      // Add a small delay to ensure the UI updates before navigation
+      setTimeout(() => {
+        router.push("/progress")
+      }, 300)
+    } catch (error) {
+      console.error("Navigation error:", error)
+      setSystemMessage("Error opening progress. Please try again.")
+      setTimeout(() => setSystemMessage(null), 3000)
+      setIsNavigating(false)
+    }
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 rounded-full border-4 border-t-blue-500 border-r-transparent border-b-purple-500 border-l-transparent animate-spin"></div>
+          <div className="text-white text-xl">Loading dashboard...</div>
+        </div>
       </div>
     )
   }
@@ -223,13 +283,29 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Link href="/profile">
-            <Button variant="ghost" size="icon" className="text-white hover:text-yellow-400">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Button variant="ghost" size="icon" className="text-white hover:text-yellow-400" onClick={handleLogout}>
-            <LogOut className="h-5 w-5" />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:text-yellow-400 relative"
+            onClick={navigateToSettings}
+            disabled={isNavigating}
+            aria-label="Settings"
+          >
+            <Settings className={`h-5 w-5 ${isNavigating ? "animate-pulse" : ""}`} />
+            {/* Larger hit area */}
+            <span className="absolute inset-0"></span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:text-yellow-400 relative"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            aria-label="Logout"
+          >
+            <LogOut className={`h-5 w-5 ${isLoggingOut ? "animate-pulse" : ""}`} />
+            {/* Larger hit area */}
+            <span className="absolute inset-0"></span>
           </Button>
         </div>
       </nav>
@@ -248,6 +324,7 @@ export default function DashboardPage() {
                 variant="outline"
                 className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50"
                 onClick={navigateToQuests}
+                disabled={isNavigating}
               >
                 <Award className="h-4 w-4 mr-2" />
                 Quests
@@ -288,15 +365,15 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <Link href="/activities">
-                  <Button
-                    variant="outline"
-                    className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
-                  >
-                    View All Activities
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
+                  onClick={() => router.push("/activities")}
+                  disabled={isNavigating}
+                >
+                  View All Activities
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -327,6 +404,7 @@ export default function DashboardPage() {
                   variant="ghost"
                   className="flex-1 h-full py-2 text-sm font-medium text-white hover:bg-blue-800/50"
                   onClick={navigateToProgress}
+                  disabled={isNavigating}
                 >
                   Progress
                 </Button>
@@ -382,6 +460,7 @@ export default function DashboardPage() {
                         variant="outline"
                         className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
                         onClick={navigateToQuests}
+                        disabled={isNavigating}
                       >
                         View All Quests
                         <ChevronRight className="ml-2 h-4 w-4" />
