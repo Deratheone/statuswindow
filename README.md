@@ -37,31 +37,16 @@ npm run dev
 ## 📂 Project Structure
 ```
 .
-├── public/               # Static assets
-│   ├── images/           # App visuals
-│   └── sounds/           # SFX
+├── public/
+│   ├── images/
+│   └── sounds/
 ├── src/
-│   ├── app/              # Next.js 13+ app dir
-│   │   ├── (main)/       # Main pages
-│   │   └── api/          # API routes
-│   ├── components/       # UI components
-│   ├── lib/              # Utilities
-│   └── styles/           # Global CSS
-├── next.config.js        # Next.js config
-└── package.json          # Dependencies
-```
-
-## 🔧 Development
-1. Set environment variables:
-```bash
-cp .env.example .env.local
-```
-2. Available scripts:
-```bash
-npm run dev     # Start dev server
-npm run build   # Production build
-npm run start   # Run production
-npm run lint    # Run ESLint
+│   ├── app/
+│   ├── components/
+│   ├── lib/
+│   └── styles/
+├── next.config.js
+└── package.json
 ```
 
 ## 🤝 Contributing
@@ -73,10 +58,5 @@ npm run lint    # Run ESLint
 
 ## 📝 License
 MIT License © 2023 [Deratheone](https://github.com/Deratheone)
-
----
-
-<div align="center">
-  <sub>⚔️ Built for warriors of self-improvement ⚔️</sub>
-</div>
 ```
+
