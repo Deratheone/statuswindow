@@ -191,8 +191,7 @@ export default function DashboardPage() {
   }
 
   // Function to navigate to progress page
-  const handleProgressClick = () => {
-    // Instead of changing tabs, navigate to a dedicated progress page
+  const navigateToProgress = () => {
     router.push("/progress")
   }
 
@@ -324,14 +323,13 @@ export default function DashboardPage() {
                 >
                   Log
                 </TabsTrigger>
-                <Link href="/progress">
-                  <Button
-                    variant="ghost"
-                    className="flex-1 h-full w-full py-2 text-sm font-medium text-white hover:bg-blue-800/50"
-                  >
-                    Progress
-                  </Button>
-                </Link>
+                <Button
+                  variant="ghost"
+                  className="flex-1 h-full py-2 text-sm font-medium text-white hover:bg-blue-800/50"
+                  onClick={navigateToProgress}
+                >
+                  Progress
+                </Button>
               </TabsList>
 
               <TabsContent value="dashboard" className="mt-6">

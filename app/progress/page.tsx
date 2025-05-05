@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Sparkles } from "lucide-react"
-import { ProgressChart } from "@/components/progress-chart"
 
 export default function ProgressPage() {
   const router = useRouter()
@@ -13,24 +12,29 @@ export default function ProgressPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check if user is logged in
-    const currentUser = localStorage.getItem("statusWindowCurrentUser")
-    if (!currentUser) {
-      router.push("/login")
-      return
+    try {
+      // Check if user is logged in
+      const currentUser = localStorage.getItem("statusWindowCurrentUser")
+      if (!currentUser) {
+        router.push("/login")
+        return
+      }
+
+      // Get user data
+      const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+      const user = users[currentUser]
+
+      if (!user) {
+        router.push("/login")
+        return
+      }
+
+      setUserData(user)
+      setLoading(false)
+    } catch (error) {
+      console.error("Error loading user data:", error)
+      router.push("/dashboard")
     }
-
-    // Get user data
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
-    const user = users[currentUser]
-
-    if (!user) {
-      router.push("/login")
-      return
-    }
-
-    setUserData(user)
-    setLoading(false)
   }, [router])
 
   if (loading) {
@@ -70,7 +74,23 @@ export default function ProgressPage() {
             <CardDescription className="text-blue-300">Track your growth over time</CardDescription>
           </CardHeader>
           <CardContent>
-            <ProgressChart userData={userData} detailed />
+            <div className="p-4 text-center">
+              <h3 className="text-xl font-bold mb-2">Stats Overview</h3>
+              <div className="grid grid-cols-3 gap-4 mt-4">
+                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-red-400 font-medium">Strength</div>
+                  <div className="text-2xl font-bold mt-1">{userData?.stats?.strength || 0}</div>
+                </div>
+                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-blue-400 font-medium">Intelligence</div>
+                  <div className="text-2xl font-bold mt-1">{userData?.stats?.intelligence || 0}</div>
+                </div>
+                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-purple-400 font-medium">Mana</div>
+                  <div className="text-2xl font-bold mt-1">{userData?.stats?.mana || 0}</div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -83,24 +103,27 @@ export default function ProgressPage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <div className="text-lg">Current Level</div>
-                  <div className="text-2xl font-bold text-yellow-400">{userData.level}</div>
+                  <div className="text-2xl font-bold text-yellow-400">{userData?.level || 1}</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>XP Progress</span>
                     <span>
-                      {userData.xp}/{userData.xpToNextLevel} XP
+                      {userData?.xp || 0}/{userData?.xpToNextLevel || 100} XP
                     </span>
                   </div>
                   <div className="h-2 bg-blue-900/50 rounded-full border border-blue-800">
                     <div
                       className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min(100, (userData.xp / userData.xpToNextLevel) * 100)}%` }}
+                      style={{
+                        width: `${Math.min(100, ((userData?.xp || 0) / (userData?.xpToNextLevel || 100)) * 100)}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
                 <div className="text-sm text-blue-300">
-                  {Math.floor((userData.xp / userData.xpToNextLevel) * 100)}% to Level {userData.level + 1}
+                  {Math.floor(((userData?.xp || 0) / (userData?.xpToNextLevel || 100)) * 100)}% to Level{" "}
+                  {(userData?.level || 1) + 1}
                 </div>
               </div>
             </CardContent>
@@ -114,25 +137,25 @@ export default function ProgressPage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <div className="text-lg">Total Activities</div>
-                  <div className="text-2xl font-bold text-green-400">{userData.activities?.length || 0}</div>
+                  <div className="text-2xl font-bold text-green-400">{userData?.activities?.length || 0}</div>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-blue-900/30 p-3 rounded-md border border-blue-800/50">
                     <div className="text-sm text-red-400">Strength</div>
                     <div className="text-xl font-bold">
-                      {userData.activities?.filter((a: any) => a.type === "strength").length || 0}
+                      {userData?.activities?.filter((a: any) => a.type === "strength").length || 0}
                     </div>
                   </div>
                   <div className="bg-blue-900/30 p-3 rounded-md border border-blue-800/50">
                     <div className="text-sm text-blue-400">Intelligence</div>
                     <div className="text-xl font-bold">
-                      {userData.activities?.filter((a: any) => a.type === "intelligence").length || 0}
+                      {userData?.activities?.filter((a: any) => a.type === "intelligence").length || 0}
                     </div>
                   </div>
                   <div className="bg-blue-900/30 p-3 rounded-md border border-blue-800/50">
                     <div className="text-sm text-purple-400">Mana</div>
                     <div className="text-xl font-bold">
-                      {userData.activities?.filter((a: any) => a.type === "mana").length || 0}
+                      {userData?.activities?.filter((a: any) => a.type === "mana").length || 0}
                     </div>
                   </div>
                 </div>
