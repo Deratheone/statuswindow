@@ -13,9 +13,11 @@ import { ProgressChart } from "@/components/progress-chart"
 import { InventorySystem } from "@/components/inventory-system"
 import { generateDefaultQuests } from "@/lib/quest-generator"
 import { playSFX } from "@/utils/audio"
+import { useMobile } from "@/hooks/use-mobile"
 
 export default function DashboardPage() {
   const router = useRouter()
+  const isMobile = useMobile()
   const [userData, setUserData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [recentActivities, setRecentActivities] = useState<any[]>([])
@@ -28,7 +30,7 @@ export default function DashboardPage() {
     // Check if user is logged in
     const currentUser = localStorage.getItem("statusWindowCurrentUser")
     if (!currentUser) {
-      router.push("/login")
+      window.location.href = "/login"
       return
     }
 
@@ -37,7 +39,7 @@ export default function DashboardPage() {
     const user = users[currentUser]
 
     if (!user) {
-      router.push("/login")
+      window.location.href = "/login"
       return
     }
 
@@ -62,7 +64,7 @@ export default function DashboardPage() {
       const audio = new Audio(`/sfx/${file}.mp3`)
       audio.preload = "auto"
     })
-  }, [router])
+  }, [])
 
   // Direct navigation function that uses window.location for reliability
   const navigateTo = (path: string, message: string) => {
@@ -240,7 +242,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
       {/* System message notification */}
       {systemMessage && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-blue-900/90 border-2 border-blue-700 px-4 py-2 rounded-md text-blue-100 shadow-lg">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-blue-900/90 border-2 border-blue-700 px-4 py-2 rounded-md text-blue-100 shadow-lg max-w-[90%] sm:max-w-md text-center">
           {systemMessage}
         </div>
       )}
@@ -250,7 +252,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-yellow-400" />
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+            <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
               StatusWindow
             </h1>
           </div>
@@ -289,13 +291,13 @@ export default function DashboardPage() {
           <div className="lg:col-span-1">
             <StatusWindow userData={userData} />
 
-            <div className="mt-4 flex justify-between">
+            <div className="mt-4 flex flex-wrap sm:flex-nowrap justify-between gap-2">
               <InventorySystem userData={userData} onUseItem={handleUseItem} />
 
               {/* Fixed Quest Button - Now using onClick handler instead of Link */}
               <Button
                 variant="outline"
-                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50"
+                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto"
                 onClick={navigateToQuests}
                 disabled={isNavigating}
               >
@@ -324,7 +326,9 @@ export default function DashboardPage() {
                         {activity.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
                         <div className="flex-1 min-w-0">
                           <div className="font-medium truncate text-blue-100">{activity.name}</div>
-                          <div className="text-xs text-blue-300">{new Date(activity.timestamp).toLocaleString()}</div>
+                          <div className="text-xs text-blue-300 truncate">
+                            {new Date(activity.timestamp).toLocaleString()}
+                          </div>
                         </div>
                         <div className="text-sm font-bold whitespace-nowrap text-yellow-400">
                           +{activity.value} {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
@@ -357,25 +361,25 @@ export default function DashboardPage() {
               <TabsList className="bg-blue-900/30 border border-blue-800/50 flex flex-wrap h-auto">
                 <TabsTrigger
                   value="dashboard"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
                 >
                   Dashboard
                 </TabsTrigger>
                 <TabsTrigger
                   value="quests"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
                 >
                   Quests
                 </TabsTrigger>
                 <TabsTrigger
                   value="log-activity"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white"
+                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
                 >
                   Log
                 </TabsTrigger>
                 <Button
                   variant="ghost"
-                  className="flex-1 h-full py-2 text-sm font-medium text-white hover:bg-blue-800/50"
+                  className="flex-1 h-full py-2 text-xs sm:text-sm font-medium text-white hover:bg-blue-800/50"
                   onClick={navigateToProgress}
                   disabled={isNavigating}
                 >
@@ -402,8 +406,8 @@ export default function DashboardPage() {
                             .slice(0, 3)
                             .map((quest: any) => (
                               <div key={quest.id} className="p-3 rounded-md bg-blue-900/30 border border-blue-800/50">
-                                <div className="font-medium text-blue-100">{quest.title}</div>
-                                <div className="text-sm text-blue-300 mt-1">{quest.description}</div>
+                                <div className="font-medium text-blue-100 truncate">{quest.title}</div>
+                                <div className="text-sm text-blue-300 mt-1 line-clamp-2">{quest.description}</div>
                                 <div className="mt-2 space-y-1">
                                   <div className="flex justify-between text-sm text-blue-200">
                                     <span>Progress</span>
@@ -418,7 +422,7 @@ export default function DashboardPage() {
                                     ></div>
                                   </div>
                                 </div>
-                                <div className="mt-2 text-sm text-yellow-400">
+                                <div className="mt-2 text-sm text-yellow-400 truncate">
                                   Reward: +{quest.reward} {quest.type.charAt(0).toUpperCase() + quest.type.slice(1)}, +
                                   {quest.xpReward} XP
                                 </div>

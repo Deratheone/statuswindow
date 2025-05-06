@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import { playSFX, preloadAudio } from "@/utils/audio"
+import { useMobile } from "@/hooks/use-mobile"
 
 interface StatusWindowProps {
   userData: any
@@ -26,6 +27,7 @@ interface SystemMessage {
 }
 
 export function StatusWindow({ userData }: StatusWindowProps) {
+  const isMobile = useMobile()
   const [levelUpAnimation, setLevelUpAnimation] = useState(false)
   const [prevStats, setPrevStats] = useState({
     strength: userData.stats.strength,
@@ -265,7 +267,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 p-6 text-blue-100">
+        <div className="relative z-10 p-4 sm:p-6 text-blue-100">
           {levelUpAnimation && (
             <div className="absolute inset-0 bg-yellow-500/20 z-10 pointer-events-none flex items-center justify-center">
               <div className="text-4xl font-bold text-yellow-400 animate-bounce">LEVEL UP!</div>
@@ -274,7 +276,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
 
           {/* Character info */}
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-700 flex items-center justify-center text-3xl border-4 border-blue-600 overflow-hidden">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-700 flex items-center justify-center text-3xl border-4 border-blue-600 overflow-hidden">
               {userData.avatar && userData.avatar.startsWith("data:") ? (
                 <img
                   src={userData.avatar || "/placeholder.svg"}
@@ -287,7 +289,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
             </div>
 
             <div className="text-center sm:text-left flex-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
                 <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
                   <div className="text-xs text-blue-300 uppercase">LEVEL</div>
                   <div className="text-xl font-bold">{userData.level}</div>
@@ -295,12 +297,12 @@ export function StatusWindow({ userData }: StatusWindowProps) {
 
                 <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
                   <div className="text-xs text-blue-300 uppercase">CLASS</div>
-                  <div className="text-xl font-bold capitalize">{userData.characterClass}</div>
+                  <div className="text-xl font-bold capitalize truncate">{userData.characterClass}</div>
                 </div>
 
-                <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700 sm:col-span-2">
+                <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700 col-span-2">
                   <div className="text-xs text-blue-300 uppercase">NAME</div>
-                  <div className="text-xl font-bold">{userData.characterName}</div>
+                  <div className="text-xl font-bold truncate">{userData.characterName}</div>
                 </div>
               </div>
             </div>
@@ -326,8 +328,8 @@ export function StatusWindow({ userData }: StatusWindowProps) {
           <div className="mb-6">
             <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">STATS</div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
+            <div className="grid grid-cols-1 gap-4">
+              <div>
                 <div className="relative">
                   <div className="flex justify-between text-sm mb-1">
                     <span className="flex items-center gap-1 text-red-300">
@@ -362,7 +364,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
                 </div>
               </div>
 
-              <div className="col-span-2">
+              <div>
                 <div className="relative">
                   <div className="flex justify-between text-sm mb-1">
                     <span className="flex items-center gap-1 text-blue-300">
@@ -397,7 +399,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
                 </div>
               </div>
 
-              <div className="col-span-2">
+              <div>
                 <div className="relative">
                   <div className="flex justify-between text-sm mb-1">
                     <span className="flex items-center gap-1 text-purple-300">
@@ -443,15 +445,17 @@ export function StatusWindow({ userData }: StatusWindowProps) {
                 {skills.map((skill, index) => (
                   <div key={index} className="bg-blue-900/30 border border-blue-800 rounded p-2">
                     <div className="flex justify-between">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-yellow-400">Lv {skill.level}</span>
+                      <span className="font-medium truncate mr-2">{skill.name}</span>
+                      <span className="text-yellow-400 whitespace-nowrap">Lv {skill.level}</span>
                     </div>
-                    <div className="text-xs text-blue-300">{skill.description}</div>
+                    <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center text-blue-400 py-2">No skills unlocked yet. Level up to gain skills!</div>
+              <div className="text-center text-blue-400 py-2 text-sm">
+                No skills unlocked yet. Level up to gain skills!
+              </div>
             )}
           </div>
 
