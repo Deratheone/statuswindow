@@ -33,15 +33,16 @@ npm run dev
 
 ## Project Structure
 ```bash
-.
-├── public/
-│   ├── images/
-│   └── sounds/
-├── src/
-│   ├── app/
-│   ├── components/
-│   ├── lib/
-│   └── styles/
+statuswindow/
+├── app/                  # Next.js 13+ App Router (replaces src/pages)
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.js         # Root layout
+│   └── page.js           # Main page component
+├── components/           # Reusable components
+│   └── StatsDisplay.js
+├── public/               # Static assets
+│   └── vercel.svg
 ├── next.config.js
 └── package.json
 ```
