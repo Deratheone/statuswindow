@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useState, useEffect, Suspense } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -58,7 +57,7 @@ export default function ProfilePage() {
     // Check if user is logged in
     const currentUser = localStorage.getItem("statusWindowCurrentUser")
     if (!currentUser) {
-      router.push("/login")
+      window.location.href = "/login"
       return
     }
 
@@ -67,7 +66,7 @@ export default function ProfilePage() {
     const user = users[currentUser]
 
     if (!user) {
-      router.push("/login")
+      window.location.href = "/login"
       return
     }
 
@@ -84,7 +83,7 @@ export default function ProfilePage() {
       })
       setLoading(false)
     }, 100)
-  }, [router])
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -186,6 +185,10 @@ export default function ProfilePage() {
     })
   }
 
+  const handleBackToDashboard = () => {
+    window.location.href = "/dashboard"
+  }
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -195,13 +198,14 @@ export default function ProfilePage() {
       {/* Navigation */}
       <nav className="container mx-auto p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Link
-            href="/dashboard"
+          <Button
+            onClick={handleBackToDashboard}
+            variant="ghost"
             className="text-white flex items-center gap-2 hover:text-purple-400 transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Dashboard</span>
-          </Link>
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <Sparkles className="h-6 w-6 text-yellow-400" />

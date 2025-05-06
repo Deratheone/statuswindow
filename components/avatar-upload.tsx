@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
-import { X } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { Upload, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface AvatarUploadProps {
@@ -14,7 +14,23 @@ interface AvatarUploadProps {
 
 export function AvatarUpload({ currentAvatar, onAvatarChange, size = "md" }: AvatarUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [isEmoji, setIsEmoji] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Check if currentAvatar is an emoji or a data URL
+  useEffect(() => {
+    if (currentAvatar) {
+      // If it starts with data: it's an image
+      if (currentAvatar.startsWith("data:")) {
+        setPreviewUrl(currentAvatar)
+        setIsEmoji(false)
+      } else {
+        // It's an emoji or text
+        setPreviewUrl(null)
+        setIsEmoji(true)
+      }
+    }
+  }, [currentAvatar])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -34,14 +50,17 @@ export function AvatarUpload({ currentAvatar, onAvatarChange, size = "md" }: Ava
 
     const reader = new FileReader()
     reader.onload = () => {
-      setPreviewUrl(reader.result as string)
-      onAvatarChange(reader.result as string)
+      const result = reader.result as string
+      setPreviewUrl(result)
+      setIsEmoji(false)
+      onAvatarChange(result)
     }
     reader.readAsDataURL(file)
   }
 
   const handleRemoveImage = () => {
     setPreviewUrl(null)
+    setIsEmoji(true)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -56,25 +75,30 @@ export function AvatarUpload({ currentAvatar, onAvatarChange, size = "md" }: Ava
 
   return (
     <div className="flex flex-col items-center">
-      <div
-        className={`relative ${sizeClasses[size]} rounded-full overflow-hidden bg-slate-700 flex items-center justify-center`}
-      >
-        {previewUrl ? (
-          <img src={previewUrl || "/placeholder.svg"} alt="Avatar" className="h-full w-full object-cover" />
-        ) : (
-          <div className={`text-${size === "sm" ? "3xl" : size === "md" ? "4xl" : "5xl"}`}>{currentAvatar}</div>
-        )}
+      <div className="flex items-center gap-4">
+        {/* Avatar display */}
+        <div
+          className={`relative ${sizeClasses[size]} rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-purple-400/30`}
+        >
+          {!isEmoji && previewUrl ? (
+            <img src={previewUrl || "/placeholder.svg"} alt="Avatar" className="h-full w-full object-cover" />
+          ) : (
+            <div className={`text-${size === "sm" ? "3xl" : size === "md" ? "4xl" : "5xl"}`}>{currentAvatar}</div>
+          )}
+        </div>
 
-        {/* Remove button with improved visibility */}
-        {(previewUrl || currentAvatar !== "🧙‍♂️") && (
-          <button
+        {/* Remove button - separate from the avatar */}
+        {!isEmoji && (
+          <Button
             type="button"
             onClick={handleRemoveImage}
-            className="absolute top-0 right-0 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow-md transform translate-x-1/4 -translate-y-1/4 z-10 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-            aria-label="Remove avatar"
+            variant="destructive"
+            size="sm"
+            className="flex items-center gap-1"
           >
-            <X className="h-4 w-4" />
-          </button>
+            <Trash2 className="h-4 w-4" />
+            Remove
+          </Button>
         )}
       </div>
 
@@ -92,8 +116,9 @@ export function AvatarUpload({ currentAvatar, onAvatarChange, size = "md" }: Ava
         variant="outline"
         size="sm"
         onClick={() => fileInputRef.current?.click()}
-        className="mt-4 bg-slate-700/50 border-slate-600 text-white hover:bg-slate-600"
+        className="mt-4 bg-slate-700/50 border-slate-600 text-white hover:bg-slate-600 flex items-center gap-1"
       >
+        <Upload className="h-4 w-4" />
         Upload Image
       </Button>
     </div>
