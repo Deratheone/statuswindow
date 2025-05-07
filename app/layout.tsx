@@ -5,12 +5,22 @@ import "./globals.css"
 import { Analytics } from "@vercel/analytics/react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
+import dynamic from "next/dynamic"
+
+// Dynamically import the ParticlesBackground component
+const ParticlesBackground = dynamic(
+  () => import("@/components/particles-background").then((mod) => mod.ParticlesBackground),
+  {
+    ssr: false,
+  },
+)
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "StatusWindow - Level Up Your Life",
   description: "Transform your self-improvement journey into an epic adventure with StatusWindow",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
     generator: 'v0.dev'
 }
 
@@ -24,6 +34,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Suspense>
+            {/* Particles background */}
+            <ParticlesBackground />
+
             {children}
             <Analytics />
           </Suspense>

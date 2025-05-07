@@ -51,6 +51,11 @@
     --manhwa-yellow: #fbbf24;
     --manhwa-red: #ef4444;
     --manhwa-purple: #a855f7;
+
+    /* Scrollbar colors */
+    --scrollbar-track: rgba(30, 64, 175, 0.1);
+    --scrollbar-thumb: rgba(30, 64, 175, 0.5);
+    --scrollbar-thumb-hover: rgba(30, 64, 175, 0.7);
   }
 
   .dark {
@@ -90,6 +95,11 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Scrollbar colors for dark mode */
+    --scrollbar-track: rgba(96, 165, 250, 0.1);
+    --scrollbar-thumb: rgba(96, 165, 250, 0.5);
+    --scrollbar-thumb-hover: rgba(96, 165, 250, 0.7);
   }
 }
 
@@ -99,6 +109,48 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Custom scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+    background-image: linear-gradient(to bottom, var(--scrollbar-thumb), var(--manhwa-blue));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    input,
+    button,
+    select,
+    textarea {
+      font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
   }
 }
 
@@ -138,4 +190,45 @@
 
 .animate-bounce {
   animation: bounce 1s ease infinite;
+}
+
+/* Mobile-specific styles */
+@layer components {
+  .mobile-card {
+    @apply rounded-xl border-2 border-blue-700 shadow-lg;
+  }
+
+  .mobile-text {
+    @apply text-sm leading-tight;
+  }
+
+  .mobile-heading {
+    @apply text-lg font-bold;
+  }
+
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Crystal effect for cards */
+.crystal-card {
+  @apply relative overflow-hidden backdrop-blur-sm;
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.2), rgba(30, 64, 175, 0.1));
+  box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.crystal-card::before {
+  content: "";
+  @apply absolute inset-0 z-0 opacity-30;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    transparent 100%
+  );
 }

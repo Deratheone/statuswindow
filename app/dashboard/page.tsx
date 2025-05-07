@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy } from "lucide-react"
+import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy, Menu } from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
@@ -14,6 +14,18 @@ import { InventorySystem } from "@/components/inventory-system"
 import { generateDefaultQuests } from "@/lib/quest-generator"
 import { playSFX } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
+import { useSwipe } from "@/hooks/use-swipe"
+import dynamic from "next/dynamic"
+
+// Dynamically import heavy components
+const MobileNavDrawer = dynamic(() => import("@/components/mobile-nav-drawer").then((mod) => mod.MobileNavDrawer), {
+  ssr: false,
+  loading: () => (
+    <div className="h-12 w-12 flex items-center justify-center">
+      <Menu className="h-6 w-6" />
+    </div>
+  ),
+})
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -25,6 +37,23 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+
+  // Swipe handlers for tab navigation
+  const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
+    onSwipeLeft: () => {
+      // Navigate to next tab
+      if (activeTab === "dashboard") setActiveTab("quests")
+      else if (activeTab === "quests") setActiveTab("log-activity")
+      else if (activeTab === "log-activity") navigateToProgress()
+    },
+    onSwipeRight: () => {
+      // Navigate to previous tab
+      if (activeTab === "log-activity") setActiveTab("quests")
+      else if (activeTab === "quests") setActiveTab("dashboard")
+      else if (activeTab === "progress") setActiveTab("log-activity")
+    },
+  })
 
   useEffect(() => {
     // Check if user is logged in
@@ -239,7 +268,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
+    <div
+      className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* System message notification */}
       {systemMessage && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-blue-900/90 border-2 border-blue-700 px-4 py-2 rounded-md text-blue-100 shadow-lg max-w-[90%] sm:max-w-md text-center">
@@ -257,32 +291,54 @@ export default function DashboardPage() {
             </h1>
           </div>
         </div>
-        <div className="flex gap-2">
+
+        {isMobile ? (
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:text-yellow-400 relative"
-            onClick={navigateToSettings}
-            disabled={isNavigating}
-            aria-label="Settings"
+            className="text-white hover:text-yellow-400 mobile-touch-target"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Menu"
           >
-            <Settings className={`h-5 w-5 ${isNavigating ? "animate-pulse" : ""}`} />
-            {/* Larger hit area */}
-            <span className="absolute inset-0"></span>
+            <Menu className="h-6 w-6" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:text-yellow-400 relative"
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            aria-label="Logout"
-          >
-            <LogOut className={`h-5 w-5 ${isLoggingOut ? "animate-pulse" : ""}`} />
-            {/* Larger hit area */}
-            <span className="absolute inset-0"></span>
-          </Button>
-        </div>
+        ) : (
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:text-yellow-400 relative"
+              onClick={navigateToSettings}
+              disabled={isNavigating}
+              aria-label="Settings"
+            >
+              <Settings className={`h-5 w-5 ${isNavigating ? "animate-pulse" : ""}`} />
+              <span className="absolute inset-0"></span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:text-yellow-400 relative"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              aria-label="Logout"
+            >
+              <LogOut className={`h-5 w-5 ${isLoggingOut ? "animate-pulse" : ""}`} />
+              <span className="absolute inset-0"></span>
+            </Button>
+          </div>
+        )}
+
+        {/* Mobile Navigation Drawer */}
+        {isMobile && (
+          <MobileNavDrawer
+            open={mobileNavOpen}
+            onClose={() => setMobileNavOpen(false)}
+            onSettings={navigateToSettings}
+            onLogout={handleLogout}
+            userData={userData}
+          />
+        )}
       </nav>
 
       <div className="container mx-auto px-2 py-4 sm:p-4">
@@ -297,7 +353,7 @@ export default function DashboardPage() {
               {/* Fixed Quest Button - Now using onClick handler instead of Link */}
               <Button
                 variant="outline"
-                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto"
+                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto mobile-touch-target"
                 onClick={navigateToQuests}
                 disabled={isNavigating}
               >
@@ -306,7 +362,7 @@ export default function DashboardPage() {
               </Button>
             </div>
 
-            <Card className="mt-6 border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+            <Card className="mt-6 crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                   <Trophy className="h-5 w-5 text-yellow-400" />
@@ -344,7 +400,7 @@ export default function DashboardPage() {
 
                 <Button
                   variant="outline"
-                  className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
+                  className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50 mobile-touch-target"
                   onClick={navigateToActivities}
                   disabled={isNavigating}
                 >
@@ -361,37 +417,35 @@ export default function DashboardPage() {
               <TabsList className="bg-blue-900/30 border border-blue-800/50 flex flex-wrap h-auto">
                 <TabsTrigger
                   value="dashboard"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
+                  className="flex-1 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-800 data-[state=active]:to-blue-700 data-[state=active]:text-white text-xs sm:text-sm mobile-touch-target"
                 >
                   Dashboard
                 </TabsTrigger>
                 <TabsTrigger
                   value="quests"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
+                  className="flex-1 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-800 data-[state=active]:to-blue-700 data-[state=active]:text-white text-xs sm:text-sm mobile-touch-target"
                 >
                   Quests
                 </TabsTrigger>
                 <TabsTrigger
                   value="log-activity"
-                  className="flex-1 py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white text-xs sm:text-sm"
+                  className="flex-1 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-800 data-[state=active]:to-blue-700 data-[state=active]:text-white text-xs sm:text-sm mobile-touch-target"
                 >
                   Log
                 </TabsTrigger>
                 <Button
                   variant="ghost"
-                  className="flex-1 h-full py-2 text-xs sm:text-sm font-medium text-white hover:bg-blue-800/50"
+                  className="flex-1 h-full py-2 text-xs sm:text-sm font-medium text-white hover:bg-blue-800/50 mobile-touch-target"
                   onClick={navigateToProgress}
                   disabled={isNavigating}
                 >
-                  <a href="/progress" className="w-full h-full flex items-center justify-center">
-                    Progress
-                  </a>
+                  <span className="w-full h-full flex items-center justify-center">Progress</span>
                 </Button>
               </TabsList>
 
               <TabsContent value="dashboard" className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                  <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                  <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Award className="h-5 w-5 text-yellow-400" />
@@ -437,7 +491,7 @@ export default function DashboardPage() {
 
                       <Button
                         variant="outline"
-                        className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50"
+                        className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50 mobile-touch-target"
                         onClick={navigateToQuests}
                         disabled={isNavigating}
                       >
@@ -447,7 +501,7 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                  <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Plus className="h-5 w-5 text-green-400" />
@@ -459,7 +513,7 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="md:col-span-2 border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                  <Card className="md:col-span-2 crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
                         <Trophy className="h-5 w-5 text-yellow-400" />
@@ -478,7 +532,7 @@ export default function DashboardPage() {
               </TabsContent>
 
               <TabsContent value="log-activity" className="mt-6">
-                <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                   <CardHeader>
                     <CardTitle className="text-blue-100">Log New Activity</CardTitle>
                     <CardDescription className="text-blue-300">
