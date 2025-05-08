@@ -41,10 +41,10 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20 flex flex-col md:flex-row items-center gap-8 sm:gap-12">
-        <div className="flex-1 space-y-6">
+      <section className="container mx-auto px-3 py-8 sm:px-4 sm:py-20 flex flex-col md:flex-row items-center gap-6 sm:gap-12">
+        <div className="flex-1 space-y-4 sm:space-y-6 mobile-text-container">
           <motion.h1
-            className="text-4xl md:text-6xl font-bold leading-tight"
+            className="text-3xl md:text-6xl font-bold leading-tight"
             initial={{ opacity: 0.9 }}
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
@@ -52,33 +52,34 @@ export default function LandingPage() {
             Level Up Your <span className="text-yellow-400">Real Life</span>
           </motion.h1>
           <motion.p
-            className="text-lg md:text-xl text-gray-300"
+            className="text-base md:text-xl text-gray-300"
             whileHover={{ x: 5 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             Transform your self-improvement journey into an epic adventure with StatusWindow, your personal RPG-inspired
             progress tracker.
           </motion.p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link href="/onboarding">
               <motion.div
                 whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(168,85,247,0.5)" }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full"
               >
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
+                  className="w-full sm:w-auto mobile-button bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
                 >
                   Start Your Journey <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </motion.div>
             </Link>
             <a href="#how-it-works">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-purple-500 text-purple-300 hover:bg-purple-900/20"
+                  className="w-full sm:w-auto mobile-button border-purple-500 text-purple-300 hover:bg-purple-900/20"
                 >
                   Learn More
                 </Button>
@@ -87,33 +88,33 @@ export default function LandingPage() {
           </div>
         </div>
         <motion.div
-          className="flex-1 relative"
+          className="flex-1 relative w-full max-w-full sm:max-w-md mx-auto md:mx-0"
           whileHover={{ y: -5 }}
           transition={{ type: "spring", stiffness: 300, damping: 10 }}
         >
           <motion.div
-            className="relative bg-slate-800/70 backdrop-blur-sm border border-purple-500/50 rounded-lg p-6 shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+            className="relative bg-slate-800/70 backdrop-blur-sm border border-purple-500/50 rounded-lg p-4 sm:p-6 shadow-[0_0_15px_rgba(168,85,247,0.5)]"
             whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.7)" }}
           >
             <motion.div
-              className="absolute -top-3 -left-3 bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-1 rounded-md text-white text-sm font-medium"
+              className="absolute -top-3 -left-3 bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-1 rounded-md text-white text-xs sm:text-sm font-medium"
               whileHover={{ scale: 1.05 }}
             >
               Character Status
             </motion.div>
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4">
               <motion.div
-                className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"
                 whileHover={{ rotate: 5, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
               >
-                <span className="text-2xl">🧙</span>
+                <span className="text-xl sm:text-2xl">🧙</span>
               </motion.div>
               <div>
-                <h3 className="text-xl font-bold">Mystic Seeker</h3>
+                <h3 className="text-lg sm:text-xl font-bold">Mystic Seeker</h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-yellow-400 text-sm">Level 12</span>
-                  <div className="h-1.5 w-24 bg-gray-700 rounded-full">
+                  <span className="text-yellow-400 text-xs sm:text-sm">Level 12</span>
+                  <div className="h-1.5 w-16 sm:w-24 bg-gray-700 rounded-full">
                     <motion.div
                       className="h-full w-3/4 bg-yellow-400 rounded-full"
                       whileHover={{ width: "80%" }}
@@ -123,15 +124,15 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="space-y-1">
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className="flex items-center gap-1">
-                    <Dumbbell className="h-4 w-4 text-red-400" /> Strength
+                    <Dumbbell className="h-3 w-3 sm:h-4 sm:w-4 text-red-400" /> Strength
                   </span>
                   <span className="text-red-400">45/100</span>
                 </div>
-                <div className="h-2 bg-gray-700 rounded-full">
+                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
                   <motion.div
                     className="h-full w-[45%] bg-gradient-to-r from-red-500 to-red-400 rounded-full"
                     whileHover={{ width: "50%" }}
@@ -140,13 +141,13 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className="flex items-center gap-1">
-                    <Brain className="h-4 w-4 text-blue-400" /> Intelligence
+                    <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" /> Intelligence
                   </span>
                   <span className="text-blue-400">72/100</span>
                 </div>
-                <div className="h-2 bg-gray-700 rounded-full">
+                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
                   <motion.div
                     className="h-full w-[72%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
                     whileHover={{ width: "77%" }}
@@ -155,13 +156,13 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className="flex items-center gap-1">
-                    <Sparkles className="h-4 w-4 text-purple-400" /> Mana
+                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400" /> Mana
                   </span>
                   <span className="text-purple-400">58/100</span>
                 </div>
-                <div className="h-2 bg-gray-700 rounded-full">
+                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
                   <motion.div
                     className="h-full w-[58%] bg-gradient-to-r from-purple-500 to-purple-400 rounded-full"
                     whileHover={{ width: "63%" }}
@@ -170,21 +171,21 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="mt-4 border-t border-gray-700 pt-4">
-              <div className="flex justify-between text-sm">
+            <div className="mt-3 sm:mt-4 border-t border-gray-700 pt-2 sm:pt-4">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="flex items-center gap-1">
-                  <Award className="h-4 w-4 text-yellow-400" /> Active Quests
+                  <Award className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400" /> Active Quests
                 </span>
                 <span className="text-yellow-400">3</span>
               </div>
             </div>
           </motion.div>
           <motion.div
-            className="absolute -bottom-4 -right-4 bg-slate-800/70 backdrop-blur-sm border border-blue-500/50 rounded-lg p-4 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+            className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-slate-800/70 backdrop-blur-sm border border-blue-500/50 rounded-lg p-3 sm:p-4 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
             whileHover={{ y: -5, x: -5, boxShadow: "0 0 20px rgba(59,130,246,0.7)" }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            <div className="text-sm font-medium text-blue-400">+15 XP</div>
+            <div className="text-xs sm:text-sm font-medium text-blue-400">+15 XP</div>
             <div className="text-xs text-gray-400">Completed meditation</div>
           </motion.div>
         </motion.div>

@@ -70,24 +70,26 @@ export default function ProgressPage() {
       <div className="container mx-auto px-2 py-4 sm:p-4">
         <Card className="border-blue-800/50 bg-blue-900/20 backdrop-blur-sm shadow-[0_0_15px_rgba(30,64,175,0.3)]">
           <CardHeader>
-            <CardTitle className="text-blue-100">Progress Analytics</CardTitle>
-            <CardDescription className="text-blue-300">Track your growth over time</CardDescription>
+            <CardTitle className="text-blue-100 mobile-text-container">Progress Analytics</CardTitle>
+            <CardDescription className="text-blue-300 mobile-text-container">
+              Track your growth over time
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="p-4 text-center">
-              <h3 className="text-xl font-bold mb-2">Stats Overview</h3>
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
-                  <div className="text-red-400 font-medium">Strength</div>
-                  <div className="text-2xl font-bold mt-1">{userData?.stats?.strength || 0}</div>
+            <div className="p-3 sm:p-4 text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 mobile-text-container">Stats Overview</h3>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-3 sm:mt-4">
+                <div className="bg-blue-900/30 p-2 sm:p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-red-400 font-medium text-sm sm:text-base">Strength</div>
+                  <div className="text-xl sm:text-2xl font-bold mt-1">{userData?.stats?.strength || 0}</div>
                 </div>
-                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
-                  <div className="text-blue-400 font-medium">Intelligence</div>
-                  <div className="text-2xl font-bold mt-1">{userData?.stats?.intelligence || 0}</div>
+                <div className="bg-blue-900/30 p-2 sm:p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-blue-400 font-medium text-sm sm:text-base">Intelligence</div>
+                  <div className="text-xl sm:text-2xl font-bold mt-1">{userData?.stats?.intelligence || 0}</div>
                 </div>
-                <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-800/50">
-                  <div className="text-purple-400 font-medium">Mana</div>
-                  <div className="text-2xl font-bold mt-1">{userData?.stats?.mana || 0}</div>
+                <div className="bg-blue-900/30 p-2 sm:p-4 rounded-lg border border-blue-800/50">
+                  <div className="text-purple-400 font-medium text-sm sm:text-base">Mana</div>
+                  <div className="text-xl sm:text-2xl font-bold mt-1">{userData?.stats?.mana || 0}</div>
                 </div>
               </div>
             </div>

@@ -96,7 +96,7 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
               <div className="absolute inset-[6px] border-[2px] border-blue-600 rounded-md z-0"></div>
 
               <CardHeader className="relative z-10 bg-blue-800 border-b-4 border-blue-700 flex flex-row justify-between items-center">
-                <CardTitle className="text-blue-100">Inventory</CardTitle>
+                <CardTitle className="text-blue-100 text-lg sm:text-xl">Inventory</CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -107,7 +107,7 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
                 </Button>
               </CardHeader>
 
-              <CardContent className="relative z-10 p-4 text-blue-100">
+              <CardContent className="relative z-10 p-3 sm:p-4 text-blue-100">
                 {items.filter((item) => !item.used).length > 0 ? (
                   <div className="space-y-3">
                     {items.map(
@@ -117,15 +117,15 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
                             key={item.id}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="bg-blue-900/30 border border-blue-800 rounded p-2 flex items-start gap-3"
+                            className="bg-blue-900/30 border border-blue-800 rounded p-2 flex items-start gap-2 sm:gap-3"
                           >
-                            <div className="bg-blue-800/50 p-2 rounded-full">
+                            <div className="bg-blue-800/50 p-2 rounded-full flex-shrink-0">
                               {item.type === "potion" && <Potion className="h-5 w-5 text-green-400" />}
                               {item.type === "scroll" && <Scroll className="h-5 w-5 text-yellow-400" />}
                               {item.type === "item" && <Package className="h-5 w-5 text-blue-400" />}
                             </div>
 
-                            <div className="flex-1">
+                            <div className="flex-1 min-w-0 mobile-text-container">
                               <div className="font-medium truncate">{item.name}</div>
                               <div className="text-xs text-blue-300 line-clamp-2">{item.description}</div>
                               <div className="text-xs text-yellow-400 mt-1 truncate">{item.effect}</div>
@@ -134,7 +134,7 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="bg-blue-800/50 border-blue-700 text-blue-100 hover:bg-blue-700 mobile-touch-target"
+                              className="bg-blue-800/50 border-blue-700 text-blue-100 hover:bg-blue-700 mobile-touch-target flex-shrink-0"
                               onClick={() => handleUseItem(item)}
                             >
                               Use
@@ -144,7 +144,7 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
                     )}
                   </div>
                 ) : (
-                  <div className="text-center py-4 text-blue-400">
+                  <div className="text-center py-4 text-blue-400 mobile-text-container">
                     No items available. Complete quests to earn items!
                   </div>
                 )}
