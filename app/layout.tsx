@@ -5,15 +5,7 @@ import "./globals.css"
 import { Analytics } from "@vercel/analytics/react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
-import dynamic from "next/dynamic"
-
-// Dynamically import the ParticlesBackground component
-const ParticlesBackground = dynamic(
-  () => import("@/components/particles-background").then((mod) => mod.ParticlesBackground),
-  {
-    ssr: false,
-  },
-)
+import { ParticlesWrapper } from "@/components/particles-wrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -35,7 +27,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Suspense>
             {/* Particles background */}
-            <ParticlesBackground />
+            <ParticlesWrapper />
 
             {children}
             <Analytics />

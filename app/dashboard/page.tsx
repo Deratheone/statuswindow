@@ -15,17 +15,7 @@ import { generateDefaultQuests } from "@/lib/quest-generator"
 import { playSFX } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
 import { useSwipe } from "@/hooks/use-swipe"
-import dynamic from "next/dynamic"
-
-// Dynamically import heavy components
-const MobileNavDrawer = dynamic(() => import("@/components/mobile-nav-drawer").then((mod) => mod.MobileNavDrawer), {
-  ssr: false,
-  loading: () => (
-    <div className="h-12 w-12 flex items-center justify-center">
-      <Menu className="h-6 w-6" />
-    </div>
-  ),
-})
+import { MobileNavWrapper } from "@/components/mobile-nav-wrapper"
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -330,8 +320,8 @@ export default function DashboardPage() {
         )}
 
         {/* Mobile Navigation Drawer */}
-        {isMobile && (
-          <MobileNavDrawer
+        {isMobile && userData && (
+          <MobileNavWrapper
             open={mobileNavOpen}
             onClose={() => setMobileNavOpen(false)}
             onSettings={navigateToSettings}
