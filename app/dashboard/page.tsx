@@ -319,8 +319,8 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Mobile Navigation Drawer */}
-        {isMobile && userData && (
+        {/* Mobile Navigation Drawer - Only render when needed */}
+        {isMobile && userData && mobileNavOpen && (
           <MobileNavWrapper
             open={mobileNavOpen}
             onClose={() => setMobileNavOpen(false)}
