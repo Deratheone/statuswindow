@@ -196,24 +196,24 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
       {/* Navigation */}
-      <nav className="container mx-auto p-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+      <nav className="container mx-auto p-4 flex flex-wrap justify-between items-center">
+        <div className="flex items-center gap-2 order-1">
           <Button
             onClick={handleBackToDashboard}
             variant="ghost"
-            className="text-white flex items-center gap-2 hover:text-purple-400 transition-colors"
+            className="text-white flex items-center gap-2 hover:text-purple-400 transition-colors p-2"
           >
             <ArrowLeft className="h-5 w-5" />
-            <span>Back to Dashboard</span>
+            <span className="text-sm sm:text-base">Back</span>
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-yellow-400" />
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+        <div className="flex items-center gap-2 order-2 mx-auto">
+          <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
+          <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
             StatusWindow
           </h1>
         </div>
-        <div></div>
+        <div className="order-3 w-[60px]"></div>
       </nav>
 
       <div className="container mx-auto px-2 py-4 sm:p-4">

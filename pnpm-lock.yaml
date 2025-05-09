@@ -97,13 +97,13 @@ importers:
         version: 1.1.6(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@remix-run/react':
         specifier: latest
-        version: 2.16.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
+        version: 2.16.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
       '@sveltejs/kit':
         specifier: latest
         version: 2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1))
       '@vercel/analytics':
         specifier: latest
-        version: 1.5.0(@remix-run/react@2.16.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.28.2)(vue-router@4.5.1(vue@3.5.13(typescript@5.0.2)))(vue@3.5.13(typescript@5.0.2))
+        version: 1.5.0(@remix-run/react@2.16.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.28.2)(vue-router@4.5.1(vue@3.5.13(typescript@5.0.2)))(vue@3.5.13(typescript@5.0.2))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.0.0)
@@ -124,7 +124,7 @@ importers:
         version: 8.5.1(react@19.0.0)
       framer-motion:
         specifier: latest
-        version: 12.10.1(@emotion/is-prop-valid@1.3.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 12.10.4(@emotion/is-prop-valid@1.3.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       input-otp:
         specifier: 1.4.1
         version: 1.4.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1376,8 +1376,8 @@ packages:
   '@radix-ui/rect@1.1.0':
     resolution: {integrity: sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg==}
 
-  '@remix-run/react@2.16.5':
-    resolution: {integrity: sha512-5S95uc9lrF/rCYesauL+XiBdAoOK+OWGwp7KCZXKMqt1qnSWAv231+cHjhxOjwvSfb7kAafQAGsrF9bqM5gwqA==}
+  '@remix-run/react@2.16.6':
+    resolution: {integrity: sha512-9wrv1E6316ptN20U3wPLm3tRhUyv0AUh1OBxq/dGwEJOMp922aQw2HSYwzYBl00blrVnQVLz1hNfVLIUzBEFzw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0.0
@@ -1391,8 +1391,8 @@ packages:
     resolution: {integrity: sha512-O3rHJzAQKamUz1fvE0Qaw0xSFqsA/yafi2iqeE0pvdFtCO1viYx8QL6f3Ln/aCCTLxs68SLf0KPM9eSeM8yBnA==}
     engines: {node: '>=14.0.0'}
 
-  '@remix-run/server-runtime@2.16.5':
-    resolution: {integrity: sha512-LGGNEJoior2zvgtqyPC5tVPucAvewovQvL4ztC5yE8ZszHmLri9bB9YYWvHqsiT+EaunKHNLmI8jpJHe3PEKhA==}
+  '@remix-run/server-runtime@2.16.6':
+    resolution: {integrity: sha512-EAD21CDrrTvaC2FznMDcVza12DgUUdGkR1kSM75ZrIy9sJaWKpiTqBitKoIjw1K89IPCM7xZTAEvpDxIWitULg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -1941,8 +1941,8 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  framer-motion@12.10.1:
-    resolution: {integrity: sha512-g+fANUVC17SzQc6eA0CtomBW4n67ckhS2hq5fjkKZneKzv7sbdXK3zzjnnAKB22Ck+Qhh+IlO5RjHNKULsq99Q==}
+  framer-motion@12.10.4:
+    resolution: {integrity: sha512-gGkavMW3QFDCxI+adVu5sn2NtIRHYPGVLDSJ0S/6B0ZoxPaql2F9foWdg9sGIP6sPA8cbNDfxYf9VlhD3+FkVQ==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -2097,8 +2097,8 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  motion-dom@12.10.1:
-    resolution: {integrity: sha512-rY8DNqgKh4LeFSQBkuXpe/7sycYS9RM+4luukjHpHogF1liSvIp0Hedx0q2QsWNz+AHuZ5bZQ9j9QZSUCA8bbw==}
+  motion-dom@12.10.4:
+    resolution: {integrity: sha512-GSv8kz0ANFfeGrFKi99s3GQjLiL1IKH3KtSNEqrPiVbloHVRiNbNtpsYQq9rkV2AV+7jxvd1X1ObUMVDnAEnXA==}
 
   motion-utils@12.9.4:
     resolution: {integrity: sha512-BW3I65zeM76CMsfh3kHid9ansEJk9Qvl+K5cu4DVHKGsI52n76OJ4z2CUJUV+Mn3uEP9k1JJA3tClG0ggSrRcg==}
@@ -2663,8 +2663,8 @@ packages:
     resolution: {integrity: sha512-MPou1ZDxsuVq6SN1fbX+aI5yrs6FyP2iPCqqttpNbWyL+R6fik1rL0ab/x02B57liDXqGKYomIbBQVP3zUTW1A==}
     deprecated: starting from tsparticles v3 the packages are now moved to @tsparticles/package-name instead of tsparticles-package-name
 
-  turbo-stream@2.4.0:
-    resolution: {integrity: sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==}
+  turbo-stream@2.4.1:
+    resolution: {integrity: sha512-v8kOJXpG3WoTN/+at8vK7erSzo6nW6CIaeOvNOkHQVDajfz1ZVeSxCbc6tOH4hrGZW7VUCV0TOXd8CPzYnYkrw==}
 
   typescript@5.0.2:
     resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
@@ -3858,21 +3858,21 @@ snapshots:
 
   '@radix-ui/rect@1.1.0': {}
 
-  '@remix-run/react@2.16.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)':
+  '@remix-run/react@2.16.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)':
     dependencies:
       '@remix-run/router': 1.23.0
-      '@remix-run/server-runtime': 2.16.5(typescript@5.0.2)
+      '@remix-run/server-runtime': 2.16.6(typescript@5.0.2)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       react-router: 6.30.0(react@19.0.0)
       react-router-dom: 6.30.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      turbo-stream: 2.4.0
+      turbo-stream: 2.4.1
     optionalDependencies:
       typescript: 5.0.2
 
   '@remix-run/router@1.23.0': {}
 
-  '@remix-run/server-runtime@2.16.5(typescript@5.0.2)':
+  '@remix-run/server-runtime@2.16.6(typescript@5.0.2)':
     dependencies:
       '@remix-run/router': 1.23.0
       '@types/cookie': 0.6.0
@@ -3880,7 +3880,7 @@ snapshots:
       cookie: 0.7.2
       set-cookie-parser: 2.7.1
       source-map: 0.7.4
-      turbo-stream: 2.4.0
+      turbo-stream: 2.4.1
     optionalDependencies:
       typescript: 5.0.2
 
@@ -4033,9 +4033,9 @@ snapshots:
     dependencies:
       csstype: 3.1.3
 
-  '@vercel/analytics@1.5.0(@remix-run/react@2.16.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.28.2)(vue-router@4.5.1(vue@3.5.13(typescript@5.0.2)))(vue@3.5.13(typescript@5.0.2))':
+  '@vercel/analytics@1.5.0(@remix-run/react@2.16.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.28.2)(vue-router@4.5.1(vue@3.5.13(typescript@5.0.2)))(vue@3.5.13(typescript@5.0.2))':
     optionalDependencies:
-      '@remix-run/react': 2.16.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
+      '@remix-run/react': 2.16.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
       '@sveltejs/kit': 2.20.8(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.7.1))
       next: 15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
@@ -4390,9 +4390,9 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.10.1(@emotion/is-prop-valid@1.3.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  framer-motion@12.10.4(@emotion/is-prop-valid@1.3.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      motion-dom: 12.10.1
+      motion-dom: 12.10.4
       motion-utils: 12.9.4
       tslib: 2.8.1
     optionalDependencies:
@@ -4522,7 +4522,7 @@ snapshots:
 
   minipass@7.1.2: {}
 
-  motion-dom@12.10.1:
+  motion-dom@12.10.4:
     dependencies:
       motion-utils: 12.9.4
 
@@ -5164,7 +5164,7 @@ snapshots:
     dependencies:
       tsparticles-engine: 2.12.0
 
-  turbo-stream@2.4.0: {}
+  turbo-stream@2.4.1: {}
 
   typescript@5.0.2: {}
 

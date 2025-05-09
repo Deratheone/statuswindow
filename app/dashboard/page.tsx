@@ -126,7 +126,7 @@ export default function DashboardPage() {
   }
 
   const navigateToActivities = () => {
-    navigateTo("/activities", "Opening activities...")
+    window.location.href = "/activities"
   }
 
   const handleActivitySubmit = (activity: any) => {
@@ -392,7 +392,6 @@ export default function DashboardPage() {
                   variant="outline"
                   className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50 mobile-touch-target"
                   onClick={navigateToActivities}
-                  disabled={isNavigating}
                 >
                   View All Activities
                   <ChevronRight className="ml-2 h-4 w-4" />

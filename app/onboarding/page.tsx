@@ -376,17 +376,17 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex flex-col items-center justify-center p-2 sm:p-4">
       <Link
         href="/"
-        className="absolute top-4 left-4 text-white flex items-center gap-2 hover:text-purple-400 transition-colors"
+        className="absolute top-4 left-4 text-white flex items-center gap-1 hover:text-purple-400 transition-colors z-10"
       >
-        <ArrowLeft className="h-5 w-5" />
-        <span>Return to the Main Gate</span>
+        <ArrowLeft className="h-4 w-4" />
+        <span className="text-xs sm:text-sm">Back</span>
       </Link>
 
       <div className="w-full max-w-[95%] sm:max-w-2xl">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 mt-10 sm:mt-0">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-yellow-400" />
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
+            <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
               StatusWindow
             </h1>
           </div>
