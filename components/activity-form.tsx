@@ -178,12 +178,15 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
         </Button>
       </form>
 
-      <ActivityVerification
-        isOpen={showVerification}
-        onClose={() => setShowVerification(false)}
-        activityData={activityData}
-        onVerify={handleVerified}
-      />
+      {/* Only render ActivityVerification when showVerification is true */}
+      {showVerification && (
+        <ActivityVerification
+          isOpen={showVerification}
+          onClose={() => setShowVerification(false)}
+          activityData={activityData}
+          onVerify={handleVerified}
+        />
+      )}
     </>
   )
 }
