@@ -133,81 +133,61 @@ export default function DashboardPage() {
     const currentUser = localStorage.getItem("statusWindowCurrentUser")
     if (!currentUser) return
 
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
-    const user = users[currentUser]
+    try {
+      const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+      const user = users[currentUser]
 
-    if (!user) return
+      if (!user) return
 
-    // Add activity to user data
-    const activities = user.activities || []
-    const newActivity = {
-      ...activity,
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-    }
-
-    activities.push(newActivity)
-    user.activities = activities
-
-    // Update stats based on activity
-    const statType = activity.type
-    const statValue = activity.value
-
-    user.stats[statType] += statValue
-
-    // Add XP
-    const oldXP = user.xp
-    user.xp += statValue * 5
-
-    // Play XP gain sound
-    playSFX("xp-gain")
-
-    // Check for level up
-    if (user.xp >= user.xpToNextLevel) {
-      user.level += 1
-      user.xp = user.xp - user.xpToNextLevel
-      user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
-
-      // Show system message for level up
-      setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
-      setTimeout(() => setSystemMessage(null), 5000)
-    }
-
-    // Update quests progress
-    user.quests = user.quests.map((quest: any) => {
-      if (quest.completed) return quest
-
-      if (quest.type === statType) {
-        const newProgress = quest.progress + statValue
-        const completed = newProgress >= quest.target
-
-        if (completed) {
-          // Award bonus for completing quest
-          user.stats[statType] += quest.reward
-          user.xp += quest.xpReward
-
-          // Show system message for quest completion
-          setSystemMessage(`Quest completed: ${quest.title}! Rewards claimed.`)
-          setTimeout(() => setSystemMessage(null), 5000)
-        }
-
-        return {
-          ...quest,
-          progress: newProgress,
-          completed,
-        }
+      // Add activity to user data
+      const activities = user.activities || []
+      const newActivity = {
+        ...activity,
+        id: Date.now(),
+        timestamp: new Date().toISOString(),
       }
 
-      return quest
-    })
+      activities.push(newActivity)
+      user.activities = activities
 
-    // Save updated user data
-    users[currentUser] = user
-    localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+      // Update stats based on activity
+      const statType = activity.type
+      const statValue = activity.value
 
-    // Update state
-    setUserData(user)
-    setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
+      // Ensure stats object exists
+      user.stats = user.stats || { strength: 0, intelligence: 0, mana: 0 }
+      user.stats[statType] = (user.stats[statType] || 0) + statValue
+
+      // Add XP
+      user.xp = (user.xp || 0) + (statValue * 5)
+      user.xpToNextLevel = user.xpToNextLevel || 100
+
+      // Play XP gain sound
+      playSFX("xp-gain")
+
+      // Check for level up
+      if (user.xp >= user.xpToNextLevel) {
+        user.level = (user.level || 1) + 1
+        user.xp = user.xp - user.xpToNextLevel
+        user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
+
+        // Show system message for level up
+        setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
+        setTimeout(() => setSystemMessage(null), 5000)
+      }
+
+      // Save updated user data
+      users[currentUser] = user
+      localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+
+      // Update state
+      setUserData(user)
+      setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
+    } catch (error) {
+      console.error("Error handling activity submission:", error)
+      setSystemMessage("Error saving activity. Please try again.")
+      setTimeout(() => setSystemMessage(null), 5000)
+    }
   }
 
   const handleUseItem = (item: any) => {

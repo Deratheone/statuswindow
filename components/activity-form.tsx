@@ -84,6 +84,7 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
             value={activityData.name}
             onChange={handleInputChange}
             className="bg-slate-700/50 border-slate-600 text-white"
+            autoComplete="off"
           />
         </div>
 
@@ -97,6 +98,7 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
               value={activityData.description}
               onChange={handleInputChange}
               className="bg-slate-700/50 border-slate-600 text-white min-h-[80px]"
+              autoComplete="off"
             />
           </div>
         )}
