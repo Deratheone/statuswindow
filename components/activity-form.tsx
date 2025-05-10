@@ -28,10 +28,8 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
+    console.log('Form submitted', activityData);
     if (!activityData.name) return
-
-    // Show verification dialog
     setShowVerification(true)
   }
 
@@ -156,7 +154,18 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
             <Label>Value: {activityData.value}</Label>
             <span className="text-sm font-medium">+{activityData.value * 5} XP</span>
           </div>
-          <Slider value={[activityData.value]} min={1} max={10} step={1} onValueChange={handleValueChange} />
+          <Slider
+            value={[activityData.value]}
+            min={1}
+            max={10}
+            step={1}
+            onValueChange={handleValueChange}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+              }
+            }}
+          />
           <div className="flex justify-between text-xs text-gray-400">
             <span>1</span>
             <span>5</span>
