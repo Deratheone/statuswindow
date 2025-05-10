@@ -19,16 +19,36 @@ export function QuestBoard({ userData, filter = "all" }: QuestBoardProps) {
   useEffect(() => {
     if (!userData) return
 
-    // Filter quests based on the filter prop
-    let filteredQuests = userData.quests || []
+    // Initialize quests if they don't exist
+    if (!userData.quests || userData.quests.length === 0) {
+      const currentUser = localStorage.getItem("statusWindowCurrentUser")
+      if (!currentUser) return
 
-    if (filter === "active") {
-      filteredQuests = filteredQuests.filter((quest: any) => !quest.completed)
-    } else if (filter === "completed") {
-      filteredQuests = filteredQuests.filter((quest: any) => quest.completed)
+      const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+      const user = users[currentUser]
+
+      if (!user) return
+
+      // Generate initial quests if none exist
+      if (!user.quests || user.quests.length === 0) {
+        const initialQuests = generateDefaultQuests(user)
+        user.quests = initialQuests
+        users[currentUser] = user
+        localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+        setQuests(initialQuests)
+      }
+    } else {
+      // Filter quests based on the filter prop
+      let filteredQuests = userData.quests || []
+
+      if (filter === "active") {
+        filteredQuests = filteredQuests.filter((quest: any) => !quest.completed)
+      } else if (filter === "completed") {
+        filteredQuests = filteredQuests.filter((quest: any) => quest.completed)
+      }
+
+      setQuests(filteredQuests)
     }
-
-    setQuests(filteredQuests)
   }, [userData, filter])
 
   const handleRefreshQuests = () => {
@@ -44,8 +64,9 @@ export function QuestBoard({ userData, filter = "all" }: QuestBoardProps) {
     const newQuests = generateDefaultQuests(user)
 
     // Keep completed quests
-    const completedQuests = user.quests.filter((quest: any) => quest.completed)
+    const completedQuests = user.quests ? user.quests.filter((quest: any) => quest.completed) : []
 
+    // Ensure user.quests exists before filtering
     user.quests = [...completedQuests, ...newQuests]
 
     // Save updated user data

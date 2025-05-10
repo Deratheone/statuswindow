@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import { X, Settings, LogOut, User, Award, Activity, BarChart3 } from "lucide-react"
+import { X, Settings, LogOut, Brain, FileText, Gauge, Home, Package, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavDrawerProps {
@@ -14,6 +14,16 @@ interface MobileNavDrawerProps {
 export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData }: MobileNavDrawerProps) {
   // Only render when open to prevent duplicate elements
   if (!open) return null
+
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: Home },
+    { href: "/activities", label: "Activities", icon: FileText },
+    { href: "/quests", label: "Quests", icon: Star },
+    { href: "/progress", label: "Progress", icon: Gauge },
+    { href: "/skills", label: "Skills", icon: Brain },
+    { href: "/inventory", label: "Inventory", icon: Package },
+    { href: "/profile", label: "Profile", icon: Settings },
+  ]
 
   return (
     <>
@@ -70,30 +80,14 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
         {/* Navigation links */}
         <nav className="p-4">
           <ul className="space-y-2">
-            <li>
-              <a href="/dashboard" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                <User className="h-5 w-5 text-blue-300" />
-                <span>Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="/quests" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                <Award className="h-5 w-5 text-yellow-400" />
-                <span>Quests</span>
-              </a>
-            </li>
-            <li>
-              <a href="/activities" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                <Activity className="h-5 w-5 text-green-400" />
-                <span>Activities</span>
-              </a>
-            </li>
-            <li>
-              <a href="/progress" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                <BarChart3 className="h-5 w-5 text-purple-400" />
-                <span>Progress</span>
-              </a>
-            </li>
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                  <item.icon className="h-5 w-5 text-blue-300" />
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
 

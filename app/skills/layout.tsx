@@ -1,4 +1,5 @@
 import type React from "react"
+import "../globals.css"
 import "./skills.css"
 
 export default function SkillsLayout({
@@ -6,5 +7,9 @@ export default function SkillsLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="min-h-screen">{children}</div>
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
 }

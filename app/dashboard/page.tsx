@@ -5,7 +5,23 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy, Menu } from "lucide-react"
+import {
+  Award,
+  Brain,
+  ChevronRight,
+  Dumbbell,
+  LogOut,
+  Plus,
+  Settings,
+  Sparkles,
+  Trophy,
+  Menu,
+  FileText,
+  Gauge,
+  LayoutGrid,
+  Package,
+  Star,
+} from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
@@ -16,6 +32,7 @@ import { playSFX } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
 import { useSwipe } from "@/hooks/use-swipe"
 import { MobileNavWrapper } from "@/components/mobile-nav-wrapper"
+import Link from "next/link"
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -330,6 +347,52 @@ export default function DashboardPage() {
           />
         )}
       </nav>
+
+      {/* Menu items */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        <Link
+          href="/activities"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <FileText className="h-6 w-6 text-purple-400" />
+          <span>Activities</span>
+        </Link>
+        <Link
+          href="/quests"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <Star className="h-6 w-6 text-yellow-400" />
+          <span>Quests</span>
+        </Link>
+        <Link
+          href="/progress"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <Gauge className="h-6 w-6 text-green-400" />
+          <span>Progress</span>
+        </Link>
+        <Link
+          href="/skills"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <Brain className="h-6 w-6 text-blue-400" />
+          <span>Skills</span>
+        </Link>
+        <Link
+          href="/inventory"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <Package className="h-6 w-6 text-orange-400" />
+          <span>Inventory</span>
+        </Link>
+        <Link
+          href="/profile"
+          className="flex flex-col items-center gap-2 rounded-xl bg-slate-800/50 p-4 text-center transition-all hover:bg-slate-700/50"
+        >
+          <LayoutGrid className="h-6 w-6 text-pink-400" />
+          <span>Profile</span>
+        </Link>
+      </div>
 
       <div className="container mx-auto px-2 py-4 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
