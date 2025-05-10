@@ -26,20 +26,23 @@ export default function DashboardPage() {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [isSkillsWindowOpen, setIsSkillsWindowOpen] = useState(false)
 
   // Swipe handlers for tab navigation
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
     onSwipeLeft: () => {
-      // Navigate to next tab
-      if (activeTab === "dashboard") setActiveTab("quests")
-      else if (activeTab === "quests") setActiveTab("log-activity")
-      else if (activeTab === "log-activity") navigateToProgress()
+      if (!isSkillsWindowOpen) {
+        if (activeTab === "dashboard") setActiveTab("quests")
+        else if (activeTab === "quests") setActiveTab("log-activity")
+        else if (activeTab === "log-activity") navigateToProgress()
+      }
     },
     onSwipeRight: () => {
-      // Navigate to previous tab
-      if (activeTab === "log-activity") setActiveTab("quests")
-      else if (activeTab === "quests") setActiveTab("dashboard")
-      else if (activeTab === "progress") setActiveTab("log-activity")
+      if (!isSkillsWindowOpen) {
+        if (activeTab === "log-activity") setActiveTab("quests")
+        else if (activeTab === "quests") setActiveTab("dashboard")
+        else if (activeTab === "progress") setActiveTab("log-activity")
+      }
     },
   })
 
