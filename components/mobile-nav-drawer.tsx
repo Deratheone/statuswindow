@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import { X, Settings, LogOut, Brain, FileText, Gauge, Home, Package, Star } from "lucide-react"
+import { X, Settings, LogOut, Home, FileText, Star, Gauge, Brain, Package, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavDrawerProps {
@@ -15,15 +15,9 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
   // Only render when open to prevent duplicate elements
   if (!open) return null
 
-  const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/activities", label: "Activities", icon: FileText },
-    { href: "/quests", label: "Quests", icon: Star },
-    { href: "/progress", label: "Progress", icon: Gauge },
-    { href: "/skills", label: "Skills", icon: Brain },
-    { href: "/inventory", label: "Inventory", icon: Package },
-    { href: "/profile", label: "Profile", icon: Settings },
-  ]
+  const handleLogout = () => {
+    onLogout()
+  }
 
   return (
     <>
@@ -80,14 +74,48 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
         {/* Navigation links */}
         <nav className="p-4">
           <ul className="space-y-2">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <a href={item.href} className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                  <item.icon className="h-5 w-5 text-blue-300" />
-                  <span>{item.label}</span>
-                </a>
-              </li>
-            ))}
+            <li>
+              <a href="/dashboard" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <Home className="h-5 w-5 text-blue-300" />
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="/activities" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <FileText className="h-5 w-5 text-blue-300" />
+                <span>Activities</span>
+              </a>
+            </li>
+            <li>
+              <a href="/quests" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <Star className="h-5 w-5 text-blue-300" />
+                <span>Quests</span>
+              </a>
+            </li>
+            <li>
+              <a href="/progress" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <Gauge className="h-5 w-5 text-blue-300" />
+                <span>Progress</span>
+              </a>
+            </li>
+            <li>
+              <a href="/skills" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <Brain className="h-5 w-5 text-blue-300" />
+                <span>Skills</span>
+              </a>
+            </li>
+            <li>
+              <a href="/inventory" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <Package className="h-5 w-5 text-blue-300" />
+                <span>Inventory</span>
+              </a>
+            </li>
+            <li>
+              <a href="/profile" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <LayoutGrid className="h-5 w-5 text-blue-300" />
+                <span>Profile</span>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -105,7 +133,7 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
             <Button
               variant="outline"
               className="w-full justify-start bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800"
-              onClick={onLogout}
+              onClick={handleLogout}
             >
               <LogOut className="h-5 w-5 mr-2" />
               Logout

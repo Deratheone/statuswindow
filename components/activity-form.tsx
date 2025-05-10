@@ -2,11 +2,11 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Textarea } from "@/components/ui/textarea"
 import { Slider } from "@/components/ui/slider"
 import { Brain, Dumbbell, Sparkles } from "lucide-react"
 import { ActivityVerification } from "@/components/activity-verification"
@@ -17,153 +17,180 @@ interface ActivityFormProps {
 }
 
 export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
-  const [activityData, setActivityData] = useState({
-    name: "",
-    type: "strength",
-    value: 5,
-  })
+  const [activityName, setActivityName] = useState("")
+  const [activityDescription, setActivityDescription] = useState("")
+  const [activityType, setActivityType] = useState<"strength" | "intelligence" | "mana">("strength")
+  const [activityValue, setActivityValue] = useState(1)
   const [showVerification, setShowVerification] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formError, setFormError] = useState("")
+
+  // Reset form error when inputs change
+  useEffect(() => {
+    if (formError) setFormError("")
+  }, [activityName, activityDescription, activityType, activityValue])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!activityData.name) return
+    // Validate form
+    if (!activityName.trim()) {
+      setFormError("Please enter an activity name")
+      return
+    }
 
-    // Show verification dialog
+    // Show verification step
     setShowVerification(true)
   }
 
-  const handleVerified = (verified: boolean) => {
+  const handleVerificationComplete = (verified: boolean) => {
     if (verified) {
+      setIsSubmitting(true)
+
       // Submit the activity
-      onSubmit(activityData)
+      onSubmit({
+        name: activityName,
+        description: activityDescription,
+        type: activityType,
+        value: activityValue,
+      })
 
       // Reset form
-      setActivityData({
-        name: "",
-        type: activityData.type,
-        value: 5,
-      })
+      setActivityName("")
+      setActivityDescription("")
+      setActivityType("strength")
+      setActivityValue(1)
+      setIsSubmitting(false)
     }
 
-    // Close verification dialog
+    // Close verification
     setShowVerification(false)
   }
 
+  if (showVerification) {
+    return (
+      <ActivityVerification
+        activity={{
+          name: activityName,
+          description: activityDescription,
+          type: activityType,
+          value: activityValue,
+        }}
+        onComplete={handleVerificationComplete}
+      />
+    )
+  }
+
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="activity-name">Activity Name</Label>
-          <Input
-            id="activity-name"
-            placeholder={
-              activityData.type === "strength"
-                ? "e.g., 30 min run, 20 pushups..."
-                : activityData.type === "intelligence"
-                  ? "e.g., 1 hour study, book reading..."
-                  : "e.g., 15 min meditation, journaling..."
-            }
-            value={activityData.name}
-            onChange={(e) => setActivityData({ ...activityData, name: e.target.value })}
-            className="bg-slate-700/50 border-slate-600 text-white"
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="activity-name" className="text-blue-100">
+          Activity Name
+        </Label>
+        <Input
+          id="activity-name"
+          placeholder="What did you accomplish?"
+          value={activityName}
+          onChange={(e) => setActivityName(e.target.value)}
+          className="bg-blue-900/30 border-blue-700 text-blue-100 placeholder:text-blue-400/50"
+        />
+      </div>
+
+      {!compact && (
+        <div>
+          <Label htmlFor="activity-description" className="text-blue-100">
+            Description (Optional)
+          </Label>
+          <Textarea
+            id="activity-description"
+            placeholder="Add more details about your activity..."
+            value={activityDescription}
+            onChange={(e) => setActivityDescription(e.target.value)}
+            className="bg-blue-900/30 border-blue-700 text-blue-100 placeholder:text-blue-400/50 min-h-[80px]"
           />
         </div>
+      )}
 
-        <div className="space-y-2">
-          <Label>Activity Type</Label>
-          <RadioGroup
-            value={activityData.type}
-            onValueChange={(value) => setActivityData({ ...activityData, type: value })}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-2"
+      <div>
+        <Label className="text-blue-100">Activity Type</Label>
+        <div className="grid grid-cols-3 gap-2 mt-1">
+          <Button
+            type="button"
+            variant={activityType === "strength" ? "default" : "outline"}
+            className={`flex flex-col items-center py-3 ${
+              activityType === "strength"
+                ? "bg-gradient-to-r from-red-700 to-red-600 border-red-500"
+                : "bg-blue-900/30 border-blue-700 text-blue-100 hover:bg-blue-800/50"
+            }`}
+            onClick={() => setActivityType("strength")}
           >
-            <div className="flex flex-col items-center">
-              <RadioGroupItem value="strength" id="activity-strength" className="sr-only" />
-              <Label
-                htmlFor="activity-strength"
-                className={`px-3 py-2 w-full flex flex-col items-center gap-1 rounded-md cursor-pointer ${
-                  activityData.type === "strength"
-                    ? "bg-red-900/50 border border-red-500"
-                    : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                }`}
-              >
-                <Dumbbell className="h-5 w-5 text-red-400" />
-                <span>Strength</span>
-              </Label>
-            </div>
-            <div className="flex flex-col items-center">
-              <RadioGroupItem value="intelligence" id="activity-intelligence" className="sr-only" />
-              <Label
-                htmlFor="activity-intelligence"
-                className={`px-3 py-2 w-full flex flex-col items-center gap-1 rounded-md cursor-pointer ${
-                  activityData.type === "intelligence"
-                    ? "bg-blue-900/50 border border-blue-500"
-                    : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                }`}
-              >
-                <Brain className="h-5 w-5 text-blue-400" />
-                <span>Intelligence</span>
-              </Label>
-            </div>
-            <div className="flex flex-col items-center">
-              <RadioGroupItem value="mana" id="activity-mana" className="sr-only" />
-              <Label
-                htmlFor="activity-mana"
-                className={`px-3 py-2 w-full flex flex-col items-center gap-1 rounded-md cursor-pointer ${
-                  activityData.type === "mana"
-                    ? "bg-purple-900/50 border border-purple-500"
-                    : "bg-slate-700 border border-slate-600 hover:bg-slate-600"
-                }`}
-              >
-                <Sparkles className="h-5 w-5 text-purple-400" />
-                <span>Mana</span>
-              </Label>
-            </div>
-          </RadioGroup>
+            <Dumbbell className={`h-5 w-5 ${activityType === "strength" ? "text-white" : "text-red-400"}`} />
+            <span className="mt-1 text-xs">Strength</span>
+          </Button>
+          <Button
+            type="button"
+            variant={activityType === "intelligence" ? "default" : "outline"}
+            className={`flex flex-col items-center py-3 ${
+              activityType === "intelligence"
+                ? "bg-gradient-to-r from-blue-700 to-blue-600 border-blue-500"
+                : "bg-blue-900/30 border-blue-700 text-blue-100 hover:bg-blue-800/50"
+            }`}
+            onClick={() => setActivityType("intelligence")}
+          >
+            <Brain className={`h-5 w-5 ${activityType === "intelligence" ? "text-white" : "text-blue-400"}`} />
+            <span className="mt-1 text-xs">Intelligence</span>
+          </Button>
+          <Button
+            type="button"
+            variant={activityType === "mana" ? "default" : "outline"}
+            className={`flex flex-col items-center py-3 ${
+              activityType === "mana"
+                ? "bg-gradient-to-r from-purple-700 to-purple-600 border-purple-500"
+                : "bg-blue-900/30 border-blue-700 text-blue-100 hover:bg-blue-800/50"
+            }`}
+            onClick={() => setActivityType("mana")}
+          >
+            <Sparkles className={`h-5 w-5 ${activityType === "mana" ? "text-white" : "text-purple-400"}`} />
+            <span className="mt-1 text-xs">Mana</span>
+          </Button>
         </div>
+      </div>
 
-        {!compact && (
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label>Activity Value</Label>
-              <span className="text-sm font-medium">
-                +{activityData.value} {activityData.type.charAt(0).toUpperCase() + activityData.type.slice(1)}
-              </span>
-            </div>
-            <Slider
-              value={[activityData.value]}
-              min={1}
-              max={20}
-              step={1}
-              onValueChange={(value) => setActivityData({ ...activityData, value: value[0] })}
-            />
-            <div className="flex justify-between text-xs text-gray-400">
-              <span>Small Activity</span>
-              <span>Major Achievement</span>
-            </div>
-          </div>
-        )}
+      <div>
+        <div className="flex justify-between mb-1">
+          <Label className="text-blue-100">Value: {activityValue}</Label>
+          <span className="text-sm text-blue-300">+{activityValue * 5} XP</span>
+        </div>
+        <Slider
+          value={[activityValue]}
+          min={1}
+          max={10}
+          step={1}
+          onValueChange={(value) => setActivityValue(value[0])}
+          className="py-2"
+        />
+        <div className="flex justify-between text-xs text-blue-400">
+          <span>1</span>
+          <span>5</span>
+          <span>10</span>
+        </div>
+      </div>
 
-        <Button
-          type="submit"
-          className={`w-full ${
-            activityData.type === "strength"
-              ? "bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700"
-              : activityData.type === "intelligence"
-                ? "bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700"
-                : "bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700"
-          }`}
-        >
-          Log Activity
-        </Button>
-      </form>
+      {formError && <div className="text-red-400 text-sm">{formError}</div>}
 
-      <ActivityVerification
-        isOpen={showVerification}
-        onClose={() => setShowVerification(false)}
-        activityData={activityData}
-        onVerify={handleVerified}
-      />
-    </>
+      <Button
+        type="submit"
+        className={`w-full ${
+          activityType === "strength"
+            ? "bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700"
+            : activityType === "intelligence"
+              ? "bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700"
+              : "bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700"
+        }`}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Logging..." : "Log Activity"}
+      </Button>
+    </form>
   )
 }
