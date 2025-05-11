@@ -2,22 +2,18 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Brain, Check, Dumbbell, Sparkles, X } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Brain, Dumbbell, Sparkles } from "lucide-react"
 
 interface ActivityVerificationProps {
   isOpen: boolean
   onClose: () => void
   activityData: {
     name: string
-    description?: string
     type: string
     value: number
   }
@@ -25,77 +21,131 @@ interface ActivityVerificationProps {
 }
 
 export function ActivityVerification({ isOpen, onClose, activityData, onVerify }: ActivityVerificationProps) {
-  const [isVerifying, setIsVerifying] = useState(false)
+  const [answer, setAnswer] = useState("")
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
 
-  const handleVerify = () => {
-    setIsVerifying(true)
+  // Generate verification question based on activity type
+  const getVerificationQuestion = () => {
+    const { type, name } = activityData
 
-    // Simulate verification delay
-    setTimeout(() => {
-      onVerify(true)
-      setIsVerifying(false)
-    }, 1000)
+    if (type === "strength") {
+      return {
+        question: `Please describe briefly how you completed "${name}":`,
+        type: "textarea",
+        options: [],
+      }
+    } else if (type === "intelligence") {
+      return {
+        question: `What was the main thing you learned from "${name}"?`,
+        type: "textarea",
+        options: [],
+      }
+    } else {
+      // Mana
+      return {
+        question: `How did "${name}" help improve your mental wellbeing?`,
+        type: "textarea",
+        options: [],
+      }
+    }
   }
 
-  const handleCancel = () => {
-    onVerify(false)
+  const verification = getVerificationQuestion()
+
+  const handleVerify = () => {
+    if (!answer.trim()) {
+      setIsCorrect(false)
+      return
+    }
+
+    // For textarea questions, any non-empty answer is considered valid
+    if (verification.type === "textarea" && answer.trim().length > 10) {
+      setIsCorrect(true)
+      onVerify(true)
+    } else if (verification.type === "text" && answer.trim().length > 3) {
+      setIsCorrect(true)
+      onVerify(true)
+    } else if (verification.type === "radio" && answer) {
+      setIsCorrect(true)
+      onVerify(true)
+    } else {
+      setIsCorrect(false)
+    }
+  }
+
+  const handleClose = () => {
+    setAnswer("")
+    setIsCorrect(null)
+    onClose()
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-slate-800 border-slate-700 text-white">
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="bg-slate-800 text-white border-purple-500/30 max-w-[95vw] sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl text-blue-100">Verify Activity</DialogTitle>
-          <DialogDescription className="text-blue-300">
-            Please confirm that you completed this activity
-          </DialogDescription>
+          <DialogTitle className="flex items-center gap-2">
+            {activityData.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400" />}
+            {activityData.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400" />}
+            {activityData.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400" />}
+            <span className="truncate">Verify Activity: {activityData.name}</span>
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <div className="flex items-start gap-3 p-3 rounded-md bg-slate-700/50 border border-slate-600">
-            {activityData.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 mt-0.5" />}
-            {activityData.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 mt-0.5" />}
-            {activityData.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 mt-0.5" />}
-            <div className="flex-1">
-              <div className="font-medium text-blue-100">{activityData.name}</div>
-              {activityData.description && <div className="text-sm text-blue-300 mt-1">{activityData.description}</div>}
-              <div className="mt-2 text-sm text-yellow-400">
-                +{activityData.value} {activityData.type.charAt(0).toUpperCase() + activityData.type.slice(1)}, +
-                {activityData.value * 5} XP
-              </div>
-            </div>
-          </div>
+          <p className="text-gray-300">{verification.question}</p>
 
-          <div className="text-sm text-blue-300">
-            By confirming, you certify that you have completed this activity in real life.
-          </div>
+          {verification.type === "textarea" && (
+            <Textarea
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="Enter your answer..."
+              className="bg-slate-700/50 border-slate-600 text-white"
+              rows={4}
+            />
+          )}
+
+          {verification.type === "text" && (
+            <Input
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="Enter your answer..."
+              className="bg-slate-700/50 border-slate-600 text-white"
+            />
+          )}
+
+          {verification.type === "radio" && (
+            <RadioGroup value={answer} onValueChange={setAnswer} className="space-y-2">
+              {verification.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <RadioGroupItem value={option} id={`option-${index}`} />
+                  <Label htmlFor={`option-${index}`}>{option}</Label>
+                </div>
+              ))}
+            </RadioGroup>
+          )}
+
+          {isCorrect === false && (
+            <div className="text-red-400 text-sm">
+              Please provide a more detailed response (at least 10 characters).
+            </div>
+          )}
         </div>
 
-        <DialogFooter className="flex flex-col sm:flex-row gap-2">
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
-            onClick={handleCancel}
-          >
-            <X className="mr-2 h-4 w-4" />
+        <DialogFooter className="flex-col sm:flex-row gap-2">
+          <Button variant="outline" onClick={handleClose} className="border-gray-600 text-gray-300">
             Cancel
           </Button>
           <Button
-            className="w-full sm:w-auto bg-green-700 hover:bg-green-800 text-white"
             onClick={handleVerify}
-            disabled={isVerifying}
+            className={`${
+              activityData.type === "strength"
+                ? "bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700"
+                : activityData.type === "intelligence"
+                  ? "bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700"
+                  : "bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700"
+            }`}
           >
-            {isVerifying ? (
-              <div className="flex items-center">
-                <div className="h-4 w-4 rounded-full border-2 border-t-transparent border-white animate-spin mr-2"></div>
-                Verifying...
-              </div>
-            ) : (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Confirm Activity
-              </>
-            )}
+            Verify
           </Button>
         </DialogFooter>
       </DialogContent>

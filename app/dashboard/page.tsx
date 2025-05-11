@@ -26,23 +26,20 @@ export default function DashboardPage() {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [isSkillsWindowOpen, setIsSkillsWindowOpen] = useState(false)
 
   // Swipe handlers for tab navigation
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
     onSwipeLeft: () => {
-      if (!isSkillsWindowOpen) {
-        if (activeTab === "dashboard") setActiveTab("quests")
-        else if (activeTab === "quests") setActiveTab("log-activity")
-        else if (activeTab === "log-activity") navigateToProgress()
-      }
+      // Navigate to next tab
+      if (activeTab === "dashboard") setActiveTab("quests")
+      else if (activeTab === "quests") setActiveTab("log-activity")
+      else if (activeTab === "log-activity") navigateToProgress()
     },
     onSwipeRight: () => {
-      if (!isSkillsWindowOpen) {
-        if (activeTab === "log-activity") setActiveTab("quests")
-        else if (activeTab === "quests") setActiveTab("dashboard")
-        else if (activeTab === "progress") setActiveTab("log-activity")
-      }
+      // Navigate to previous tab
+      if (activeTab === "log-activity") setActiveTab("quests")
+      else if (activeTab === "quests") setActiveTab("dashboard")
+      else if (activeTab === "progress") setActiveTab("log-activity")
     },
   })
 
@@ -136,61 +133,81 @@ export default function DashboardPage() {
     const currentUser = localStorage.getItem("statusWindowCurrentUser")
     if (!currentUser) return
 
-    try {
-      const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
-      const user = users[currentUser]
+    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const user = users[currentUser]
 
-      if (!user) return
+    if (!user) return
 
-      // Add activity to user data
-      const activities = user.activities || []
-      const newActivity = {
-        ...activity,
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-      }
+    // Add activity to user data
+    const activities = user.activities || []
+    const newActivity = {
+      ...activity,
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+    }
 
-      activities.push(newActivity)
-      user.activities = activities
+    activities.push(newActivity)
+    user.activities = activities
 
-      // Update stats based on activity
-      const statType = activity.type
-      const statValue = activity.value
+    // Update stats based on activity
+    const statType = activity.type
+    const statValue = activity.value
 
-      // Ensure stats object exists
-      user.stats = user.stats || { strength: 0, intelligence: 0, mana: 0 }
-      user.stats[statType] = (user.stats[statType] || 0) + statValue
+    user.stats[statType] += statValue
 
-      // Add XP
-      user.xp = (user.xp || 0) + (statValue * 5)
-      user.xpToNextLevel = user.xpToNextLevel || 100
+    // Add XP
+    const oldXP = user.xp
+    user.xp += statValue * 5
 
-      // Play XP gain sound
-      playSFX("xp-gain")
+    // Play XP gain sound
+    playSFX("xp-gain")
 
-      // Check for level up
-      if (user.xp >= user.xpToNextLevel) {
-        user.level = (user.level || 1) + 1
-        user.xp = user.xp - user.xpToNextLevel
-        user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
+    // Check for level up
+    if (user.xp >= user.xpToNextLevel) {
+      user.level += 1
+      user.xp = user.xp - user.xpToNextLevel
+      user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
 
-        // Show system message for level up
-        setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
-        setTimeout(() => setSystemMessage(null), 5000)
-      }
-
-      // Save updated user data
-      users[currentUser] = user
-      localStorage.setItem("statusWindowUsers", JSON.stringify(users))
-
-      // Update state
-      setUserData(user)
-      setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
-    } catch (error) {
-      console.error("Error handling activity submission:", error)
-      setSystemMessage("Error saving activity. Please try again.")
+      // Show system message for level up
+      setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
       setTimeout(() => setSystemMessage(null), 5000)
     }
+
+    // Update quests progress
+    user.quests = user.quests.map((quest: any) => {
+      if (quest.completed) return quest
+
+      if (quest.type === statType) {
+        const newProgress = quest.progress + statValue
+        const completed = newProgress >= quest.target
+
+        if (completed) {
+          // Award bonus for completing quest
+          user.stats[statType] += quest.reward
+          user.xp += quest.xpReward
+
+          // Show system message for quest completion
+          setSystemMessage(`Quest completed: ${quest.title}! Rewards claimed.`)
+          setTimeout(() => setSystemMessage(null), 5000)
+        }
+
+        return {
+          ...quest,
+          progress: newProgress,
+          completed,
+        }
+      }
+
+      return quest
+    })
+
+    // Save updated user data
+    users[currentUser] = user
+    localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+
+    // Update state
+    setUserData(user)
+    setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
   }
 
   const handleUseItem = (item: any) => {

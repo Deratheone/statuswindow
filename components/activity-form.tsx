@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
-import { Textarea } from "@/components/ui/textarea"
 import { Brain, Dumbbell, Sparkles } from "lucide-react"
 import { ActivityVerification } from "@/components/activity-verification"
 
@@ -20,16 +19,17 @@ interface ActivityFormProps {
 export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
   const [activityData, setActivityData] = useState({
     name: "",
-    description: "",
     type: "strength",
-    value: 1,
+    value: 5,
   })
   const [showVerification, setShowVerification] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted', activityData);
+
     if (!activityData.name) return
+
+    // Show verification dialog
     setShowVerification(true)
   }
 
@@ -41,9 +41,8 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
       // Reset form
       setActivityData({
         name: "",
-        description: "",
         type: activityData.type,
-        value: 1,
+        value: 5,
       })
     }
 
@@ -51,27 +50,13 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
     setShowVerification(false)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setActivityData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleTypeChange = (value: string) => {
-    setActivityData((prev) => ({ ...prev, type: value }))
-  }
-
-  const handleValueChange = (value: number[]) => {
-    setActivityData((prev) => ({ ...prev, value: value[0] }))
-  }
-
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Activity Name</Label>
+          <Label htmlFor="activity-name">Activity Name</Label>
           <Input
-            id="name"
-            name="name"
+            id="activity-name"
             placeholder={
               activityData.type === "strength"
                 ? "e.g., 30 min run, 20 pushups..."
@@ -80,30 +65,18 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
                   : "e.g., 15 min meditation, journaling..."
             }
             value={activityData.name}
-            onChange={handleInputChange}
+            onChange={(e) => setActivityData({ ...activityData, name: e.target.value })}
             className="bg-slate-700/50 border-slate-600 text-white"
-            autoComplete="off"
           />
         </div>
 
-        {!compact && (
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (Optional)</Label>
-            <Textarea
-              id="description"
-              name="description"
-              placeholder="Add more details about your activity..."
-              value={activityData.description}
-              onChange={handleInputChange}
-              className="bg-slate-700/50 border-slate-600 text-white min-h-[80px]"
-              autoComplete="off"
-            />
-          </div>
-        )}
-
         <div className="space-y-2">
           <Label>Activity Type</Label>
-          <RadioGroup value={activityData.type} onValueChange={handleTypeChange} className="grid grid-cols-3 gap-2">
+          <RadioGroup
+            value={activityData.type}
+            onValueChange={(value) => setActivityData({ ...activityData, type: value })}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-2"
+          >
             <div className="flex flex-col items-center">
               <RadioGroupItem value="strength" id="activity-strength" className="sr-only" />
               <Label
@@ -149,29 +122,27 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
           </RadioGroup>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <Label>Value: {activityData.value}</Label>
-            <span className="text-sm font-medium">+{activityData.value * 5} XP</span>
+        {!compact && (
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <Label>Activity Value</Label>
+              <span className="text-sm font-medium">
+                +{activityData.value} {activityData.type.charAt(0).toUpperCase() + activityData.type.slice(1)}
+              </span>
+            </div>
+            <Slider
+              value={[activityData.value]}
+              min={1}
+              max={20}
+              step={1}
+              onValueChange={(value) => setActivityData({ ...activityData, value: value[0] })}
+            />
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>Small Activity</span>
+              <span>Major Achievement</span>
+            </div>
           </div>
-          <Slider
-            value={[activityData.value]}
-            min={1}
-            max={10}
-            step={1}
-            onValueChange={handleValueChange}
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-              }
-            }}
-          />
-          <div className="flex justify-between text-xs text-gray-400">
-            <span>1</span>
-            <span>5</span>
-            <span>10</span>
-          </div>
-        </div>
+        )}
 
         <Button
           type="submit"
@@ -187,15 +158,12 @@ export function ActivityForm({ onSubmit, compact = false }: ActivityFormProps) {
         </Button>
       </form>
 
-      {/* Only render ActivityVerification when showVerification is true */}
-      {showVerification && (
-        <ActivityVerification
-          isOpen={showVerification}
-          onClose={() => setShowVerification(false)}
-          activityData={activityData}
-          onVerify={handleVerified}
-        />
-      )}
+      <ActivityVerification
+        isOpen={showVerification}
+        onClose={() => setShowVerification(false)}
+        activityData={activityData}
+        onVerify={handleVerified}
+      />
     </>
   )
 }
