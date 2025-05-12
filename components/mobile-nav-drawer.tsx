@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import { X, Settings, LogOut, Home, FileText, Star, Gauge, Brain, Package, LayoutGrid } from "lucide-react"
+import { X, Settings, LogOut, Home, FileText, Star, Gauge, Package, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavDrawerProps {
@@ -96,12 +96,6 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
               <a href="/progress" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
                 <Gauge className="h-5 w-5 text-blue-300" />
                 <span>Progress</span>
-              </a>
-            </li>
-            <li>
-              <a href="/skills" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
-                <Brain className="h-5 w-5 text-blue-300" />
-                <span>Skills</span>
               </a>
             </li>
             <li>

@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./status-animations.css";
 
 @layer base {
   :root {
@@ -194,44 +193,20 @@
 
 /* Mobile-specific styles */
 @layer components {
-  .mobile-card {
-    @apply rounded-xl border-2 border-blue-700 shadow-lg;
-  }
-
-  .mobile-text {
-    @apply text-sm leading-tight;
-  }
-
-  .mobile-heading {
-    @apply text-lg font-bold;
-  }
-
   .mobile-touch-target {
     min-height: 44px;
     min-width: 44px;
   }
+
+  .crystal-card {
+    background: linear-gradient(to bottom, rgba(30, 64, 175, 0.2), rgba(30, 41, 59, 0.7));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(30, 64, 175, 0.3);
+  }
 }
 
-/* Crystal effect for cards */
-.crystal-card {
-  @apply relative overflow-hidden backdrop-blur-sm;
-  background: linear-gradient(135deg, rgba(30, 64, 175, 0.2), rgba(30, 64, 175, 0.1));
-  box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
-  border: 1px solid rgba(96, 165, 250, 0.3);
-}
-
-.crystal-card::before {
-  content: "";
-  @apply absolute inset-0 z-0 opacity-30;
-  background: linear-gradient(
-    45deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 45%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.1) 55%,
-    transparent 100%
-  );
-}
+/* Import status animations */
+@import url("./status-animations.css");
 
 @layer utilities {
   /* Improved mobile text handling */
