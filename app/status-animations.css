@@ -64,3 +64,113 @@
 .system-message {
   animation: fadeInOut 5s forwards;
 }
+
+/* Celebration animations */
+@keyframes celebration-burst {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.celebration-burst {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.celebration-burst::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(251, 191, 36, 0) 70%);
+  border-radius: 50%;
+  animation: celebration-burst 0.8s ease-out forwards;
+}
+
+@keyframes float-text {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-40px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1);
+  }
+}
+
+.celebration-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--manhwa-yellow);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 101;
+  pointer-events: none;
+  animation: float-text 2s ease-out forwards;
+  white-space: nowrap;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px gold;
+  pointer-events: none;
+}
+
+.sparkle-1 {
+  animation: sparkle 0.8s ease-out 0.1s infinite;
+}
+.sparkle-2 {
+  animation: sparkle 0.8s ease-out 0.2s infinite;
+}
+.sparkle-3 {
+  animation: sparkle 0.8s ease-out 0.3s infinite;
+}
+.sparkle-4 {
+  animation: sparkle 0.8s ease-out 0.4s infinite;
+}
+.sparkle-5 {
+  animation: sparkle 0.8s ease-out 0.5s infinite;
+}

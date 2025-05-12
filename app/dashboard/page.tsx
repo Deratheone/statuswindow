@@ -2,17 +2,20 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Award, Brain, ChevronRight, Dumbbell, LogOut, Settings, Sparkles, Trophy, Menu } from "lucide-react"
+import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy, Menu } from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
+import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
 import { ProgressChart } from "@/components/progress-chart"
 import { InventorySystem } from "@/components/inventory-system"
 import { generateDefaultQuests } from "@/lib/quest-generator"
+import { playSFX } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
 import { useSwipe } from "@/hooks/use-swipe"
 import { MobileNavWrapper } from "@/components/mobile-nav-wrapper"
+import { CelebrationEffect } from "@/components/celebration-effect"
 
 export default function DashboardPage() {
   const isMobile = useMobile()
@@ -24,18 +27,22 @@ export default function DashboardPage() {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [showCelebration, setShowCelebration] = useState(false)
+  const [celebrationMessage, setCelebrationMessage] = useState("")
 
   // Swipe handlers for tab navigation
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
     onSwipeLeft: () => {
       // Navigate to next tab
       if (activeTab === "dashboard") setActiveTab("quests")
-      else if (activeTab === "quests") navigateToProgress()
+      else if (activeTab === "quests") setActiveTab("log-activity")
+      else if (activeTab === "log-activity") navigateToProgress()
     },
     onSwipeRight: () => {
       // Navigate to previous tab
-      if (activeTab === "quests") setActiveTab("dashboard")
-      else if (activeTab === "progress") setActiveTab("quests")
+      if (activeTab === "log-activity") setActiveTab("quests")
+      else if (activeTab === "quests") setActiveTab("dashboard")
+      else if (activeTab === "progress") setActiveTab("log-activity")
     },
   })
 
@@ -123,6 +130,93 @@ export default function DashboardPage() {
     window.location.href = "/activities"
   }
 
+  const handleActivitySubmit = (activity: any) => {
+    if (!userData) return
+
+    const currentUser = localStorage.getItem("statusWindowCurrentUser")
+    if (!currentUser) return
+
+    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const user = users[currentUser]
+
+    if (!user) return
+
+    // Add activity to user data
+    const activities = user.activities || []
+    const newActivity = {
+      ...activity,
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+    }
+
+    activities.push(newActivity)
+    user.activities = activities
+
+    // Update stats based on activity
+    const statType = activity.type
+    const statValue = activity.value
+
+    user.stats[statType] += statValue
+
+    // Add XP
+    const oldXP = user.xp
+    user.xp += statValue * 5
+
+    // Play XP gain sound
+    playSFX("xp-gain")
+
+    // Show celebration
+    setCelebrationMessage(`+${statValue} ${statType.charAt(0).toUpperCase() + statType.slice(1)}!`)
+    setShowCelebration(true)
+
+    // Check for level up
+    if (user.xp >= user.xpToNextLevel) {
+      user.level += 1
+      user.xp = user.xp - user.xpToNextLevel
+      user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
+
+      // Show system message for level up
+      setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
+      setTimeout(() => setSystemMessage(null), 5000)
+    }
+
+    // Update quests progress
+    user.quests = user.quests.map((quest: any) => {
+      if (quest.completed) return quest
+
+      if (quest.type === statType) {
+        const newProgress = quest.progress + statValue
+        const completed = newProgress >= quest.target
+
+        if (completed) {
+          // Award bonus for completing quest
+          user.stats[statType] += quest.reward
+          user.xp += quest.xpReward
+
+          // Show system message for quest completion
+          setSystemMessage(`Quest completed: ${quest.title}! Rewards claimed.`)
+          setTimeout(() => setSystemMessage(null), 5000)
+        }
+
+        return {
+          ...quest,
+          progress: newProgress,
+          completed,
+        }
+      }
+
+      return quest
+    })
+
+    // Save updated user data
+    users[currentUser] = user
+    localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+
+    // Update state
+    setUserData(user)
+    setRecentActivities([newActivity, ...recentActivities].slice(0, 5))
+  }
+
   const handleUseItem = (item: any) => {
     if (!userData) return
 
@@ -181,6 +275,13 @@ export default function DashboardPage() {
           {systemMessage}
         </div>
       )}
+
+      {/* Celebration effect */}
+      <CelebrationEffect
+        show={showCelebration}
+        message={celebrationMessage}
+        onComplete={() => setShowCelebration(false)}
+      />
 
       {/* Navigation */}
       <nav className="container mx-auto p-4 flex justify-between items-center">
@@ -327,6 +428,12 @@ export default function DashboardPage() {
                 >
                   Quests
                 </TabsTrigger>
+                <TabsTrigger
+                  value="log-activity"
+                  className="flex-1 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-800 data-[state=active]:to-blue-700 data-[state=active]:text-white text-xs sm:text-sm mobile-touch-target"
+                >
+                  Log Activity
+                </TabsTrigger>
                 <Button
                   variant="ghost"
                   className="flex-1 h-full py-2 text-xs sm:text-sm font-medium text-white hover:bg-blue-800/50 mobile-touch-target"
@@ -395,6 +502,18 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
 
+                  <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
+                        <Plus className="h-5 w-5 text-green-400" />
+                        Quick Add Activity
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ActivityForm onSubmit={handleActivitySubmit} compact />
+                    </CardContent>
+                  </Card>
+
                   <Card className="md:col-span-2 crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
@@ -411,6 +530,20 @@ export default function DashboardPage() {
 
               <TabsContent value="quests" className="mt-6">
                 <QuestBoard userData={userData} />
+              </TabsContent>
+
+              <TabsContent value="log-activity" className="mt-6">
+                <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
+                  <CardHeader>
+                    <CardTitle className="text-blue-100">Log New Activity</CardTitle>
+                    <CardDescription className="text-blue-300">
+                      Record your activities to gain XP and improve your stats
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ActivityForm onSubmit={handleActivitySubmit} />
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>
