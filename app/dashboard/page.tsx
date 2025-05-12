@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,22 +31,59 @@ export default function DashboardPage() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
   const [celebrationMessage, setCelebrationMessage] = useState("")
+  const [swipeEnabled, setSwipeEnabled] = useState(true)
+
+  // Check URL for tab parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const tabParam = urlParams.get("tab")
+    if (tabParam && ["dashboard", "quests", "log-activity"].includes(tabParam)) {
+      setActiveTab(tabParam)
+    }
+  }, [])
+
+  // Enable/disable swipe based on active tab
+  useEffect(() => {
+    setSwipeEnabled(activeTab !== "log-activity")
+  }, [activeTab])
 
   // Swipe handlers for tab navigation
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSwipe({
     onSwipeLeft: () => {
+      if (!swipeEnabled) return
+
       // Navigate to next tab
       if (activeTab === "dashboard") setActiveTab("quests")
       else if (activeTab === "quests") setActiveTab("log-activity")
       else if (activeTab === "log-activity") navigateToProgress()
     },
     onSwipeRight: () => {
+      if (!swipeEnabled) return
+
       // Navigate to previous tab
       if (activeTab === "log-activity") setActiveTab("quests")
       else if (activeTab === "quests") setActiveTab("dashboard")
       else if (activeTab === "progress") setActiveTab("log-activity")
     },
   })
+
+  const handleTouchStartWrapper = (e: React.TouchEvent) => {
+    if (swipeEnabled) {
+      handleTouchStart(e)
+    }
+  }
+
+  const handleTouchMoveWrapper = (e: React.TouchEvent) => {
+    if (swipeEnabled) {
+      handleTouchMove(e)
+    }
+  }
+
+  const handleTouchEndWrapper = (e: React.TouchEvent) => {
+    if (swipeEnabled) {
+      handleTouchEnd(e)
+    }
+  }
 
   useEffect(() => {
     // Check if user is logged in
@@ -265,9 +304,9 @@ export default function DashboardPage() {
   return (
     <div
       className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={handleTouchStartWrapper}
+      onTouchMove={handleTouchMoveWrapper}
+      onTouchEnd={handleTouchEndWrapper}
     >
       {/* System message notification */}
       {systemMessage && (
