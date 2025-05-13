@@ -1,7 +1,7 @@
 # StatusWindow
 
 <p align="center">
-  <img src="public/images/logo.png" alt="StatusWindow Logo" width="200" />
+  <img src="public/logo.png" alt="StatusWindow Logo" width="200" />
 </p>
 
 <p align="center">
