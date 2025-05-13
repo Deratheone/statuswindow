@@ -32,25 +32,67 @@ StatusWindow transforms your daily activities into a gamified experience with:
 
 ## Demo
 
-<p align="center">
-  <img src="public/dashboard.png" alt="Dashboard" width="800" />
-  <em>Main Dashboard with Status Window and Activity Log</em>
-</p>
+## Demo
 
-<p align="center">
-  <img src="public/character-creation.png" alt="Character Creation" width="800" />
-  <em>Character Creation Interface</em>
-</p>
+<div style="display: flex; flex-direction: column; gap: 2rem; margin: 2rem 0;">
 
-<p align="center">
-  <img src="public/quests.png" alt="Quest Board" width="800" />
-  <em>Quest Board with Active and Completed Quests</em>
-</p>
+  <!-- Dashboard Section -->
+  <div style="display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 3rem;">
+    <img src="public/dashboard.png" alt="Dashboard" style="width: 60%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"/>
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0;">Main Dashboard</h3>
+      <p>The central hub features your character's status window with real-time stat tracking, activity log, and quick-access controls.</p>
+      <ul style="margin-top: 0.5rem; color: #666;">
+        <li>Live stat tracking</li>
+        <li>Recent activity feed</li>
+        <li>Quick-log buttons</li>
+      </ul>
+    </div>
+  </div>
 
-<p align="center">
-  <img src="public/mobile-view.png" alt="Mobile View" width="300" />
-  <em>Mobile-Optimized Interface</em>
-</p>
+  <!-- Character Creation Section -->
+  <div style="display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 3rem; flex-direction: row-reverse;">
+    <img src="public/character-creation.png" alt="Character Creation" style="width: 60%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"/>
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0;">Character Creation</h3>
+      <p>Create your RPG avatar with unique traits and initial stat allocations. Choose from various fantasy archetypes.</p>
+      <ul style="margin-top: 0.5rem; color: #666;">
+        <li>Class selection</li>
+        <li>Stat distribution</li>
+        <li>Avatar customization</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Quests Section -->
+  <div style="display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 3rem;">
+    <img src="public/quests.png" alt="Quest Board" style="width: 60%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"/>
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0;">Quest System</h3>
+      <p>Track and complete daily challenges with RPG-style objectives and rewards.</p>
+      <ul style="margin-top: 0.5rem; color: #666;">
+        <li>Daily/Weekly challenges</li>
+        <li>XP rewards system</li>
+        <li>Progress tracking</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mobile View Section -->
+  <div style="display: flex; gap: 2rem; align-items: center; margin-bottom: 3rem; flex-direction: row-reverse;">
+    <img src="public/mobile-view.png" alt="Mobile View" style="width: 40%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"/>
+    <div style="flex: 1;">
+      <h3 style="margin-top: 0;">Mobile Experience</h3>
+      <p>Fully responsive design optimized for mobile devices with touch-friendly controls.</p>
+      <ul style="margin-top: 0.5rem; color: #666;">
+        <li>Swipe gestures</li>
+        <li>Condensed UI</li>
+        <li>Offline support</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
 
 ## Tech Stack
 
