@@ -1,4 +1,4 @@
-```markdown
+
 # StatusWindow
 
 <p align="center">
