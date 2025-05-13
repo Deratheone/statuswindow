@@ -6,9 +6,13 @@
 </p>
 
 <p align="center">
+  <a href="https://statuswindow.vercel.app/" target="_blank" style="display: inline-block; background: #4F46E5; color: white; padding: 8px 16px; border-radius: 6px; font-weight: bold; text-decoration: none; margin-bottom: 16px;">
+    🚀 Visit Live Site
+  </a>
+</p>
+
+<p align="center">
   A gamified self-improvement web application that turns your real-life activities into RPG-style progression.
-  <br>
-  <a href="https://statuswindow.vercel.app/" target="_blank">🌐 Live Demo</a>
 </p>
 
 <p align="center">
