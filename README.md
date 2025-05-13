@@ -7,6 +7,8 @@
 
 <p align="center">
   A gamified self-improvement web application that turns your real-life activities into RPG-style progression.
+  <br>
+  <a href="https://statuswindow.vercel.app/" target="_blank">🌐 Live Demo</a>
 </p>
 
 <p align="center">
