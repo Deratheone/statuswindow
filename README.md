@@ -32,8 +32,6 @@ StatusWindow transforms your daily activities into a gamified experience with:
 
 ## Demo
 
-## Demo
-
 <div style="display: flex; flex-direction: column; gap: 2rem; margin: 2rem 0;">
 
   <!-- Dashboard Section -->
@@ -87,7 +85,6 @@ StatusWindow transforms your daily activities into a gamified experience with:
       <ul style="margin-top: 0.5rem; color: #666;">
         <li>Swipe gestures</li>
         <li>Condensed UI</li>
-        <li>Offline support</li>
       </ul>
     </div>
   </div>
