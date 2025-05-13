@@ -33,22 +33,22 @@ StatusWindow transforms your daily activities into a gamified experience with:
 ## Demo
 
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="Dashboard" width="800" />
+  <img src="public/dashboard.png" alt="Dashboard" width="800" />
   <em>Main Dashboard with Status Window and Activity Log</em>
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/character-creation.png" alt="Character Creation" width="800" />
+  <img src="public/character-creation.png" alt="Character Creation" width="800" />
   <em>Character Creation Interface</em>
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/quests.png" alt="Quest Board" width="800" />
+  <img src="public/quests.png" alt="Quest Board" width="800" />
   <em>Quest Board with Active and Completed Quests</em>
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/mobile-view.png" alt="Mobile View" width="300" />
+  <img src="public/mobile-view.png" alt="Mobile View" width="300" />
   <em>Mobile-Optimized Interface</em>
 </p>
 
