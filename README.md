@@ -184,3 +184,82 @@ npm install
 
 # Start the development server
 npm run dev
+Here's the continuation of your README file with the remaining sections:
+
+---
+
+## Usage
+
+Once installed and running, StatusWindow provides an intuitive interface:
+
+1. **First-Time Setup**:
+   - Create your character by selecting a class and distributing initial stat points
+   - Set up your activity categories (e.g., Exercise, Reading, Coding)
+   - Configure your daily goals
+
+2. **Daily Use**:
+   - Log activities as you complete them throughout the day
+   - Check your quest board for daily challenges
+   - Monitor your stat progression in the dashboard
+   - Collect rewards for completed quests
+
+3. **Long-Term Tracking**:
+   - View your progress analytics to identify trends
+   - Level up your character by earning XP
+   - Unlock new items and abilities as you progress
+
+## Mobile Optimization
+
+StatusWindow is designed with mobile-first principles:
+
+- **Touch-Friendly Controls**: Large buttons and swipe gestures for easy navigation
+- **Responsive Layout**: Adapts to any screen size from phone to desktop
+- **Mobile-Specific Features**:
+  - Quick-log buttons for frequent activities
+  - Haptic feedback for important actions
+  - Offline support with localStorage persistence
+- **Performance Optimizations**:
+  - Lazy-loaded components
+  - Optimized animations for mobile devices
+  - Reduced bundle size for faster loading
+
+## Future Development
+
+Planned features and improvements:
+
+### Short-Term Roadmap
+- [ ] Social features (friends list, leaderboards)
+- [ ] Achievement system with badges
+- [ ] Customizable activity categories
+
+### Long-Term Vision
+- [ ] Mobile app versions (iOS/Android)
+- [ ] Wearable device integration
+- [ ] AI-powered quest generation
+- [ ] Expanded character customization
+
+## Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. Fork the repository
+2. Create a new branch for your feature (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+Please ensure your code follows the existing style and includes appropriate tests.
+
+## License
+
+StatusWindow is [MIT licensed](LICENSE).
+
+## Support
+
+For support, feature requests, or bug reports:
+- Open an issue on GitHub
+
+<p align="center">
+  <a href="#statuswindow">Back to Top</a>
+</p>
+
