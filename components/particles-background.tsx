@@ -1,45 +1,43 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import dynamic from "next/dynamic"
+import Particles from "react-particles"
+import type { Engine } from "tsparticles-engine"
+import { loadFull } from "tsparticles"
 import { useTheme } from "next-themes"
 import { useMobile } from "@/hooks/use-mobile"
 
-// Dynamically import Particles component with SSR disabled for better performance
-const Particles = dynamic(() => import("react-tsparticles").then((mod) => mod.default), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 -z-10" />,
-})
-
-// Dynamically import the slim version of the particles engine
-const loadSlimEngine = dynamic(() => import("tsparticles-slim").then((engine) => engine.loadSlimAsync), {
-  ssr: false,
-})
-
 export function ParticlesBackground() {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const isMobile = useMobile()
-  const [mounted, setMounted] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
-  // Only show particles after component is mounted to avoid hydration issues
   useEffect(() => {
-    setMounted(true)
+    setIsClient(true)
   }, [])
 
-  const particlesInit = useCallback(async (engine: any) => {
-    await loadSlimEngine(engine)
+  const particlesInit = useCallback(async (engine: Engine) => {
+    try {
+      await loadFull(engine)
+    } catch (error) {
+      console.error("Error initializing particles:", error)
+    }
   }, [])
 
-  if (!mounted) return null
+  if (!isClient) return null
 
-  // Reduce particle count on mobile for better performance
+  const isDark = resolvedTheme === "dark"
+  const particleColor = isDark ? "#60a5fa" : "#1e40af"
+  const linkColor = isDark ? "#3b82f6" : "#1e40af"
   const particleCount = isMobile ? 15 : 30
 
   return (
     <Particles
-      className="absolute inset-0 -z-10"
+      id="tsparticles"
+      className="fixed inset-0 -z-10 h-full w-full"
       init={particlesInit}
       options={{
+        fullScreen: false,
         background: {
           color: {
             value: "transparent",
@@ -48,21 +46,17 @@ export function ParticlesBackground() {
         fpsLimit: 60,
         particles: {
           color: {
-            value: theme === "dark" ? "#60a5fa" : "#1e40af",
+            value: particleColor,
           },
           links: {
-            color: theme === "dark" ? "#3b82f6" : "#1e40af",
+            color: linkColor,
             distance: 150,
             enable: true,
             opacity: 0.3,
             width: 1,
           },
           move: {
-            direction: "none",
             enable: true,
-            outModes: {
-              default: "bounce",
-            },
             random: true,
             speed: 1,
             straight: false,
@@ -84,7 +78,6 @@ export function ParticlesBackground() {
             value: { min: 1, max: 3 },
           },
         },
-        detectRetina: true,
         interactivity: {
           events: {
             onHover: {
@@ -95,7 +88,6 @@ export function ParticlesBackground() {
               enable: true,
               mode: "push",
             },
-            resize: true,
           },
           modes: {
             grab: {
@@ -109,6 +101,7 @@ export function ParticlesBackground() {
             },
           },
         },
+        detectRetina: true,
       }}
     />
   )
