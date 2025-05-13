@@ -1,3 +1,6 @@
+Here's the complete, fixed README file with proper formatting and structure:
+
+```markdown
 # StatusWindow
 
 <p align="center">
@@ -184,9 +187,7 @@ npm install
 
 # Start the development server
 npm run dev
-Here's the continuation of your README file with the remaining sections:
-
----
+```
 
 ## Usage
 
@@ -216,7 +217,6 @@ StatusWindow is designed with mobile-first principles:
 - **Responsive Layout**: Adapts to any screen size from phone to desktop
 - **Mobile-Specific Features**:
   - Quick-log buttons for frequent activities
-  - Haptic feedback for important actions
   - Offline support with localStorage persistence
 - **Performance Optimizations**:
   - Lazy-loaded components
@@ -262,4 +262,4 @@ For support, feature requests, or bug reports:
 <p align="center">
   <a href="#statuswindow">Back to Top</a>
 </p>
-
+```
