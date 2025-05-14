@@ -1,6 +1,18 @@
 "use client"
 import { motion } from "framer-motion"
-import { X, Settings, LogOut, Home, FileText, Star, Gauge, Package, LayoutGrid, PlusCircle } from "lucide-react"
+import {
+  X,
+  Settings,
+  LogOut,
+  Home,
+  FileText,
+  Star,
+  Gauge,
+  Package,
+  LayoutGrid,
+  PlusCircle,
+  BookOpen,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavDrawerProps {
@@ -67,6 +79,9 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
               <p className="text-blue-300">
                 Level {userData.level} {userData.characterClass}
               </p>
+              {userData.skillPoints > 0 && (
+                <p className="text-yellow-400 text-sm">Skill Points: {userData.skillPoints}</p>
+              )}
             </div>
           </div>
         </div>
@@ -90,6 +105,17 @@ export function MobileNavDrawer({ open, onClose, onSettings, onLogout, userData 
               <a href="/quests" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
                 <Star className="h-5 w-5 text-blue-300" />
                 <span>Quests</span>
+              </a>
+            </li>
+            <li>
+              <a href="/skills" className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800/50 text-white">
+                <BookOpen className="h-5 w-5 text-blue-300" />
+                <span>Skills</span>
+                {userData.skillPoints > 0 && (
+                  <span className="ml-auto bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full text-xs">
+                    {userData.skillPoints}
+                  </span>
+                )}
               </a>
             </li>
             <li>

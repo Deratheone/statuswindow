@@ -1,0 +1,202 @@
+.centerContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 100%;
+}
+
+.startButton {
+  position: relative;
+  z-index: 10;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 2px solid rgba(100, 200, 255, 0.8);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(100, 200, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.startButton:hover:not(:disabled) {
+  background: rgba(100, 200, 255, 0.1);
+  box-shadow: 0 0 25px rgba(100, 200, 255, 0.5);
+}
+
+.startButton.fade {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.orbContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.orbContainer.active {
+  opacity: 1;
+  visibility: visible;
+  animation: rotateOrb 14s linear forwards;
+}
+
+@keyframes rotateOrb {
+  100% {
+    transform: rotateY(720deg) rotateX(720deg);
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  opacity: 0;
+  transform-origin: center;
+  animation: particleAnim 14s forwards linear var(--delay);
+}
+
+@keyframes particleAnim {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    background-color: hsla(190, 100%, 70%, 0);
+    box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
+  }
+  10% {
+    opacity: 1;
+    transform: translate3d(var(--x), var(--y), var(--z));
+    background-color: hsla(190, 100%, 70%, 0.9);
+    box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
+  }
+  50% {
+    background-color: hsla(30, 100%, 60%, 0.9);
+    box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
+  }
+  85% {
+    opacity: 1;
+    transform: translate3d(var(--x), var(--y), var(--z));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--x) * 0.5), calc(var(--y) * 0.5), calc(var(--z) * 0.5));
+    background-color: hsla(30, 100%, 60%, 0);
+    box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
+  }
+}
+
+.holographicBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(100, 200, 255, 0);
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(100, 200, 255, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  z-index: 7;
+  transform: translate(-50%, -50%) scale(0.1);
+  transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+.holographicBox.active {
+  width: 320px;
+  height: 220px;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(100, 200, 255, 0.5);
+  border-radius: 5px;
+  box-shadow: 0 0 30px rgba(100, 200, 255, 0.4), inset 0 0 20px rgba(100, 200, 255, 0.2);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.holographicBox::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(100, 200, 255, 0) 0%,
+    rgba(100, 200, 255, 0.1) 50%,
+    rgba(100, 200, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+.holographicText {
+  color: rgba(200, 240, 255, 0.9);
+  text-align: center;
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);
+  padding: 20px;
+  z-index: 2;
+  letter-spacing: 1px;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.5s;
+}
+
+.holographicBox.active .holographicText {
+  opacity: 1;
+}
+
+.electricPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(100, 200, 255, 0.1);
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.electricPulse.active {
+  animation: electricPulse 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes electricPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+    box-shadow: 0 0 30px rgba(100, 200, 255, 0.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+    box-shadow: 0 0 100px rgba(100, 200, 255, 0);
+  }
+}

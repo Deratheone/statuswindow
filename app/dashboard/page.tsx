@@ -6,7 +6,19 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Award, Brain, ChevronRight, Dumbbell, LogOut, Plus, Settings, Sparkles, Trophy, Menu } from "lucide-react"
+import {
+  Award,
+  Brain,
+  ChevronRight,
+  Dumbbell,
+  LogOut,
+  Plus,
+  Settings,
+  Sparkles,
+  Trophy,
+  Menu,
+  BookOpen,
+} from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
@@ -109,6 +121,13 @@ export default function DashboardPage() {
       localStorage.setItem("statusWindowUsers", JSON.stringify(users))
     }
 
+    // Initialize skillPoints if not present
+    if (user.skillPoints === undefined) {
+      user.skillPoints = 5 // Starting skill points
+      users[currentUser] = user
+      localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+    }
+
     setUserData(user)
 
     // Get recent activities (last 5)
@@ -165,6 +184,10 @@ export default function DashboardPage() {
     navigateTo("/progress", "Opening progress...")
   }
 
+  const navigateToSkills = () => {
+    navigateTo("/skills", "Opening skills...")
+  }
+
   const navigateToActivities = () => {
     window.location.href = "/activities"
   }
@@ -210,12 +233,16 @@ export default function DashboardPage() {
 
     // Check for level up
     if (user.xp >= user.xpToNextLevel) {
+      const oldLevel = user.level
       user.level += 1
       user.xp = user.xp - user.xpToNextLevel
       user.xpToNextLevel = Math.floor(user.xpToNextLevel * 1.5)
 
+      // Add skill points on level up
+      user.skillPoints = (user.skillPoints || 0) + 5
+
       // Show system message for level up
-      setSystemMessage(`Congratulations! You've reached level ${user.level}!`)
+      setSystemMessage(`Congratulations! You've reached level ${user.level}! +5 Skill Points awarded!`)
       setTimeout(() => setSystemMessage(null), 5000)
     }
 
@@ -391,7 +418,19 @@ export default function DashboardPage() {
             <div className="mt-4 flex flex-wrap sm:flex-nowrap justify-between gap-2">
               <InventorySystem userData={userData} onUseItem={handleUseItem} />
 
-              {/* Fixed Quest Button - Now using onClick handler instead of Link */}
+              {/* Skills Button */}
+              <Button
+                variant="outline"
+                className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto mobile-touch-target"
+                onClick={navigateToSkills}
+                disabled={isNavigating}
+              >
+                <BookOpen className="h-4 w-4 mr-2" />
+                Skills{" "}
+                {userData.skillPoints > 0 && <span className="ml-1 text-yellow-400">({userData.skillPoints})</span>}
+              </Button>
+
+              {/* Quest Button */}
               <Button
                 variant="outline"
                 className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto mobile-touch-target"
