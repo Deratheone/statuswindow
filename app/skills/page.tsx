@@ -63,6 +63,11 @@ export default function SkillsPage() {
     }, animationTime)
   }
 
+  const resetSkillOrb = () => {
+    setUnlockedSkill(null)
+    setActivatingSkill(false)
+  }
+
   const unlockRandomSkill = () => {
     if (!userData) return
 
@@ -371,6 +376,7 @@ export default function SkillsPage() {
                       unlockedSkill={unlockedSkill}
                       disabled={userData.skillPoints <= 0}
                       isMobile={isMobile}
+                      onReset={resetSkillOrb}
                     />
                   </>
                 ) : (

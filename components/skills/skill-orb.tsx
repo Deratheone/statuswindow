@@ -10,6 +10,7 @@ interface SkillOrbProps {
   unlockedSkill: any
   disabled?: boolean
   isMobile?: boolean
+  onReset?: () => void
 }
 
 export function SkillOrb({
@@ -18,11 +19,13 @@ export function SkillOrb({
   unlockedSkill,
   disabled = false,
   isMobile = false,
+  onReset,
 }: SkillOrbProps) {
   const orbContainerRef = useRef<HTMLDivElement>(null)
   const [showHolographicBox, setShowHolographicBox] = useState(false)
   const [showElectricPulse, setShowElectricPulse] = useState(false)
   const [showSkillPopup, setShowSkillPopup] = useState(false)
+  const [animationComplete, setAnimationComplete] = useState(false)
 
   useEffect(() => {
     if (isActivating) {
@@ -38,18 +41,21 @@ export function SkillOrb({
       }, animationTime) // Matches orb animation duration
 
       return () => clearTimeout(timer)
-    } else {
+    } else if (!isActivating && !unlockedSkill) {
+      // Reset all states when not activating and no skill is unlocked
       setShowElectricPulse(false)
       setShowHolographicBox(false)
       setShowSkillPopup(false)
+      setAnimationComplete(false)
     }
-  }, [isActivating, isMobile])
+  }, [isActivating, isMobile, unlockedSkill])
 
   // Show skill popup when unlockedSkill changes
   useEffect(() => {
     if (unlockedSkill && showHolographicBox) {
       setTimeout(() => {
         setShowSkillPopup(true)
+        setAnimationComplete(true)
       }, 1000)
     }
   }, [unlockedSkill, showHolographicBox])
@@ -99,15 +105,20 @@ export function SkillOrb({
     }
   }
 
+  const handleReset = () => {
+    if (onReset) {
+      onReset()
+    }
+  }
+
   return (
     <div className={styles.centerContainer}>
-      <Button
-        className={`${styles.startButton} ${isActivating ? styles.fade : ""}`}
-        onClick={handleActivate}
-        disabled={disabled || isActivating}
-      >
-        Activate The Skill Orb
-      </Button>
+      {/* Only show the start button if not activating and no skill has been unlocked */}
+      {!isActivating && !animationComplete && (
+        <Button className={styles.startButton} onClick={handleActivate} disabled={disabled}>
+          Activate The Skill Orb
+        </Button>
+      )}
 
       <div
         ref={orbContainerRef}
@@ -149,7 +160,14 @@ export function SkillOrb({
           >
             {unlockedSkill.rarity}
           </div>
-          <div className="text-blue-100 text-sm">{unlockedSkill.description}</div>
+          <div className="text-blue-100 text-sm mb-4">{unlockedSkill.description}</div>
+
+          {/* Continue button to reset and allow activating another skill */}
+          {animationComplete && (
+            <Button onClick={handleReset} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+              Continue
+            </Button>
+          )}
         </div>
       )}
 
