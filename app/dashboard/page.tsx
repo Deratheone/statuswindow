@@ -6,19 +6,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Award,
-  Brain,
-  ChevronRight,
-  Dumbbell,
-  LogOut,
-  Plus,
-  Settings,
-  Sparkles,
-  Trophy,
-  Menu,
-  BookOpen,
-} from "lucide-react"
+import { Award, Brain, ChevronRight, Dumbbell, LogOut, Settings, Sparkles, Trophy, Menu, BookOpen } from "lucide-react"
 import { StatusWindow } from "@/components/status-window"
 import { ActivityForm } from "@/components/activity-form"
 import { QuestBoard } from "@/components/quest-board"
@@ -30,6 +18,7 @@ import { useMobile } from "@/hooks/use-mobile"
 import { useSwipe } from "@/hooks/use-swipe"
 import { MobileNavWrapper } from "@/components/mobile-nav-wrapper"
 import { CelebrationEffect } from "@/components/celebration-effect"
+import { SkillsList } from "@/components/skills/skills-list"
 
 export default function DashboardPage() {
   const isMobile = useMobile()
@@ -124,6 +113,13 @@ export default function DashboardPage() {
     // Initialize skillPoints if not present
     if (user.skillPoints === undefined) {
       user.skillPoints = 5 // Starting skill points
+      users[currentUser] = user
+      localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+    }
+
+    // Initialize unlockedSkills if not present
+    if (!user.unlockedSkills) {
+      user.unlockedSkills = []
       users[currentUser] = user
       localStorage.setItem("statusWindowUsers", JSON.stringify(users))
     }
@@ -583,12 +579,28 @@ export default function DashboardPage() {
                   <Card className="crystal-card border-blue-800/50 shadow-[0_0_15px_rgba(30,64,175,0.3)]">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2 text-blue-100">
-                        <Plus className="h-5 w-5 text-green-400" />
-                        Quick Add Activity
+                        <BookOpen className="h-5 w-5 text-blue-400" />
+                        Unlocked Skills
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ActivityForm onSubmit={handleActivitySubmit} compact />
+                      {userData.unlockedSkills && userData.unlockedSkills.length > 0 ? (
+                        <SkillsList skills={userData.unlockedSkills.slice(0, 3)} compact />
+                      ) : (
+                        <div className="text-center text-blue-300 py-4">
+                          No skills unlocked yet. Visit the Skills page to unlock skills!
+                        </div>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        className="w-full mt-4 border-blue-700/50 text-blue-300 hover:bg-blue-900/50 mobile-touch-target"
+                        onClick={navigateToSkills}
+                        disabled={isNavigating}
+                      >
+                        View All Skills
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </CardContent>
                   </Card>
 

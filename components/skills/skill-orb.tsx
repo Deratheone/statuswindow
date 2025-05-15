@@ -9,27 +9,50 @@ interface SkillOrbProps {
   isActivating: boolean
   unlockedSkill: any
   disabled?: boolean
+  isMobile?: boolean
 }
 
-export function SkillOrb({ onActivate, isActivating, unlockedSkill, disabled = false }: SkillOrbProps) {
+export function SkillOrb({
+  onActivate,
+  isActivating,
+  unlockedSkill,
+  disabled = false,
+  isMobile = false,
+}: SkillOrbProps) {
   const orbContainerRef = useRef<HTMLDivElement>(null)
   const [showHolographicBox, setShowHolographicBox] = useState(false)
   const [showElectricPulse, setShowElectricPulse] = useState(false)
+  const [showSkillPopup, setShowSkillPopup] = useState(false)
 
   useEffect(() => {
     if (isActivating) {
       // After orb animation completes
+      const animationTime = isMobile ? 8000 : 14000
       const timer = setTimeout(() => {
         setShowElectricPulse(true)
-        setShowHolographicBox(true)
-      }, 14000) // Matches orb animation duration
+
+        // Show holographic box after a short delay
+        setTimeout(() => {
+          setShowHolographicBox(true)
+        }, 500)
+      }, animationTime) // Matches orb animation duration
 
       return () => clearTimeout(timer)
     } else {
       setShowElectricPulse(false)
       setShowHolographicBox(false)
+      setShowSkillPopup(false)
     }
-  }, [isActivating])
+  }, [isActivating, isMobile])
+
+  // Show skill popup when unlockedSkill changes
+  useEffect(() => {
+    if (unlockedSkill && showHolographicBox) {
+      setTimeout(() => {
+        setShowSkillPopup(true)
+      }, 1000)
+    }
+  }, [unlockedSkill, showHolographicBox])
 
   useEffect(() => {
     if (isActivating && orbContainerRef.current) {
@@ -40,7 +63,8 @@ export function SkillOrb({ onActivate, isActivating, unlockedSkill, disabled = f
   const generateParticles = () => {
     if (!orbContainerRef.current) return
 
-    const totalParticles = 400
+    // Reduce particle count on mobile for better performance
+    const totalParticles = isMobile ? 200 : 400
     const radius = 100
 
     // Clear existing particles
@@ -85,50 +109,52 @@ export function SkillOrb({ onActivate, isActivating, unlockedSkill, disabled = f
         Activate The Skill Orb
       </Button>
 
-      <div ref={orbContainerRef} className={`${styles.orbContainer} ${isActivating ? styles.active : ""}`}></div>
+      <div
+        ref={orbContainerRef}
+        className={`${styles.orbContainer} ${isActivating ? (isMobile ? styles.activeMobile : styles.active) : ""}`}
+      ></div>
 
       <div className={`${styles.electricPulse} ${showElectricPulse ? styles.active : ""}`}></div>
 
-      <div className={`${styles.holographicBox} ${showHolographicBox ? styles.active : ""}`}>
-        <div className={styles.holographicText}>
-          {unlockedSkill ? (
-            <>
-              <div
-                className={`text-2xl font-bold mb-2 ${
-                  unlockedSkill.rarity === "Common"
-                    ? "text-gray-300"
-                    : unlockedSkill.rarity === "Rare"
-                      ? "text-blue-300"
-                      : unlockedSkill.rarity === "Epic"
-                        ? "text-purple-300"
-                        : unlockedSkill.rarity === "Legendary"
-                          ? "text-orange-300"
-                          : "text-pink-300" // Mythic
-                }`}
-              >
-                {unlockedSkill.name}
-              </div>
-              <div
-                className={`text-sm mb-2 ${
-                  unlockedSkill.rarity === "Common"
-                    ? "text-gray-400"
-                    : unlockedSkill.rarity === "Rare"
-                      ? "text-blue-400"
-                      : unlockedSkill.rarity === "Epic"
-                        ? "text-purple-400"
-                        : unlockedSkill.rarity === "Legendary"
-                          ? "text-orange-400"
-                          : "text-pink-400" // Mythic
-                }`}
-              >
-                {unlockedSkill.rarity}
-              </div>
-              <div className="text-blue-100 text-sm">{unlockedSkill.description}</div>
-            </>
-          ) : (
-            "SKILL UNLOCKED"
-          )}
+      {/* Skill popup that appears in front of the orb */}
+      {unlockedSkill && (
+        <div className={`${styles.skillPopup} ${showSkillPopup ? styles.active : ""}`}>
+          <div
+            className={`text-2xl font-bold mb-2 ${
+              unlockedSkill.rarity === "Common"
+                ? "text-gray-300"
+                : unlockedSkill.rarity === "Rare"
+                  ? "text-blue-300"
+                  : unlockedSkill.rarity === "Epic"
+                    ? "text-purple-300"
+                    : unlockedSkill.rarity === "Legendary"
+                      ? "text-orange-300"
+                      : "text-pink-300" // Mythic
+            }`}
+          >
+            {unlockedSkill.name}
+          </div>
+          <div
+            className={`text-sm mb-2 ${
+              unlockedSkill.rarity === "Common"
+                ? "text-gray-400"
+                : unlockedSkill.rarity === "Rare"
+                  ? "text-blue-400"
+                  : unlockedSkill.rarity === "Epic"
+                    ? "text-purple-400"
+                    : unlockedSkill.rarity === "Legendary"
+                      ? "text-orange-400"
+                      : "text-pink-400" // Mythic
+            }`}
+          >
+            {unlockedSkill.rarity}
+          </div>
+          <div className="text-blue-100 text-sm">{unlockedSkill.description}</div>
         </div>
+      )}
+
+      <div className={`${styles.holographicBox} ${showHolographicBox ? styles.active : ""}`}>
+        <div className={styles.holographicText}>SKILL UNLOCKED</div>
       </div>
     </div>
   )

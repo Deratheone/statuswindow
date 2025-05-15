@@ -56,9 +56,11 @@ export default function SkillsPage() {
     setActivatingSkill(true)
 
     // After the animation completes, unlock a random skill
+    // For mobile, we'll reduce the animation time
+    const animationTime = isMobile ? 8000 : 14000
     setTimeout(() => {
       unlockRandomSkill()
-    }, 14000)
+    }, animationTime)
   }
 
   const unlockRandomSkill = () => {
@@ -72,68 +74,206 @@ export default function SkillsPage() {
 
     if (!user) return
 
-    // Available skills
+    // Available skills with rarity weights
     const availableSkills = [
+      // Common skills (50% chance)
       {
         name: "Focused Mind",
         description: "Increases intelligence gain by 10%",
         rarity: "Common",
         type: "intelligence",
+        weight: 50,
       },
-      { name: "Iron Body", description: "Increases strength gain by 10%", rarity: "Common", type: "strength" },
-      { name: "Spirit Vessel", description: "Increases mana gain by 10%", rarity: "Common", type: "mana" },
+      {
+        name: "Iron Body",
+        description: "Increases strength gain by 10%",
+        rarity: "Common",
+        type: "strength",
+        weight: 50,
+      },
+      {
+        name: "Spirit Vessel",
+        description: "Increases mana gain by 10%",
+        rarity: "Common",
+        type: "mana",
+        weight: 50,
+      },
+      {
+        name: "Study Habit",
+        description: "Intelligence activities are 5% more effective",
+        rarity: "Common",
+        type: "intelligence",
+        weight: 50,
+      },
+      {
+        name: "Workout Routine",
+        description: "Strength activities are 5% more effective",
+        rarity: "Common",
+        type: "strength",
+        weight: 50,
+      },
+      {
+        name: "Meditation Routine",
+        description: "Mana activities are 5% more effective",
+        rarity: "Common",
+        type: "mana",
+        weight: 50,
+      },
+
+      // Rare skills (30% chance)
       {
         name: "Quick Learner",
         description: "Gain 5% more XP from all activities",
         rarity: "Rare",
         type: "intelligence",
+        weight: 30,
       },
       {
         name: "Endurance",
         description: "Strength activities require less recovery time",
         rarity: "Rare",
         type: "strength",
+        weight: 30,
       },
       {
         name: "Meditation Master",
         description: "Mana activities provide bonus intelligence",
         rarity: "Rare",
         type: "mana",
+        weight: 30,
       },
       {
+        name: "Knowledge Retention",
+        description: "Intelligence gains have a 10% chance to be doubled",
+        rarity: "Rare",
+        type: "intelligence",
+        weight: 30,
+      },
+      {
+        name: "Physical Conditioning",
+        description: "Strength gains have a 10% chance to be doubled",
+        rarity: "Rare",
+        type: "strength",
+        weight: 30,
+      },
+      {
+        name: "Mental Clarity",
+        description: "Mana gains have a 10% chance to be doubled",
+        rarity: "Rare",
+        type: "mana",
+        weight: 30,
+      },
+
+      // Epic skills (15% chance)
+      {
         name: "Genius Intellect",
-        description: "25% chance to double intelligence gain",
+        description: "15% chance to double intelligence gain",
         rarity: "Epic",
         type: "intelligence",
+        weight: 15,
       },
       {
         name: "Herculean Strength",
-        description: "25% chance to double strength gain",
+        description: "15% chance to double strength gain",
         rarity: "Epic",
         type: "strength",
+        weight: 15,
       },
-      { name: "Arcane Affinity", description: "25% chance to double mana gain", rarity: "Epic", type: "mana" },
+      {
+        name: "Arcane Affinity",
+        description: "15% chance to double mana gain",
+        rarity: "Epic",
+        type: "mana",
+        weight: 15,
+      },
+      {
+        name: "Scholarly Insight",
+        description: "Intelligence activities have a chance to complete quests faster",
+        rarity: "Epic",
+        type: "intelligence",
+        weight: 15,
+      },
+      {
+        name: "Warrior's Spirit",
+        description: "Strength activities have a chance to complete quests faster",
+        rarity: "Epic",
+        type: "strength",
+        weight: 15,
+      },
+      {
+        name: "Mystic Connection",
+        description: "Mana activities have a chance to complete quests faster",
+        rarity: "Epic",
+        type: "mana",
+        weight: 15,
+      },
+
+      // Legendary skills (4% chance)
       {
         name: "Time Dilation",
         description: "Activities take 15% less time to complete",
         rarity: "Legendary",
         type: "intelligence",
+        weight: 4,
       },
       {
         name: "Titan's Might",
         description: "Strength activities have a chance to complete quests instantly",
         rarity: "Legendary",
         type: "strength",
+        weight: 4,
       },
       {
         name: "Ethereal Connection",
         description: "Mana activities have a chance to restore all stats",
         rarity: "Legendary",
         type: "mana",
+        weight: 4,
       },
-      { name: "Omniscience", description: "Gain all stats from any activity", rarity: "Mythic", type: "intelligence" },
-      { name: "Godlike Power", description: "All stat gains are increased by 50%", rarity: "Mythic", type: "strength" },
-      { name: "Transcendence", description: "XP gain is doubled for all activities", rarity: "Mythic", type: "mana" },
+      {
+        name: "Quantum Mind",
+        description: "Intelligence gains are increased by 25%",
+        rarity: "Legendary",
+        type: "intelligence",
+        weight: 4,
+      },
+      {
+        name: "Olympian Power",
+        description: "Strength gains are increased by 25%",
+        rarity: "Legendary",
+        type: "strength",
+        weight: 4,
+      },
+      {
+        name: "Astral Projection",
+        description: "Mana gains are increased by 25%",
+        rarity: "Legendary",
+        type: "mana",
+        weight: 4,
+      },
+
+      // Mythic skills (1% chance)
+      {
+        name: "Omniscience",
+        description: "Gain all stats from any activity",
+        rarity: "Mythic",
+        type: "intelligence",
+        weight: 1,
+      },
+      {
+        name: "Godlike Power",
+        description: "All stat gains are increased by 50%",
+        rarity: "Mythic",
+        type: "strength",
+        weight: 1,
+      },
+      {
+        name: "Transcendence",
+        description: "XP gain is doubled for all activities",
+        rarity: "Mythic",
+        type: "mana",
+        weight: 1,
+      },
     ]
 
     // Filter out already unlocked skills
@@ -151,11 +291,21 @@ export default function SkillsPage() {
       return
     }
 
-    // Select a random skill
-    const randomSkill = availableToUnlock[Math.floor(Math.random() * availableToUnlock.length)]
+    // Create a weighted selection based on rarity
+    const totalWeight = availableToUnlock.reduce((sum, skill) => sum + skill.weight, 0)
+    let randomWeight = Math.random() * totalWeight
+    let selectedSkill = availableToUnlock[0]
+
+    for (const skill of availableToUnlock) {
+      randomWeight -= skill.weight
+      if (randomWeight <= 0) {
+        selectedSkill = skill
+        break
+      }
+    }
 
     // Add to user's unlocked skills
-    user.unlockedSkills.push(randomSkill)
+    user.unlockedSkills.push(selectedSkill)
 
     // Deduct a skill point
     user.skillPoints -= 1
@@ -166,7 +316,7 @@ export default function SkillsPage() {
 
     // Update state
     setUserData(user)
-    setUnlockedSkill(randomSkill)
+    setUnlockedSkill(selectedSkill)
     setActivatingSkill(false)
   }
 
@@ -220,6 +370,7 @@ export default function SkillsPage() {
                       isActivating={activatingSkill}
                       unlockedSkill={unlockedSkill}
                       disabled={userData.skillPoints <= 0}
+                      isMobile={isMobile}
                     />
                   </>
                 ) : (
