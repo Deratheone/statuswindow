@@ -82,19 +82,36 @@ export function SkillOrbAnimation() {
       // Show electric pulse
       setShowElectricPulse(true)
 
-      // Start holographic box expansion
-      setShowHolographicBox(true)
-
-      // Trigger glitch effect when box is fully visible
+      // Start holographic box expansion immediately after pulse
+      // REDUCED DELAY: Show holographic box sooner
       setTimeout(() => {
-        setShowGlitchOverlay(true)
+        setShowHolographicBox(true)
 
-        // Hide glitch after animation
+        // Trigger glitch effect when box is fully visible
+        // REDUCED DELAY: Show glitch effect sooner
         setTimeout(() => {
-          setShowGlitchOverlay(false)
-        }, 500)
-      }, 800) // Match box expansion time
-    }, 4000) // Reduced orb animation duration to 4s
+          setShowGlitchOverlay(true)
+
+          // Hide glitch after animation
+          setTimeout(() => {
+            setShowGlitchOverlay(false)
+          }, 500)
+        }, 300) // Reduced from 800ms to 300ms
+      }, 200) // Reduced delay to 200ms (was implicit before)
+
+      // Hide orb container after pulse
+      setTimeout(() => {
+        orbContainerRef.current?.classList.remove(styles.active)
+        orbContainerRef.current?.classList.remove(styles.activeMobile)
+
+        // Hide orb container completely
+        setTimeout(() => {
+          if (orbContainerRef.current) {
+            orbContainerRef.current.style.display = "none"
+          }
+        }, 100)
+      }, 600)
+    }, 4000) // Keep the original orb animation duration at 4s
   }
 
   return (
@@ -105,8 +122,7 @@ export function SkillOrbAnimation() {
 
       <div
         ref={orbContainerRef}
-        className={`${styles.orbContainer} ${animationTriggered ? styles.active : ""}`}
-        style={{ display: animationTriggered && showElectricPulse ? "none" : "block" }}
+        className={`${styles.orbContainer} ${animationTriggered ? (isMobile ? styles.activeMobile : styles.active) : ""}`}
       ></div>
 
       <div className={`${styles.electricPulse} ${showElectricPulse ? styles.active : ""}`}></div>
