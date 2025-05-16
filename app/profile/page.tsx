@@ -13,6 +13,7 @@ import { ArrowLeft, Check, Save, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { AvatarUpload } from "@/components/avatar-upload"
 import { motion } from "framer-motion"
+import { logoutUser } from "@/utils/auth"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -52,6 +53,8 @@ export default function ProfilePage() {
   })
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState("")
 
   useEffect(() => {
     // Check if user is logged in
@@ -187,6 +190,17 @@ export default function ProfilePage() {
 
   const handleBackToDashboard = () => {
     window.location.href = "/dashboard"
+  }
+
+  const handleLogout = () => {
+    logoutUser(true) // Clear remembered user as well
+    router.push("/login")
+  }
+
+  const clearRememberedLogin = () => {
+    localStorage.removeItem("statusWindowRememberedUser")
+    setShowToast(true)
+    setToastMessage("Auto-login cleared successfully")
   }
 
   if (loading) {
@@ -327,6 +341,21 @@ export default function ProfilePage() {
                         className="bg-slate-700/50 border-slate-600 text-white"
                       />
                     </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mt-4">
+                  <h3 className="text-lg font-medium">Login Settings</h3>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-400">Clear auto-login</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearRememberedLogin}
+                      className="border-red-500/30 text-red-400 hover:bg-red-900/20"
+                    >
+                      Clear
+                    </Button>
                   </div>
                 </div>
 

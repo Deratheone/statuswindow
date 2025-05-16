@@ -214,6 +214,7 @@ export default function OnboardingPage() {
   }, [formData])
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [rememberMe, setRememberMe] = useState(true)
 
   const validateStep = () => {
     const newErrors: Record<string, string> = {}
@@ -268,6 +269,17 @@ export default function OnboardingPage() {
 
     // Set as current user
     localStorage.setItem("statusWindowCurrentUser", formData.username)
+
+    // Store credentials if remember me is checked
+    if (rememberMe) {
+      localStorage.setItem(
+        "statusWindowRememberedUser",
+        JSON.stringify({
+          username: formData.username,
+          timestamp: Date.now(),
+        }),
+      )
+    }
 
     // Redirect to dashboard
     router.push("/dashboard")
@@ -1368,6 +1380,18 @@ export default function OnboardingPage() {
                       Your character has been created and is ready to begin the journey of self-improvement. Click
                       "Begin Adventure" to start your quest!
                     </p>
+                  </div>
+                  <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="remember-me"
+                        checked={rememberMe}
+                        onCheckedChange={(checked) => setRememberMe(checked === true)}
+                      />
+                      <Label htmlFor="remember-me" className="text-sm text-gray-300 cursor-pointer">
+                        Remember me for 30 days
+                      </Label>
+                    </div>
                   </div>
                 </div>
               </div>

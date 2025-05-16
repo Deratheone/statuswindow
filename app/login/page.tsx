@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -10,12 +10,49 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Sparkles } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function LoginPage() {
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Check for stored credentials on component mount
+  useEffect(() => {
+    const checkStoredCredentials = () => {
+      const storedUser = localStorage.getItem("statusWindowRememberedUser")
+
+      if (storedUser) {
+        try {
+          const { username, timestamp } = JSON.parse(storedUser)
+          const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+
+          // Check if the stored user exists and if the remember me hasn't expired (30 days)
+          const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000
+          const isValid = Date.now() - timestamp < thirtyDaysInMs
+
+          if (isValid && users[username]) {
+            // Auto login
+            localStorage.setItem("statusWindowCurrentUser", username)
+            router.push("/dashboard")
+            return
+          } else {
+            // Clear invalid stored credentials
+            localStorage.removeItem("statusWindowRememberedUser")
+          }
+        } catch (e) {
+          localStorage.removeItem("statusWindowRememberedUser")
+        }
+      }
+
+      setIsLoading(false)
+    }
+
+    checkStoredCredentials()
+  }, [router])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,10 +69,35 @@ export default function LoginPage() {
     if (users[username] && users[username].password === password) {
       // Set current user
       localStorage.setItem("statusWindowCurrentUser", username)
+
+      // Store credentials if remember me is checked
+      if (rememberMe) {
+        localStorage.setItem(
+          "statusWindowRememberedUser",
+          JSON.stringify({
+            username,
+            timestamp: Date.now(),
+          }),
+        )
+      }
+
       router.push("/dashboard")
     } else {
       setError("Invalid username or password")
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md flex justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <Sparkles className="h-8 w-8 text-yellow-400 animate-spin" />
+            <p className="mt-4 text-white">Loading...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -84,6 +146,17 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-slate-700/50 border-slate-600 text-white"
                 />
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember-me"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked === true)}
+                />
+                <Label htmlFor="remember-me" className="text-sm text-gray-300 cursor-pointer">
+                  Remember me for 30 days
+                </Label>
               </div>
 
               <Button
