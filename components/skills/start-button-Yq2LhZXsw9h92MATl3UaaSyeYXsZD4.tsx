@@ -77,40 +77,33 @@ export function SkillOrbAnimation() {
     if (animationTriggered) return
     setAnimationTriggered(true)
 
-    // After orb animation completes (adjusted to 4s)
+    // After orb animation completes
     setTimeout(() => {
       // Show electric pulse
       setShowElectricPulse(true)
 
-      // Start holographic box expansion immediately after pulse
-      // REDUCED DELAY: Show holographic box sooner
+      // Hide orb container immediately after pulse
+      setTimeout(() => {
+        if (orbContainerRef.current) {
+          orbContainerRef.current.style.display = "none"
+        }
+      }, 100)
+
+      // Start holographic box expansion almost immediately
+      // SIGNIFICANTLY REDUCED DELAY: Show holographic box much sooner
       setTimeout(() => {
         setShowHolographicBox(true)
 
         // Trigger glitch effect when box is fully visible
-        // REDUCED DELAY: Show glitch effect sooner
         setTimeout(() => {
           setShowGlitchOverlay(true)
 
           // Hide glitch after animation
           setTimeout(() => {
             setShowGlitchOverlay(false)
-          }, 500)
-        }, 300) // Reduced from 800ms to 300ms
-      }, 200) // Reduced delay to 200ms (was implicit before)
-
-      // Hide orb container after pulse
-      setTimeout(() => {
-        orbContainerRef.current?.classList.remove(styles.active)
-        orbContainerRef.current?.classList.remove(styles.activeMobile)
-
-        // Hide orb container completely
-        setTimeout(() => {
-          if (orbContainerRef.current) {
-            orbContainerRef.current.style.display = "none"
-          }
-        }, 100)
-      }, 600)
+          }, 300)
+        }, 200) // Reduced from 300ms to 200ms
+      }, 100) // Reduced delay to 100ms (was 200ms)
     }, 4000) // Keep the original orb animation duration at 4s
   }
 
