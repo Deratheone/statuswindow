@@ -57,7 +57,7 @@ export default function SkillsPage() {
 
     // After the animation completes, unlock a random skill
     // For mobile, we'll reduce the animation time
-    const animationTime = isMobile ? 8000 : 14000
+    const animationTime = isMobile ? 5000 : 10000
     setTimeout(() => {
       unlockRandomSkill()
     }, animationTime)
