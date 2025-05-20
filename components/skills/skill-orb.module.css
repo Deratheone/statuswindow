@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 400px;
+  height: 100vh;
   width: 100%;
 }
 
@@ -29,15 +29,9 @@
   box-shadow: 0 0 25px rgba(100, 200, 255, 0.5);
 }
 
-.startButton:disabled {
-  background: linear-gradient(135deg, #64748b, #475569);
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
 .startButton.fade {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
 }
 
@@ -104,38 +98,6 @@
   }
 }
 
-.electricPulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: rgba(100, 200, 255, 0.1);
-  transform: translate(-50%, -50%) scale(0);
-  z-index: 6;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.electricPulse.active {
-  animation: electricPulse 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes electricPulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.8;
-    box-shadow: 0 0 30px rgba(100, 200, 255, 0.6);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(3);
-    opacity: 0;
-    box-shadow: 0 0 100px rgba(100, 200, 255, 0);
-  }
-}
-
 .holographicBox {
   position: absolute;
   top: 50%;
@@ -152,7 +114,7 @@
   opacity: 0;
   z-index: 7;
   transform: translate(-50%, -50%) scale(0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   will-change: transform, opacity, width, height;
 }
@@ -205,23 +167,43 @@
   letter-spacing: 1px;
   font-weight: 300;
   opacity: 0;
-  transition: opacity 0.2s ease 0.1s;
-  /* Fix for overlapping text */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  /* Make text semi-transparent to avoid interfering with skill details */
-  color: rgba(200, 240, 255, 0.5);
+  transition: opacity 0.3s ease 0.3s;
 }
 
 .holographicBox.active .holographicText {
-  opacity: 0.5; /* Reduced opacity to avoid interfering with skill details */
+  opacity: 1;
+}
+
+.electricPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(100, 200, 255, 0.1);
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.electricPulse.active {
+  animation: electricPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes electricPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+    box-shadow: 0 0 30px rgba(100, 200, 255, 0.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+    box-shadow: 0 0 100px rgba(100, 200, 255, 0);
+  }
 }
 
 .glitchOverlay {
@@ -234,12 +216,7 @@
   z-index: 20;
   opacity: 0;
   pointer-events: none;
-  animation: glitchEffect 0.3s linear;
-  display: none;
-}
-
-.glitchOverlay.active {
-  opacity: 1;
+  animation: glitchEffect 0.5s linear;
 }
 
 @keyframes glitchEffect {
@@ -292,57 +269,4 @@
     padding: 12px 30px;
     font-size: 1.2rem;
   }
-
-  .particle {
-    animation-duration: 4s; /* Match desktop for consistency */
-  }
-
-  .orbContainer.activeMobile .particle {
-    animation-duration: 4s; /* Match desktop for consistency */
-  }
-
-  .electricPulse.active {
-    animation-duration: 0.4s;
-  }
-
-  .skillPopup {
-    width: 280px;
-    padding: 1.25rem;
-  }
-}
-
-/* Add these to support the existing skill orb component */
-.skillPopup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  width: 300px;
-  max-width: 90%;
-  padding: 1.5rem;
-  background: rgba(15, 23, 42, 0.9);
-  border: 2px solid rgba(59, 130, 246, 0.5);
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  opacity: 0;
-  z-index: 30;
-  transition: all 0.5s ease;
-  pointer-events: none;
-}
-
-.skillPopup.active {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.activeMobile {
-  opacity: 1;
-  visibility: visible;
-  animation: rotateOrb 4s linear forwards;
 }
