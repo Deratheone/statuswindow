@@ -1,136 +1,36 @@
-.centerContainer {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+... This file was left out for brevity. Assume it is correct and does not need any modifications. ...
+
+/* Skill Result Styles */
+.skillResultContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-}
-
-.startButton {
-  position: relative;
-  z-index: 10;
-  padding: 15px 40px;
-  font-size: 1.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: 2px solid rgba(100, 200, 255, 0.8);
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 15px rgba(100, 200, 255, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.startButton:hover {
-  background: rgba(100, 200, 255, 0.1);
-  box-shadow: 0 0 25px rgba(100, 200, 255, 0.5);
-}
-
-.startButton.fade {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-.orbContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  opacity: 0;
-  visibility: hidden;
-  will-change: transform;
-}
-
-.orbContainer.active {
-  opacity: 1;
-  visibility: visible;
-  animation: rotateOrb 4s linear forwards;
-}
-
-@keyframes rotateOrb {
-  100% {
-    transform: rotateY(720deg) rotateX(720deg);
-  }
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  opacity: 0;
-  transform-origin: center;
-  will-change: transform, opacity;
-  animation: particleAnim 4s forwards linear var(--delay);
-}
-
-@keyframes particleAnim {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-    background-color: hsla(190, 100%, 70%, 0);
-    box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
-  }
-  10% {
-    opacity: 1;
-    transform: translate3d(var(--x), var(--y), var(--z));
-    background-color: hsla(190, 100%, 70%, 0.9);
-    box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
-  }
-  50% {
-    background-color: hsla(30, 100%, 60%, 0.9);
-    box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
-  }
-  85% {
-    opacity: 1;
-    transform: translate3d(var(--x), var(--y), var(--z));
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(calc(var(--x) * 0.5), calc(var(--y) * 0.5), calc(var(--z) * 0.5));
-    background-color: hsla(30, 100%, 60%, 0);
-    box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
-  }
-}
-
-.holographicBox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  background: rgba(0, 0, 0, 0);
-  border: 1px solid rgba(100, 200, 255, 0);
-  border-radius: 50%;
-  box-shadow: 0 0 0 rgba(100, 200, 255, 0);
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  z-index: 7;
-  transform: translate(-50%, -50%) scale(0.1);
-  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 30;
+  animation: fadeIn 0.5s ease forwards;
+  background: rgba(0, 10, 30, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.skillResultContent {
+  background: linear-gradient(135deg, rgba(10, 20, 40, 0.9), rgba(5, 15, 35, 0.95));
+  border: 2px solid var(--rarity-color, #ff8000);
+  box-shadow: 0 0 30px var(--rarity-color, #ff8000), inset 0 0 15px rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 90%;
+  width: 450px;
+  text-align: center;
+  position: relative;
   overflow: hidden;
-  will-change: transform, opacity, width, height;
+  animation: pulseGlow 3s infinite alternate;
 }
 
-.holographicBox.active {
-  width: min(320px, 90vw);
-  height: min(220px, 30vh);
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(100, 200, 255, 0.5);
-  border-radius: 5px;
-  box-shadow: 0 0 30px rgba(100, 200, 255, 0.4), inset 0 0 20px rgba(100, 200, 255, 0.2);
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.holographicBox::before {
+.skillResultContent::before {
   content: "";
   position: absolute;
   top: -50%;
@@ -139,134 +39,104 @@
   height: 200%;
   background: linear-gradient(
     to bottom right,
-    rgba(100, 200, 255, 0) 0%,
-    rgba(100, 200, 255, 0.1) 50%,
-    rgba(100, 200, 255, 0) 100%
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
   );
   transform: rotate(30deg);
   animation: shine 3s infinite;
-  will-change: transform;
+  pointer-events: none;
 }
 
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-.holographicText {
-  color: rgba(200, 240, 255, 0.9);
-  text-align: center;
-  font-size: clamp(1.2rem, 5vw, 1.8rem);
-  text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);
-  padding: 20px;
-  z-index: 2;
+.skillName {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--rarity-color, #ff8000);
+  text-shadow: var(--rarity-glow, 0 0 20px) var(--rarity-color, #ff8000);
   letter-spacing: 1px;
-  font-weight: 300;
-  opacity: 0;
-  transition: opacity 0.3s ease 0.3s;
 }
 
-.holographicBox.active .holographicText {
-  opacity: 1;
+.skillRarity {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--rarity-color, #ff8000);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.9;
 }
 
-.electricPulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: rgba(100, 200, 255, 0.1);
-  transform: translate(-50%, -50%) scale(0);
-  z-index: 6;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
+.skillDescription {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.electricPulse.active {
-  animation: electricPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.continueButton {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(40, 40, 40, 0.7));
+  color: white;
+  border: 2px solid var(--rarity-color, #ff8000);
+  border-radius: 30px;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes electricPulse {
+.continueButton:hover {
+  background: linear-gradient(to right, rgba(40, 40, 40, 0.7), rgba(60, 60, 60, 0.7));
+  box-shadow: 0 0 15px var(--rarity-color, #ff8000);
+  transform: translateY(-2px);
+}
+
+.continueButton:active {
+  transform: translateY(1px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
   0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.8;
-    box-shadow: 0 0 30px rgba(100, 200, 255, 0.6);
+    box-shadow: 0 0 15px var(--rarity-color, #ff8000), inset 0 0 10px rgba(255, 255, 255, 0.1);
   }
   100% {
-    transform: translate(-50%, -50%) scale(3);
-    opacity: 0;
-    box-shadow: 0 0 100px rgba(100, 200, 255, 0);
-  }
-}
-
-.glitchOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  z-index: 20;
-  opacity: 0;
-  pointer-events: none;
-  animation: glitchEffect 0.5s linear;
-}
-
-@keyframes glitchEffect {
-  0% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  10% {
-    opacity: 0.8;
-    background: linear-gradient(
-      0deg,
-      transparent 45%,
-      rgba(100, 200, 255, 0.3) 45%,
-      rgba(100, 200, 255, 0.3) 55%,
-      transparent 55%
-    );
-    transform: translateX(-10px);
-  }
-  20% {
-    transform: translateX(10px);
-    background: linear-gradient(
-      0deg,
-      transparent 45%,
-      rgba(255, 255, 255, 0.4) 45%,
-      rgba(255, 255, 255, 0.4) 55%,
-      transparent 55%
-    );
-  }
-  30% {
-    transform: translateX(-5px);
-    background: linear-gradient(
-      90deg,
-      transparent 45%,
-      rgba(100, 200, 255, 0.3) 45%,
-      rgba(100, 200, 255, 0.3) 55%,
-      transparent 55%
-    );
-  }
-  40%,
-  100% {
-    opacity: 0;
-    transform: translateX(0);
-    background: black;
+    box-shadow: 0 0 25px var(--rarity-color, #ff8000), inset 0 0 15px rgba(255, 255, 255, 0.2);
   }
 }
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .startButton {
-    padding: 12px 30px;
-    font-size: 1.2rem;
+  .skillName {
+    font-size: 2rem;
+  }
+
+  .skillRarity {
+    font-size: 1rem;
+  }
+
+  .skillDescription {
+    font-size: 1rem;
+  }
+
+  .continueButton {
+    padding: 0.7rem 2rem;
+    font-size: 1rem;
+  }
+
+  .skillResultContent {
+    padding: 1.5rem;
   }
 }

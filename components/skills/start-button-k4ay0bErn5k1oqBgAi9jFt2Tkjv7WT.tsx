@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useEffect, useRef, useState } from "react"
 import styles from "./skill-orb.module.css"
 
@@ -8,14 +10,20 @@ interface SkillOrbProps {
   onComplete?: () => void
   disabled?: boolean
   isMobile?: boolean
+  skillResult?: {
+    name: string
+    rarity: "Common" | "Uncommon" | "Rare" | "Epic" | "Legendary" | "Mythic"
+    description: string
+  }
 }
 
-export function SkillOrb({ onActivate, onComplete, disabled = false, isMobile = false }: SkillOrbProps) {
+export function SkillOrb({ onActivate, onComplete, disabled = false, isMobile = false, skillResult }: SkillOrbProps) {
   const [animationTriggered, setAnimationTriggered] = useState(false)
   const orbContainerRef = useRef<HTMLDivElement>(null)
   const [showHolographicBox, setShowHolographicBox] = useState(false)
   const [showElectricPulse, setShowElectricPulse] = useState(false)
   const [showGlitchOverlay, setShowGlitchOverlay] = useState(false)
+  const [showSkillResult, setShowSkillResult] = useState(false)
 
   // Generate particles in 3D spherical distribution
   const generateParticles = () => {
@@ -96,10 +104,55 @@ export function SkillOrb({ onActivate, onComplete, disabled = false, isMobile = 
         // Hide glitch after animation
         setTimeout(() => {
           setShowGlitchOverlay(false)
-          if (onComplete) onComplete()
+
+          // Show skill result after a short delay
+          setTimeout(() => {
+            setShowSkillResult(true)
+            if (onComplete) onComplete()
+          }, 300)
         }, 500)
       }, 800) // Match box expansion time
     }, 4000) // Reduced orb animation duration to 4s
+  }
+
+  // Get color based on rarity
+  const getRarityColor = (rarity: string) => {
+    switch (rarity) {
+      case "Common":
+        return "#a0a0a0"
+      case "Uncommon":
+        return "#1eff00"
+      case "Rare":
+        return "#0070dd"
+      case "Epic":
+        return "#a335ee"
+      case "Legendary":
+        return "#ff8000"
+      case "Mythic":
+        return "#e6cc80"
+      default:
+        return "#ffffff"
+    }
+  }
+
+  // Get glow intensity based on rarity
+  const getRarityGlow = (rarity: string) => {
+    switch (rarity) {
+      case "Common":
+        return "0 0 5px"
+      case "Uncommon":
+        return "0 0 8px"
+      case "Rare":
+        return "0 0 10px"
+      case "Epic":
+        return "0 0 15px"
+      case "Legendary":
+        return "0 0 20px"
+      case "Mythic":
+        return "0 0 25px"
+      default:
+        return "0 0 5px"
+    }
   }
 
   return (
@@ -123,6 +176,27 @@ export function SkillOrb({ onActivate, onComplete, disabled = false, isMobile = 
       <div className={`${styles.holographicBox} ${showHolographicBox ? styles.active : ""}`}>
         <div className={styles.holographicText}>SKILL UNLOCKED</div>
       </div>
+
+      {showSkillResult && skillResult && (
+        <div className={styles.skillResultContainer}>
+          <div
+            className={styles.skillResultContent}
+            style={
+              {
+                "--rarity-color": getRarityColor(skillResult.rarity),
+                "--rarity-glow": getRarityGlow(skillResult.rarity),
+              } as React.CSSProperties
+            }
+          >
+            <h2 className={styles.skillName}>{skillResult.name}</h2>
+            <div className={styles.skillRarity}>{skillResult.rarity}</div>
+            <p className={styles.skillDescription}>{skillResult.description}</p>
+            <button className={styles.continueButton} onClick={() => window.location.reload()}>
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
