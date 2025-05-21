@@ -1,80 +1,52 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
 import styles from "./skill-orb.module.css"
 
 interface SkillOrbProps {
-  onActivate: () => void
-  isActivating: boolean
-  unlockedSkill: any
+  onActivate?: () => void
+  onComplete?: () => void
   disabled?: boolean
   isMobile?: boolean
+  unlockedSkill?: {
+    name: string
+    rarity: string
+    description: string
+    type?: string
+  } | null
   onReset?: () => void
 }
 
 export function SkillOrb({
   onActivate,
-  isActivating,
-  unlockedSkill,
+  onComplete,
   disabled = false,
   isMobile = false,
+  unlockedSkill = null,
   onReset,
 }: SkillOrbProps) {
+  const [animationStage, setAnimationStage] = useState<
+    "idle" | "orbAnimation" | "electricPulse" | "holographicBox" | "glitchEffect" | "skillResult"
+  >("idle")
   const orbContainerRef = useRef<HTMLDivElement>(null)
-  const [showHolographicBox, setShowHolographicBox] = useState(false)
-  const [showElectricPulse, setShowElectricPulse] = useState(false)
-  const [showSkillPopup, setShowSkillPopup] = useState(false)
-  const [animationComplete, setAnimationComplete] = useState(false)
+  const startButtonRef = useRef<HTMLButtonElement>(null)
+  const electricPulseRef = useRef<HTMLDivElement>(null)
+  const holographicBoxRef = useRef<HTMLDivElement>(null)
+  const glitchOverlayRef = useRef<HTMLDivElement>(null)
+  const skillResultRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (isActivating) {
-      // After orb animation completes
-      const animationTime = isMobile ? 8000 : 14000
-      const timer = setTimeout(() => {
-        setShowElectricPulse(true)
-
-        // Show holographic box after a short delay
-        setTimeout(() => {
-          setShowHolographicBox(true)
-        }, 500)
-      }, animationTime) // Matches orb animation duration
-
-      return () => clearTimeout(timer)
-    } else if (!isActivating && !unlockedSkill) {
-      // Reset all states when not activating and no skill is unlocked
-      setShowElectricPulse(false)
-      setShowHolographicBox(false)
-      setShowSkillPopup(false)
-      setAnimationComplete(false)
-    }
-  }, [isActivating, isMobile, unlockedSkill])
-
-  // Show skill popup when unlockedSkill changes
-  useEffect(() => {
-    if (unlockedSkill && showHolographicBox) {
-      setTimeout(() => {
-        setShowSkillPopup(true)
-        setAnimationComplete(true)
-      }, 1000)
-    }
-  }, [unlockedSkill, showHolographicBox])
-
-  useEffect(() => {
-    if (isActivating && orbContainerRef.current) {
-      generateParticles()
-    }
-  }, [isActivating])
-
+  // Generate particles in 3D spherical distribution
   const generateParticles = () => {
     if (!orbContainerRef.current) return
 
-    // Reduce particle count on mobile for better performance
-    const totalParticles = isMobile ? 200 : 400
-    const radius = 100
-
     // Clear existing particles
     orbContainerRef.current.innerHTML = ""
+
+    // Reduce particle count for mobile devices
+    const totalParticles = isMobile ? 190 : 200
+    const radius = isMobile ? 80 : 100
+    const styleSheet = document.createElement("style")
+    let styleRules = ""
 
     for (let i = 0; i < totalParticles; i++) {
       const particle = document.createElement("div")
@@ -90,90 +62,269 @@ export function SkillOrb({
       const y = r * Math.sin(phi) * Math.sin(theta)
       const z = r * Math.cos(phi)
 
-      particle.style.setProperty("--x", `${x}px`)
-      particle.style.setProperty("--y", `${y}px`)
-      particle.style.setProperty("--z", `${z}px`)
-      particle.style.setProperty("--delay", `${i * 0.01}s`)
+      const animName = `p${i}`
 
+      // Batch keyframes into a single style element for better performance
+      styleRules += `
+        @keyframes ${animName} {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 0, 0);
+            background-color: hsla(190, 100%, 70%, 0);
+            box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
+          }
+          10% {
+            opacity: 1;
+            transform: translate3d(${x}px, ${y}px, ${z}px);
+            background-color: hsla(190, 100%, 70%, 0.9);
+            box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
+          }
+          50% {
+            background-color: hsla(30, 100%, 60%, 0.9);
+            box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
+          }
+          85% {
+            opacity: 1;
+            transform: translate3d(${x}px, ${y}px, ${z}px);
+          }
+          100% {
+            opacity: 0;
+            transform: translate3d(${x * 0.5}px, ${y * 0.5}px, ${z * 0.5}px);
+            background-color: hsla(30, 100%, 60%, 0);
+            box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
+          }
+        }
+      `
+
+      // Use staggered delays to prevent GPU overload
+      const delay = i * (isMobile ? 0.01 : 0.005)
+      particle.style.animation = `${animName} 4s forwards linear ${delay}s`
       orbContainerRef.current.appendChild(particle)
     }
-  }
 
-  const handleActivate = () => {
-    if (!disabled && !isActivating) {
-      onActivate()
+    // Append all keyframes at once
+    styleSheet.textContent = styleRules
+    document.head.appendChild(styleSheet)
+
+    // Clean up the style element when component unmounts
+    return () => {
+      document.head.removeChild(styleSheet)
     }
   }
 
-  const handleReset = () => {
+  // Generate particles after component mounts
+  useEffect(() => {
+    const cleanup = generateParticles()
+    return cleanup
+  }, [])
+
+  // Prevent scrolling on mobile when animation is active
+  useEffect(() => {
+    const preventScroll = (e: TouchEvent) => {
+      if (animationStage !== "idle") {
+        e.preventDefault()
+      }
+    }
+
+    document.body.addEventListener("touchmove", preventScroll, { passive: false })
+    return () => {
+      document.body.removeEventListener("touchmove", preventScroll)
+    }
+  }, [animationStage])
+
+  // Reset animation when unlockedSkill is null
+  useEffect(() => {
+    if (unlockedSkill === null && animationStage !== "idle") {
+      setAnimationStage("idle")
+    }
+  }, [unlockedSkill, animationStage])
+
+  // Handle animation stages
+  useEffect(() => {
+    if (animationStage === "orbAnimation") {
+      // Fade out button
+      if (startButtonRef.current) {
+        startButtonRef.current.classList.add(styles.fade)
+      }
+
+      // Activate orb
+      if (orbContainerRef.current) {
+        orbContainerRef.current.classList.add(styles.active)
+      }
+
+      // After orb animation completes (4s)
+      const timer = setTimeout(() => {
+        setAnimationStage("electricPulse")
+      }, 4000)
+
+      return () => clearTimeout(timer)
+    } else if (animationStage === "electricPulse") {
+      // Show electric pulse
+      if (electricPulseRef.current) {
+        electricPulseRef.current.classList.add(styles.active)
+      }
+
+      // Hide orb container after pulse
+      if (orbContainerRef.current) {
+        orbContainerRef.current.style.display = "none"
+      }
+
+      // Start holographic box expansion
+      setAnimationStage("holographicBox")
+
+      return () => {}
+    } else if (animationStage === "holographicBox") {
+      // Show holographic box
+      if (holographicBoxRef.current) {
+        holographicBoxRef.current.classList.add(styles.active)
+      }
+
+      // Trigger glitch effect when box is fully visible
+      const timer = setTimeout(() => {
+        setAnimationStage("glitchEffect")
+      }, 800)
+
+      return () => clearTimeout(timer)
+    } else if (animationStage === "glitchEffect") {
+      // Show glitch overlay
+      if (glitchOverlayRef.current) {
+        glitchOverlayRef.current.style.display = "block"
+        requestAnimationFrame(() => {
+          if (glitchOverlayRef.current) {
+            glitchOverlayRef.current.style.opacity = "1"
+          }
+        })
+      }
+
+      // Hide glitch after animation
+      const timer = setTimeout(() => {
+        if (glitchOverlayRef.current) {
+          glitchOverlayRef.current.style.display = "none"
+        }
+
+        // Call onComplete to unlock a random skill
+        if (onComplete) {
+          onComplete()
+        }
+
+        // Show skill result
+        setAnimationStage("skillResult")
+      }, 500)
+
+      return () => clearTimeout(timer)
+    }
+  }, [animationStage, onComplete])
+
+  const handleActivate = () => {
+    if (disabled || animationStage !== "idle") return
+
+    setAnimationStage("orbAnimation")
+    if (onActivate) onActivate()
+  }
+
+  const handleContinue = () => {
+    setAnimationStage("idle")
+
+    // Reset refs
+    if (orbContainerRef.current) {
+      orbContainerRef.current.classList.remove(styles.active)
+      orbContainerRef.current.style.display = "block"
+    }
+
+    if (electricPulseRef.current) {
+      electricPulseRef.current.classList.remove(styles.active)
+    }
+
+    if (holographicBoxRef.current) {
+      holographicBoxRef.current.classList.remove(styles.active)
+    }
+
+    if (startButtonRef.current) {
+      startButtonRef.current.classList.remove(styles.fade)
+    }
+
     if (onReset) {
       onReset()
     }
   }
 
+  // Get color based on rarity
+  const getRarityColor = (rarity: string) => {
+    switch (rarity.toLowerCase()) {
+      case "common":
+        return "#a0a0a0"
+      case "uncommon":
+        return "#1eff00"
+      case "rare":
+        return "#0070dd"
+      case "epic":
+        return "#a335ee"
+      case "legendary":
+        return "#ff8000"
+      case "mythic":
+        return "#e6cc80"
+      default:
+        return "#ffffff"
+    }
+  }
+
   return (
     <div className={styles.centerContainer}>
-      {/* Only show the start button if not activating and no skill has been unlocked */}
-      {!isActivating && !animationComplete && (
-        <Button className={styles.startButton} onClick={handleActivate} disabled={disabled}>
+      {animationStage === "idle" && (
+        <button ref={startButtonRef} className={styles.startButton} onClick={handleActivate} disabled={disabled}>
           Activate The Skill Orb
-        </Button>
+        </button>
       )}
 
-      <div
-        ref={orbContainerRef}
-        className={`${styles.orbContainer} ${isActivating ? (isMobile ? styles.activeMobile : styles.active) : ""}`}
-      ></div>
+      <div ref={orbContainerRef} className={styles.orbContainer}></div>
 
-      <div className={`${styles.electricPulse} ${showElectricPulse ? styles.active : ""}`}></div>
+      <div ref={electricPulseRef} className={styles.electricPulse}></div>
 
-      {/* Skill popup that appears in front of the orb */}
-      {unlockedSkill && (
-        <div className={`${styles.skillPopup} ${showSkillPopup ? styles.active : ""}`}>
-          <div
-            className={`text-2xl font-bold mb-2 ${
-              unlockedSkill.rarity === "Common"
-                ? "text-gray-300"
-                : unlockedSkill.rarity === "Rare"
-                  ? "text-blue-300"
-                  : unlockedSkill.rarity === "Epic"
-                    ? "text-purple-300"
-                    : unlockedSkill.rarity === "Legendary"
-                      ? "text-orange-300"
-                      : "text-pink-300" // Mythic
-            }`}
-          >
-            {unlockedSkill.name}
-          </div>
-          <div
-            className={`text-sm mb-2 ${
-              unlockedSkill.rarity === "Common"
-                ? "text-gray-400"
-                : unlockedSkill.rarity === "Rare"
-                  ? "text-blue-400"
-                  : unlockedSkill.rarity === "Epic"
-                    ? "text-purple-400"
-                    : unlockedSkill.rarity === "Legendary"
-                      ? "text-orange-400"
-                      : "text-pink-400" // Mythic
-            }`}
-          >
-            {unlockedSkill.rarity}
-          </div>
-          <div className="text-blue-100 text-sm mb-4">{unlockedSkill.description}</div>
+      <div ref={glitchOverlayRef} className={styles.glitchOverlay}></div>
 
-          {/* Continue button to reset and allow activating another skill */}
-          {animationComplete && (
-            <Button onClick={handleReset} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-              Continue
-            </Button>
-          )}
-        </div>
-      )}
-
-      <div className={`${styles.holographicBox} ${showHolographicBox ? styles.active : ""}`}>
+      <div ref={holographicBoxRef} className={styles.holographicBox}>
         <div className={styles.holographicText}>SKILL UNLOCKED</div>
       </div>
+
+      {animationStage === "skillResult" && unlockedSkill && (
+        <div className={styles.skillResultContainer}>
+          <div
+            className={styles.skillResultContent}
+            style={{
+              borderColor: getRarityColor(unlockedSkill.rarity),
+              boxShadow: `0 0 30px ${getRarityColor(unlockedSkill.rarity)}, inset 0 0 15px rgba(255, 255, 255, 0.1)`,
+            }}
+          >
+            <h2
+              className={styles.skillName}
+              style={{
+                color: getRarityColor(unlockedSkill.rarity),
+                textShadow: `0 0 10px ${getRarityColor(unlockedSkill.rarity)}`,
+              }}
+            >
+              {unlockedSkill.name}
+            </h2>
+            <div
+              className={styles.skillRarity}
+              style={{
+                color: getRarityColor(unlockedSkill.rarity),
+              }}
+            >
+              {unlockedSkill.rarity}
+            </div>
+            <p className={styles.skillDescription}>{unlockedSkill.description}</p>
+            <button
+              className={styles.continueButton}
+              onClick={handleContinue}
+              style={{
+                borderColor: getRarityColor(unlockedSkill.rarity),
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

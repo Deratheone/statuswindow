@@ -1,144 +1,3 @@
-/* Skill Result Styles */
-.skillResultContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 30;
-  animation: fadeIn 0.5s ease forwards;
-  background: rgba(0, 10, 30, 0.7);
-  backdrop-filter: blur(4px);
-}
-
-.skillResultContent {
-  background: linear-gradient(135deg, rgba(10, 20, 40, 0.9), rgba(5, 15, 35, 0.95));
-  border: 2px solid var(--rarity-color, #ff8000);
-  box-shadow: 0 0 30px var(--rarity-color, #ff8000), inset 0 0 15px rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 2rem;
-  max-width: 90%;
-  width: 450px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  animation: pulseGlow 3s infinite alternate;
-}
-
-.skillResultContent::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shine 3s infinite;
-  pointer-events: none;
-}
-
-.skillName {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--rarity-color, #ff8000);
-  text-shadow: var(--rarity-glow, 0 0 20px) var(--rarity-color, #ff8000);
-  letter-spacing: 1px;
-}
-
-.skillRarity {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--rarity-color, #ff8000);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  opacity: 0.9;
-}
-
-.skillDescription {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 2rem;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.continueButton {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(40, 40, 40, 0.7));
-  color: white;
-  border: 2px solid var(--rarity-color, #ff8000);
-  border-radius: 30px;
-  padding: 0.8rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.continueButton:hover {
-  background: linear-gradient(to right, rgba(40, 40, 40, 0.7), rgba(60, 60, 60, 0.7));
-  box-shadow: 0 0 15px var(--rarity-color, #ff8000);
-  transform: translateY(-2px);
-}
-
-.continueButton:active {
-  transform: translateY(1px);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes pulseGlow {
-  0% {
-    box-shadow: 0 0 15px var(--rarity-color, #ff8000), inset 0 0 10px rgba(255, 255, 255, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 25px var(--rarity-color, #ff8000), inset 0 0 15px rgba(255, 255, 255, 0.2);
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .skillName {
-    font-size: 2rem;
-  }
-
-  .skillRarity {
-    font-size: 1rem;
-  }
-
-  .skillDescription {
-    font-size: 1rem;
-  }
-
-  .continueButton {
-    padding: 0.7rem 2rem;
-    font-size: 1rem;
-  }
-
-  .skillResultContent {
-    padding: 1.5rem;
-  }
-}
-
 .centerContainer {
   position: relative;
   display: flex;
@@ -178,7 +37,7 @@
 
 .startButton.fade {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
 }
 
@@ -213,36 +72,6 @@
   opacity: 0;
   transform-origin: center;
   will-change: transform, opacity;
-  animation: particleAnim 4s forwards linear var(--delay);
-}
-
-@keyframes particleAnim {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-    background-color: hsla(190, 100%, 70%, 0);
-    box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
-  }
-  10% {
-    opacity: 1;
-    transform: translate3d(var(--x), var(--y), var(--z));
-    background-color: hsla(190, 100%, 70%, 0.9);
-    box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
-  }
-  50% {
-    background-color: hsla(30, 100%, 60%, 0.9);
-    box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
-  }
-  85% {
-    opacity: 1;
-    transform: translate3d(var(--x), var(--y), var(--z));
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(calc(var(--x) * 0.5), calc(var(--y) * 0.5), calc(var(--z) * 0.5));
-    background-color: hsla(30, 100%, 60%, 0);
-    box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
-  }
 }
 
 .electricPulse {
@@ -261,7 +90,7 @@
 }
 
 .electricPulse.active {
-  animation: electricPulse 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: electricPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes electricPulse {
@@ -293,7 +122,7 @@
   opacity: 0;
   z-index: 7;
   transform: translate(-50%, -50%) scale(0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   will-change: transform, opacity, width, height;
 }
@@ -346,23 +175,11 @@
   letter-spacing: 1px;
   font-weight: 300;
   opacity: 0;
-  transition: opacity 0.2s ease 0.1s;
-  /* Fix for overlapping text */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  /* Make text semi-transparent to avoid interfering with skill details */
-  color: rgba(200, 240, 255, 0.5);
+  transition: opacity 0.3s ease 0.3s;
 }
 
 .holographicBox.active .holographicText {
-  opacity: 0.5; /* Reduced opacity to avoid interfering with skill details */
+  opacity: 1;
 }
 
 .glitchOverlay {
@@ -375,12 +192,8 @@
   z-index: 20;
   opacity: 0;
   pointer-events: none;
-  animation: glitchEffect 0.3s linear;
+  animation: glitchEffect 0.5s linear;
   display: none;
-}
-
-.glitchOverlay.active {
-  opacity: 1;
 }
 
 @keyframes glitchEffect {
@@ -427,6 +240,123 @@
   }
 }
 
+/* Skill Result Styles */
+.skillResultContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+  animation: fadeIn 0.5s ease forwards;
+  background: rgba(0, 10, 30, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.skillResultContent {
+  background: linear-gradient(135deg, rgba(10, 20, 40, 0.9), rgba(5, 15, 35, 0.95));
+  border: 2px solid #ff8000;
+  box-shadow: 0 0 30px #ff8000, inset 0 0 15px rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 90%;
+  width: 450px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: pulseGlow 3s infinite alternate;
+}
+
+.skillResultContent::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shine 3s infinite;
+  pointer-events: none;
+}
+
+.skillName {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ff8000;
+  text-shadow: 0 0 20px #ff8000;
+  letter-spacing: 1px;
+}
+
+.skillRarity {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #ff8000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.9;
+}
+
+.skillDescription {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.continueButton {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(40, 40, 40, 0.7));
+  color: white;
+  border: 2px solid #ff8000;
+  border-radius: 30px;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.continueButton:hover {
+  background: linear-gradient(to right, rgba(40, 40, 40, 0.7), rgba(60, 60, 60, 0.7));
+  box-shadow: 0 0 15px #ff8000;
+  transform: translateY(-2px);
+}
+
+.continueButton:active {
+  transform: translateY(1px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px #ff8000, inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 25px #ff8000, inset 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .startButton {
@@ -434,56 +364,24 @@
     font-size: 1.2rem;
   }
 
-  .particle {
-    animation-duration: 4s; /* Match desktop for consistency */
+  .skillName {
+    font-size: 2rem;
   }
 
-  .orbContainer.activeMobile .particle {
-    animation-duration: 4s; /* Match desktop for consistency */
+  .skillRarity {
+    font-size: 1rem;
   }
 
-  .electricPulse.active {
-    animation-duration: 0.4s;
+  .skillDescription {
+    font-size: 1rem;
   }
 
-  .skillPopup {
-    width: 280px;
-    padding: 1.25rem;
+  .continueButton {
+    padding: 0.7rem 2rem;
+    font-size: 1rem;
   }
-}
 
-/* Add these to support the existing skill orb component */
-.skillPopup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  width: 300px;
-  max-width: 90%;
-  padding: 1.5rem;
-  background: rgba(15, 23, 42, 0.9);
-  border: 2px solid rgba(59, 130, 246, 0.5);
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  opacity: 0;
-  z-index: 30;
-  transition: all 0.5s ease;
-  pointer-events: none;
-}
-
-.skillPopup.active {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.activeMobile {
-  opacity: 1;
-  visibility: visible;
-  animation: rotateOrb 4s linear forwards;
+  .skillResultContent {
+    padding: 1.5rem;
+  }
 }
