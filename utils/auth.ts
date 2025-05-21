@@ -2,11 +2,11 @@
  * Logs out the current user and optionally clears the remembered user
  * @param clearRemembered - Whether to clear the remembered user credentials
  */
-export function logoutUser(clearRemembered = false) {
+export function logoutUser(clearRemembered = true) {
   // Remove current user
   localStorage.removeItem("statusWindowCurrentUser")
 
-  // Optionally clear remembered user
+  // Clear remembered user by default
   if (clearRemembered) {
     localStorage.removeItem("statusWindowRememberedUser")
   }
