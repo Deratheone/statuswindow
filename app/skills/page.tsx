@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Brain } from "lucide-react"
-import { SkillOrb } from "@/components/skills/skill-orb"
+import { SkillOrb } from "@/components/skills/start-button-k4ay0bErn5k1oqBgAi9jFt2Tkjv7WT"
 import { useMobile } from "@/hooks/use-mobile"
 import Link from "next/link"
 
@@ -54,13 +54,6 @@ export default function SkillsPage() {
     if (!userData || userData.skillPoints <= 0) return
 
     setActivatingSkill(true)
-
-    // After the animation completes, unlock a random skill
-    // For mobile, we'll reduce the animation time
-    const animationTime = isMobile ? 5000 : 10000
-    setTimeout(() => {
-      unlockRandomSkill()
-    }, animationTime)
   }
 
   const resetSkillOrb = () => {
@@ -372,7 +365,7 @@ export default function SkillsPage() {
                     </p>
                     <SkillOrb
                       onActivate={handleActivateSkillOrb}
-                      isActivating={activatingSkill}
+                      onComplete={unlockRandomSkill}
                       unlockedSkill={unlockedSkill}
                       disabled={userData.skillPoints <= 0}
                       isMobile={isMobile}
