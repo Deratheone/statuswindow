@@ -212,8 +212,15 @@ export function SkillOrb({
       }, 500)
 
       return () => clearTimeout(timer)
+    } else if (animationStage === "skillResult" && unlockedSkill) {
+      // Auto-reset after 1 second of showing the skill result
+      const timer = setTimeout(() => {
+        handleReset()
+      }, 1000)
+
+      return () => clearTimeout(timer)
     }
-  }, [animationStage, onComplete])
+  }, [animationStage, onComplete, unlockedSkill])
 
   const handleActivate = () => {
     if (disabled || animationStage !== "idle") return
@@ -222,10 +229,8 @@ export function SkillOrb({
     if (onActivate) onActivate()
   }
 
-  const handleContinue = () => {
-    setAnimationStage("idle")
-
-    // Reset refs
+  const handleReset = () => {
+    // Reset all animation elements
     if (orbContainerRef.current) {
       orbContainerRef.current.classList.remove(styles.active)
       orbContainerRef.current.style.display = "block"
@@ -243,6 +248,10 @@ export function SkillOrb({
       startButtonRef.current.classList.remove(styles.fade)
     }
 
+    // Reset animation stage
+    setAnimationStage("idle")
+
+    // Call onReset callback
     if (onReset) {
       onReset()
     }
@@ -313,15 +322,6 @@ export function SkillOrb({
               {unlockedSkill.rarity}
             </div>
             <p className={styles.skillDescription}>{unlockedSkill.description}</p>
-            <button
-              className={styles.continueButton}
-              onClick={handleContinue}
-              style={{
-                borderColor: getRarityColor(unlockedSkill.rarity),
-              }}
-            >
-              Continue
-            </button>
           </div>
         </div>
       )}
