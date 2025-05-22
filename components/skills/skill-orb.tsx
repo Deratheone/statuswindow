@@ -35,7 +35,8 @@ export function SkillOrb({
   const glitchOverlayRef = useRef<HTMLDivElement>(null)
   const skillResultRef = useRef<HTMLDivElement>(null)
 
-  // Generate particles in 3D spherical distribution
+  // Update the particle generation function to position particles better
+
   const generateParticles = () => {
     if (!orbContainerRef.current) return
 
@@ -44,7 +45,7 @@ export function SkillOrb({
 
     // Reduce particle count for mobile devices
     const totalParticles = isMobile ? 190 : 200
-    const radius = isMobile ? 80 : 100
+    const radius = isMobile ? 120 : 150 // Increased radius to spread particles wider
     const styleSheet = document.createElement("style")
     let styleRules = ""
 
@@ -52,10 +53,10 @@ export function SkillOrb({
       const particle = document.createElement("div")
       particle.className = styles.particle
 
-      // Spherical coordinates with tighter distribution
+      // Spherical coordinates with wider distribution
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
-      const r = radius * (0.85 + Math.random() * 0.15)
+      const r = radius * (0.7 + Math.random() * 0.3) // More varied radius
 
       // Convert to Cartesian coordinates
       const x = r * Math.sin(phi) * Math.cos(theta)
@@ -66,35 +67,35 @@ export function SkillOrb({
 
       // Batch keyframes into a single style element for better performance
       styleRules += `
-        @keyframes ${animName} {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 0, 0);
-            background-color: hsla(190, 100%, 70%, 0);
-            box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
-          }
-          10% {
-            opacity: 1;
-            transform: translate3d(${x}px, ${y}px, ${z}px);
-            background-color: hsla(190, 100%, 70%, 0.9);
-            box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
-          }
-          50% {
-            background-color: hsla(30, 100%, 60%, 0.9);
-            box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
-          }
-          85% {
-            opacity: 1;
-            transform: translate3d(${x}px, ${y}px, ${z}px);
-          }
-          100% {
-            opacity: 0;
-            transform: translate3d(${x * 0.5}px, ${y * 0.5}px, ${z * 0.5}px);
-            background-color: hsla(30, 100%, 60%, 0);
-            box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
-          }
+      @keyframes ${animName} {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 0, 0);
+          background-color: hsla(190, 100%, 70%, 0);
+          box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
         }
-      `
+        10% {
+          opacity: 1;
+          transform: translate3d(${x}px, ${y}px, ${z}px);
+          background-color: hsla(190, 100%, 70%, 0.9);
+          box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
+        }
+        50% {
+          background-color: hsla(30, 100%, 60%, 0.9);
+          box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
+        }
+        85% {
+          opacity: 1;
+          transform: translate3d(${x}px, ${y}px, ${z}px);
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(${x * 0.5}px, ${y * 0.5}px, ${z * 0.5}px);
+          background-color: hsla(30, 100%, 60%, 0);
+          box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
+        }
+      }
+    `
 
       // Use staggered delays to prevent GPU overload
       const delay = i * (isMobile ? 0.01 : 0.005)
@@ -277,15 +278,16 @@ export function SkillOrb({
     }
   }
 
+  // Also update the component structure to ensure proper layering
   return (
     <div className={styles.centerContainer}>
+      <div ref={orbContainerRef} className={styles.orbContainer}></div>
+
       {animationStage === "idle" && (
         <button ref={startButtonRef} className={styles.startButton} onClick={handleActivate} disabled={disabled}>
           Activate The Skill Orb
         </button>
       )}
-
-      <div ref={orbContainerRef} className={styles.orbContainer}></div>
 
       <div ref={electricPulseRef} className={styles.electricPulse}></div>
 

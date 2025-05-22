@@ -9,7 +9,7 @@
 
 .startButton {
   position: relative;
-  z-index: 10;
+  z-index: 10; /* Higher z-index to stay above particles */
   padding: 15px 40px;
   font-size: 1.5rem;
   background: rgba(0, 0, 0, 0.7);
@@ -45,11 +45,14 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   transform-style: preserve-3d;
   perspective: 1000px;
   opacity: 0;
   visibility: hidden;
   will-change: transform;
+  z-index: 5; /* Lower z-index than the button */
+  pointer-events: none; /* Ensure it doesn't block button clicks */
 }
 
 .orbContainer.active {
