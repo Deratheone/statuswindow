@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import styles from "./skill-orb.module.css"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface SkillOrbProps {
   onActivate?: () => void
@@ -269,50 +270,59 @@ export function SkillOrb({
   }
 
   return (
-    <div className={styles.centerContainer}>
-      <button ref={startButtonRef} className={styles.startButton} onClick={handleActivate} disabled={disabled}>
-        Activate The Skill Orb
-      </button>
+    <TooltipProvider>
+      <div className={styles.centerContainer}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button ref={startButtonRef} className={styles.startButton} onClick={handleActivate} disabled={disabled}>
+              Activate The Skill Orb
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Click to activate the Skill Orb and unlock a random skill</p>
+          </TooltipContent>
+        </Tooltip>
 
-      <div ref={orbContainerRef} className={styles.orbContainer}></div>
+        <div ref={orbContainerRef} className={styles.orbContainer}></div>
 
-      <div ref={electricPulseRef} className={styles.electricPulse}></div>
-      <div ref={glitchOverlayRef} className={styles.glitchOverlay}></div>
+        <div ref={electricPulseRef} className={styles.electricPulse}></div>
+        <div ref={glitchOverlayRef} className={styles.glitchOverlay}></div>
 
-      <div ref={holoBoxRef} className={styles.holographicBox}>
-        <div className={styles.holographicText}>SKILL UNLOCKED</div>
-      </div>
-
-      {skillResultVisible && unlockedSkill && (
-        <div className={styles.skillResultContainer}>
-          <div
-            className={styles.skillResultContent}
-            style={{
-              borderColor: getRarityColor(unlockedSkill.rarity),
-              boxShadow: `0 0 30px ${getRarityColor(unlockedSkill.rarity)}, inset 0 0 15px rgba(255, 255, 255, 0.1)`,
-            }}
-          >
-            <h2
-              className={styles.skillName}
-              style={{
-                color: getRarityColor(unlockedSkill.rarity),
-                textShadow: `0 0 10px ${getRarityColor(unlockedSkill.rarity)}`,
-              }}
-            >
-              {unlockedSkill.name}
-            </h2>
-            <div
-              className={styles.skillRarity}
-              style={{
-                color: getRarityColor(unlockedSkill.rarity),
-              }}
-            >
-              {unlockedSkill.rarity}
-            </div>
-            <p className={styles.skillDescription}>{unlockedSkill.description}</p>
-          </div>
+        <div ref={holoBoxRef} className={styles.holographicBox}>
+          <div className={styles.holographicText}>SKILL UNLOCKED</div>
         </div>
-      )}
-    </div>
+
+        {skillResultVisible && unlockedSkill && (
+          <div className={styles.skillResultContainer}>
+            <div
+              className={styles.skillResultContent}
+              style={{
+                borderColor: getRarityColor(unlockedSkill.rarity),
+                boxShadow: `0 0 30px ${getRarityColor(unlockedSkill.rarity)}, inset 0 0 15px rgba(255, 255, 255, 0.1)`,
+              }}
+            >
+              <h2
+                className={styles.skillName}
+                style={{
+                  color: getRarityColor(unlockedSkill.rarity),
+                  textShadow: `0 0 10px ${getRarityColor(unlockedSkill.rarity)}`,
+                }}
+              >
+                {unlockedSkill.name}
+              </h2>
+              <div
+                className={styles.skillRarity}
+                style={{
+                  color: getRarityColor(unlockedSkill.rarity),
+                }}
+              >
+                {unlockedSkill.rarity}
+              </div>
+              <p className={styles.skillDescription}>{unlockedSkill.description}</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </TooltipProvider>
   )
 }

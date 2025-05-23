@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import { playSFX, preloadAudio } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { LoadingSkeleton } from "@/components/loading-skeleton"
 
 interface StatusWindowProps {
   userData: any
@@ -39,6 +41,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
   const [systemMessages, setSystemMessages] = useState<SystemMessage[]>([])
   const [soundEnabled, setSoundEnabled] = useState(true)
   const lastUpdateRef = useRef(Date.now())
+  const [isLoading, setIsLoading] = useState(true)
 
   // Calculate stat max based on level (100 base + 20 per level above 1)
   const statMax = 100 + (userData.level - 1) * 20
@@ -46,6 +49,15 @@ export function StatusWindow({ userData }: StatusWindowProps) {
   // Preload audio files
   useEffect(() => {
     preloadAudio(["xp-gain", "level-up", "stat-increase"])
+  }, [])
+
+  useEffect(() => {
+    // Simulate initial loading
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+
+    return () => clearTimeout(timer)
   }, [])
 
   // Check for stat and level changes
@@ -237,260 +249,302 @@ export function StatusWindow({ userData }: StatusWindowProps) {
   const skills = getUnlockedSkills()
 
   return (
-    <div className="relative">
-      {/* Sound toggle button */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="absolute top-2 right-2 z-10 text-white/70 hover:text-white"
-        onClick={() => setSoundEnabled(!soundEnabled)}
-      >
-        {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-      </Button>
+    <TooltipProvider>
+      <div className="relative">
+        {isLoading ? (
+          <LoadingSkeleton type="status-window" />
+        ) : (
+          <div className="relative">
+            {/* Sound toggle button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-2 right-2 z-10 text-white/70 hover:text-white"
+                  onClick={() => setSoundEnabled(!soundEnabled)}
+                >
+                  {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{soundEnabled ? "Disable sound effects" : "Enable sound effects"}</p>
+              </TooltipContent>
+            </Tooltip>
 
-      <Card className={`relative border-0 overflow-hidden ${levelUpAnimation ? "animate-pulse" : ""}`}>
-        {/* Background with blue crystal effect */}
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-950 z-0"></div>
+            <Card className={`relative border-0 overflow-hidden ${levelUpAnimation ? "animate-pulse" : ""}`}>
+              {/* Background with blue crystal effect */}
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-950 z-0"></div>
 
-        {/* Beveled edges */}
-        <div className="absolute inset-0 border-[6px] border-blue-800 rounded-lg z-0"></div>
-        <div className="absolute inset-[6px] border-[2px] border-blue-600 rounded-md z-0"></div>
+              {/* Beveled edges */}
+              <div className="absolute inset-0 border-[6px] border-blue-800 rounded-lg z-0"></div>
+              <div className="absolute inset-[6px] border-[2px] border-blue-600 rounded-md z-0"></div>
 
-        {/* Inner glow */}
-        <div className="absolute inset-0 bg-blue-500/5 z-0"></div>
+              {/* Inner glow */}
+              <div className="absolute inset-0 bg-blue-500/5 z-0"></div>
 
-        {/* Header with crystal design */}
-        <div className="relative z-10 bg-blue-800 mx-4 mt-4 py-2 px-4 text-center border-b-4 border-blue-700 rounded-t-md">
-          <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-300 rounded-full"></div>
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-300 rounded-full"></div>
-          <h2 className="text-xl font-bold text-blue-100 tracking-wider">STATUS</h2>
-        </div>
-
-        {/* Main content */}
-        <div className="relative z-10 p-4 sm:p-6 text-blue-100">
-          {levelUpAnimation && (
-            <div className="absolute inset-0 bg-yellow-500/20 z-10 pointer-events-none flex items-center justify-center">
-              <div className="text-4xl font-bold text-yellow-400 animate-bounce">LEVEL UP!</div>
-            </div>
-          )}
-
-          {/* Character info */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-700 flex items-center justify-center text-3xl border-4 border-blue-600 overflow-hidden">
-              {userData.avatar && userData.avatar.startsWith("data:") ? (
-                <img
-                  src={userData.avatar || "/placeholder.svg"}
-                  alt="User avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span>{userData.avatar}</span>
-              )}
-            </div>
-
-            <div className="text-center sm:text-left flex-1">
-              <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
-                <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
-                  <div className="text-xs text-blue-300 uppercase">LEVEL</div>
-                  <div className="text-xl font-bold">{userData.level}</div>
-                </div>
-
-                <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
-                  <div className="text-xs text-blue-300 uppercase">CLASS</div>
-                  <div className="text-xl font-bold capitalize truncate">{userData.characterClass}</div>
-                </div>
-
-                <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700 col-span-2">
-                  <div className="text-xs text-blue-300 uppercase">NAME</div>
-                  <div className="text-xl font-bold truncate">{userData.characterName}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* XP Bar */}
-          <div className="mb-6">
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-blue-300">EXPERIENCE</span>
-              <span className="text-blue-200">
-                {userData.xp}/{userData.xpToNextLevel} XP
-              </span>
-            </div>
-            <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-yellow-400 to-yellow-300 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, xpPercentage)}%` }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Stats section */}
-          <div className="mb-6">
-            <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">STATS</div>
-
-            <div className="grid grid-cols-1 gap-4">
-              <div>
-                <div className="relative">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="flex items-center gap-1 text-red-300">
-                      <Dumbbell className="h-4 w-4" /> STRENGTH
-                    </span>
-                    <span className="text-red-200 relative">
-                      {userData.stats.strength}/{statMax}
-                      {/* Stat increase animations */}
-                      <AnimatePresence>
-                        {statAnimations
-                          .filter((anim) => anim.stat === "strength")
-                          .map((anim) => (
-                            <motion.div
-                              key={anim.id}
-                              initial={{ opacity: 0, y: 0 }}
-                              animate={{ opacity: 1, y: -20 }}
-                              exit={{ opacity: 0 }}
-                              className="absolute -right-4 -top-1 text-yellow-400 font-bold"
-                            >
-                              +{anim.value}
-                            </motion.div>
-                          ))}
-                      </AnimatePresence>
-                    </span>
-                  </div>
-                  <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-red-600 to-red-500 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min(100, (userData.stats.strength / statMax) * 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
+              {/* Header with crystal design */}
+              <div className="relative z-10 bg-blue-800 mx-4 mt-4 py-2 px-4 text-center border-b-4 border-blue-700 rounded-t-md">
+                <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-300 rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-300 rounded-full"></div>
+                <h2 className="text-xl font-bold text-blue-100 tracking-wider">STATUS</h2>
               </div>
 
-              <div>
-                <div className="relative">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="flex items-center gap-1 text-blue-300">
-                      <Brain className="h-4 w-4" /> INTELLIGENCE
-                    </span>
-                    <span className="text-blue-200 relative">
-                      {userData.stats.intelligence}/{statMax}
-                      {/* Stat increase animations */}
-                      <AnimatePresence>
-                        {statAnimations
-                          .filter((anim) => anim.stat === "intelligence")
-                          .map((anim) => (
-                            <motion.div
-                              key={anim.id}
-                              initial={{ opacity: 0, y: 0 }}
-                              animate={{ opacity: 1, y: -20 }}
-                              exit={{ opacity: 0 }}
-                              className="absolute -right-4 -top-1 text-yellow-400 font-bold"
-                            >
-                              +{anim.value}
-                            </motion.div>
-                          ))}
-                      </AnimatePresence>
-                    </span>
+              {/* Main content */}
+              <div className="relative z-10 p-4 sm:p-6 text-blue-100">
+                {levelUpAnimation && (
+                  <div className="absolute inset-0 bg-yellow-500/20 z-10 pointer-events-none flex items-center justify-center">
+                    <div className="text-4xl font-bold text-yellow-400 animate-bounce">LEVEL UP!</div>
                   </div>
-                  <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-blue-600 to-blue-500 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min(100, (userData.stats.intelligence / statMax) * 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="relative">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="flex items-center gap-1 text-purple-300">
-                      <Sparkles className="h-4 w-4" /> MANA
-                    </span>
-                    <span className="text-purple-200 relative">
-                      {userData.stats.mana}/{statMax}
-                      {/* Stat increase animations */}
-                      <AnimatePresence>
-                        {statAnimations
-                          .filter((anim) => anim.stat === "mana")
-                          .map((anim) => (
-                            <motion.div
-                              key={anim.id}
-                              initial={{ opacity: 0, y: 0 }}
-                              animate={{ opacity: 1, y: -20 }}
-                              exit={{ opacity: 0 }}
-                              className="absolute -right-4 -top-1 text-yellow-400 font-bold"
-                            >
-                              +{anim.value}
-                            </motion.div>
-                          ))}
-                      </AnimatePresence>
-                    </span>
-                  </div>
-                  <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-purple-600 to-purple-500 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.min(100, (userData.stats.mana / statMax) * 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Skills section */}
-          <div className="mb-6">
-            <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">SKILLS</div>
-
-            {skills.length > 0 ? (
-              <div className="space-y-2">
-                {skills.map((skill, index) => (
-                  <div key={index} className="bg-blue-900/30 border border-blue-800 rounded p-2">
-                    <div className="flex justify-between">
-                      <span className="font-medium truncate mr-2">{skill.name}</span>
-                      <span className="text-yellow-400 whitespace-nowrap">Lv {skill.level}</span>
-                    </div>
-                    <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-blue-400 py-2 text-sm">
-                No skills unlocked yet. Level up to gain skills!
-              </div>
-            )}
-          </div>
-
-          {/* System messages */}
-          <div>
-            <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">SYSTEM</div>
-
-            <div className="bg-blue-950/70 border border-blue-800 rounded p-2 h-[100px] overflow-y-auto font-mono text-sm">
-              <AnimatePresence>
-                {systemMessages.length > 0 ? (
-                  systemMessages.map((msg) => (
-                    <motion.div
-                      key={msg.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
-                      className={`mb-1 ${
-                        msg.type === "warning"
-                          ? "text-yellow-400"
-                          : msg.type === "success"
-                            ? "text-green-400"
-                            : "text-blue-300"
-                      }`}
-                    >
-                      &gt; {msg.text}
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="text-blue-500">&gt; System ready. Awaiting input...</div>
                 )}
-              </AnimatePresence>
-            </div>
+
+                {/* Character info */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-700 flex items-center justify-center text-3xl border-4 border-blue-600 overflow-hidden">
+                    {userData.avatar && userData.avatar.startsWith("data:") ? (
+                      <img
+                        src={userData.avatar || "/placeholder.svg"}
+                        alt="User avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span>{userData.avatar}</span>
+                    )}
+                  </div>
+
+                  <div className="text-center sm:text-left flex-1">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
+                      <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
+                        <div className="text-xs text-blue-300 uppercase">LEVEL</div>
+                        <div className="text-xl font-bold">{userData.level}</div>
+                      </div>
+
+                      <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700">
+                        <div className="text-xs text-blue-300 uppercase">CLASS</div>
+                        <div className="text-xl font-bold capitalize truncate">{userData.characterClass}</div>
+                      </div>
+
+                      <div className="bg-blue-900/50 px-3 py-1 rounded border border-blue-700 col-span-2">
+                        <div className="text-xs text-blue-300 uppercase">NAME</div>
+                        <div className="text-xl font-bold truncate">{userData.characterName}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* XP Bar */}
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-blue-300">EXPERIENCE</span>
+                    <span className="text-blue-200">
+                      {userData.xp}/{userData.xpToNextLevel} XP
+                    </span>
+                  </div>
+                  <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-yellow-400 to-yellow-300 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min(100, xpPercentage)}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Stats section */}
+                <div className="mb-6">
+                  <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">STATS</div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <div className="relative">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="flex items-center gap-1 text-red-300">
+                            <Dumbbell className="h-4 w-4" /> STRENGTH
+                          </span>
+                          <span className="text-red-200 relative">
+                            {userData.stats.strength}/{statMax}
+                            {/* Stat increase animations */}
+                            <AnimatePresence>
+                              {statAnimations
+                                .filter((anim) => anim.stat === "strength")
+                                .map((anim) => (
+                                  <motion.div
+                                    key={anim.id}
+                                    initial={{ opacity: 0, y: 0 }}
+                                    animate={{ opacity: 1, y: -20 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute -right-4 -top-1 text-yellow-400 font-bold"
+                                  >
+                                    +{anim.value}
+                                  </motion.div>
+                                ))}
+                            </AnimatePresence>
+                          </span>
+                        </div>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
+                              <div
+                                className="h-full bg-gradient-to-r from-red-600 to-red-500 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(100, (userData.stats.strength / statMax) * 100)}%` }}
+                              ></div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              Strength: {userData.stats.strength}/{statMax} - Increases from physical activities
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="relative">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="flex items-center gap-1 text-blue-300">
+                            <Brain className="h-4 w-4" /> INTELLIGENCE
+                          </span>
+                          <span className="text-blue-200 relative">
+                            {userData.stats.intelligence}/{statMax}
+                            {/* Stat increase animations */}
+                            <AnimatePresence>
+                              {statAnimations
+                                .filter((anim) => anim.stat === "intelligence")
+                                .map((anim) => (
+                                  <motion.div
+                                    key={anim.id}
+                                    initial={{ opacity: 0, y: 0 }}
+                                    animate={{ opacity: 1, y: -20 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute -right-4 -top-1 text-yellow-400 font-bold"
+                                  >
+                                    +{anim.value}
+                                  </motion.div>
+                                ))}
+                            </AnimatePresence>
+                          </span>
+                        </div>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
+                              <div
+                                className="h-full bg-gradient-to-r from-blue-600 to-blue-500 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(100, (userData.stats.intelligence / statMax) * 100)}%` }}
+                              ></div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              Intelligence: {userData.stats.intelligence}/{statMax} - Increases from mental activities
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="relative">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="flex items-center gap-1 text-purple-300">
+                            <Sparkles className="h-4 w-4" /> MANA
+                          </span>
+                          <span className="text-purple-200 relative">
+                            {userData.stats.mana}/{statMax}
+                            {/* Stat increase animations */}
+                            <AnimatePresence>
+                              {statAnimations
+                                .filter((anim) => anim.stat === "mana")
+                                .map((anim) => (
+                                  <motion.div
+                                    key={anim.id}
+                                    initial={{ opacity: 0, y: 0 }}
+                                    animate={{ opacity: 1, y: -20 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute -right-4 -top-1 text-yellow-400 font-bold"
+                                  >
+                                    +{anim.value}
+                                  </motion.div>
+                                ))}
+                            </AnimatePresence>
+                          </span>
+                        </div>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="h-3 bg-blue-900/50 rounded-full border border-blue-700 overflow-hidden">
+                              <div
+                                className="h-full bg-gradient-to-r from-purple-600 to-purple-500 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(100, (userData.stats.mana / statMax) * 100)}%` }}
+                              ></div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              Mana: {userData.stats.mana}/{statMax} - Increases from spiritual activities
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Skills section */}
+                <div className="mb-6">
+                  <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">SKILLS</div>
+
+                  {skills.length > 0 ? (
+                    <div className="space-y-2">
+                      {skills.map((skill, index) => (
+                        <div key={index} className="bg-blue-900/30 border border-blue-800 rounded p-2">
+                          <div className="flex justify-between">
+                            <span className="font-medium truncate mr-2">{skill.name}</span>
+                            <span className="text-yellow-400 whitespace-nowrap">Lv {skill.level}</span>
+                          </div>
+                          <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center text-blue-400 py-2 text-sm">
+                      No skills unlocked yet. Level up to gain skills!
+                    </div>
+                  )}
+                </div>
+
+                {/* System messages */}
+                <div>
+                  <div className="text-lg font-bold text-blue-200 border-b-2 border-blue-700 pb-1 mb-3">SYSTEM</div>
+
+                  <div className="bg-blue-950/70 border border-blue-800 rounded p-2 h-[100px] overflow-y-auto font-mono text-sm">
+                    <AnimatePresence>
+                      {systemMessages.length > 0 ? (
+                        systemMessages.map((msg) => (
+                          <motion.div
+                            key={msg.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0 }}
+                            className={`mb-1 ${
+                              msg.type === "warning"
+                                ? "text-yellow-400"
+                                : msg.type === "success"
+                                  ? "text-green-400"
+                                  : "text-blue-300"
+                            }`}
+                          >
+                            &gt; {msg.text}
+                          </motion.div>
+                        ))
+                      ) : (
+                        <div className="text-blue-500">&gt; System ready. Awaiting input...</div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
-        </div>
-      </Card>
-    </div>
+        )}
+      </div>
+    </TooltipProvider>
   )
 }

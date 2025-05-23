@@ -7,6 +7,7 @@ import { PillBottleIcon as Potion, Scroll, Package, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { playSFX } from "@/utils/audio"
 import { useMobile } from "@/hooks/use-mobile"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface InventoryItem {
   id: string
@@ -51,6 +52,7 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
       used: false,
     },
   ])
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleUseItem = (item: InventoryItem) => {
     // Play sound effect
@@ -70,14 +72,23 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
 
   return (
     <div className="relative">
-      <Button
-        variant="outline"
-        className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto mobile-touch-target"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Package className="h-4 w-4 mr-2" />
-        Inventory
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              className="bg-blue-900/50 border-blue-700 text-blue-100 hover:bg-blue-800 hover:text-blue-50 w-full sm:w-auto mobile-touch-target"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <Package className="h-4 w-4 mr-2" />
+              Inventory
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>View and use your collected items</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <AnimatePresence>
         {isOpen && (
@@ -131,14 +142,21 @@ export function InventorySystem({ userData, onUseItem }: InventorySystemProps) {
                               <div className="text-xs text-yellow-400 mt-1 truncate">{item.effect}</div>
                             </div>
 
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="bg-blue-800/50 border-blue-700 text-blue-100 hover:bg-blue-700 mobile-touch-target flex-shrink-0"
-                              onClick={() => handleUseItem(item)}
-                            >
-                              Use
-                            </Button>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="bg-blue-800/50 border-blue-700 text-blue-100 hover:bg-blue-700 mobile-touch-target flex-shrink-0"
+                                  onClick={() => handleUseItem(item)}
+                                >
+                                  Use
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Use this item: {item.effect}</p>
+                              </TooltipContent>
+                            </Tooltip>
                           </motion.div>
                         ),
                     )}
