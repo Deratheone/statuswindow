@@ -100,10 +100,10 @@ importers:
         version: 2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
       '@sveltejs/kit':
         specifier: latest
-        version: 2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
+        version: 2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
       '@vercel/analytics':
         specifier: latest
-        version: 1.5.0(@remix-run/react@2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.32.1)(vue-router@4.5.1(vue@3.5.14(typescript@5.0.2)))(vue@3.5.14(typescript@5.0.2))
+        version: 1.5.0(@remix-run/react@2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.33.1)(vue-router@4.5.1(vue@3.5.14(typescript@5.0.2)))(vue@3.5.14(typescript@5.0.2))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.0.0)
@@ -160,7 +160,7 @@ importers:
         version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       svelte:
         specifier: latest
-        version: 5.32.1
+        version: 5.33.1
       tailwind-merge:
         specifier: ^2.5.5
         version: 2.5.5
@@ -1858,8 +1858,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.155:
-    resolution: {integrity: sha512-ps5KcGGmwL8VaeJlvlDlu4fORQpv3+GIcF5I3f9tUKUlJ/wsysh6HU8P5L1XWRYeXfA0oJd4PyM8ds8zTFf6Ng==}
+  electron-to-chromium@1.5.157:
+    resolution: {integrity: sha512-/0ybgsQd1muo8QlnuTpKwtl0oX5YMlUGbm8xyqgDU00motRkKFFbUJySAQBWcY79rVqNLWIWa87BGVGClwAB2w==}
 
   embla-carousel-react@8.5.1:
     resolution: {integrity: sha512-z9Y0K84BJvhChXgqn2CFYbfEi6AwEr+FFVVKm/MqbTQ2zIzO1VQri6w67LcfpVF0AjbhwVMywDZqY4alYkjW5w==}
@@ -2467,8 +2467,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  svelte@5.32.1:
-    resolution: {integrity: sha512-tT02QOeF0dbSIQ+/rUZw+76DyO6ATHvZJGOM2A/Ed6fBwZwUxqIun3beErpePAtwFIK3Mi9k2QAnhFVvUBun8g==}
+  svelte@5.33.1:
+    resolution: {integrity: sha512-7znzaaQALL62NBzkdKV04tmYIVla8qjrW+k6GdgFZcKcj8XOb8iEjmfRPo40iaWZlKv3+uiuc0h4iaGgwoORtA==}
     engines: {node: '>=18'}
 
   tailwind-merge@2.5.5:
@@ -3797,10 +3797,10 @@ snapshots:
     dependencies:
       acorn: 8.14.1
 
-  '@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
+  '@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
     dependencies:
       '@sveltejs/acorn-typescript': 1.0.5(acorn@8.14.1)
-      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
+      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
       '@types/cookie': 0.6.0
       acorn: 8.14.1
       cookie: 0.6.0
@@ -3812,26 +3812,26 @@ snapshots:
       sade: 1.8.1
       set-cookie-parser: 2.7.1
       sirv: 3.0.1
-      svelte: 5.32.1
+      svelte: 5.33.1
       vite: 6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)
 
-  '@sveltejs/vite-plugin-svelte-inspector@4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
+  '@sveltejs/vite-plugin-svelte-inspector@4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
+      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
       debug: 4.4.1
-      svelte: 5.32.1
+      svelte: 5.33.1
       vite: 6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
+  '@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
+      '@sveltejs/vite-plugin-svelte-inspector': 4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
       debug: 4.4.1
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.17
-      svelte: 5.32.1
+      svelte: 5.33.1
       vite: 6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)
       vitefu: 1.0.6(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
     transitivePeerDependencies:
@@ -3883,13 +3883,13 @@ snapshots:
     dependencies:
       csstype: 3.1.3
 
-  '@vercel/analytics@1.5.0(@remix-run/react@2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.32.1)(vue-router@4.5.1(vue@3.5.14(typescript@5.0.2)))(vue@3.5.14(typescript@5.0.2))':
+  '@vercel/analytics@1.5.0(@remix-run/react@2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2))(@sveltejs/kit@2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(next@15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(svelte@5.33.1)(vue-router@4.5.1(vue@3.5.14(typescript@5.0.2)))(vue@3.5.14(typescript@5.0.2))':
     optionalDependencies:
       '@remix-run/react': 2.16.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.0.2)
-      '@sveltejs/kit': 2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.32.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
+      '@sveltejs/kit': 2.21.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0)))(svelte@5.33.1)(vite@6.3.5(@types/node@22.0.0)(jiti@1.21.7)(yaml@2.8.0))
       next: 15.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
-      svelte: 5.32.1
+      svelte: 5.33.1
       vue: 3.5.14(typescript@5.0.2)
       vue-router: 4.5.1(vue@3.5.14(typescript@5.0.2))
 
@@ -4005,7 +4005,7 @@ snapshots:
   browserslist@4.24.5:
     dependencies:
       caniuse-lite: 1.0.30001718
-      electron-to-chromium: 1.5.155
+      electron-to-chromium: 1.5.157
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.5)
 
@@ -4151,7 +4151,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.155: {}
+  electron-to-chromium@1.5.157: {}
 
   embla-carousel-react@8.5.1(react@19.0.0):
     dependencies:
@@ -4760,7 +4760,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte@5.32.1:
+  svelte@5.33.1:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0
