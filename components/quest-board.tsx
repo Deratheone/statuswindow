@@ -6,8 +6,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Brain, Check, Dumbbell, RefreshCw, Sparkles } from "lucide-react"
 import { generateDefaultQuests } from "@/lib/quest-generator"
 import { useToast } from "@/hooks/use-toast"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { LoadingSkeleton } from "@/components/loading-skeleton"
 
 interface QuestBoardProps {
   userData: any
@@ -17,15 +15,6 @@ interface QuestBoardProps {
 export function QuestBoard({ userData, filter = "all" }: QuestBoardProps) {
   const { toast } = useToast()
   const [quests, setQuests] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 800)
-
-    return () => clearTimeout(timer)
-  }, [])
 
   useEffect(() => {
     if (!userData) return
@@ -117,89 +106,73 @@ export function QuestBoard({ userData, filter = "all" }: QuestBoardProps) {
   }
 
   return (
-    <TooltipProvider>
-      {isLoading ? (
-        <LoadingSkeleton type="quest-board" />
-      ) : (
-        <div className="space-y-6">
-          {filter === "active" && (
-            <div className="flex justify-end">
-              <Button
-                onClick={handleRefreshQuests}
-                className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Refresh Quests
-              </Button>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            {quests.map((quest) => (
-              <Card
-                key={quest.id}
-                className={`border-${quest.type === "strength" ? "red" : quest.type === "intelligence" ? "blue" : "purple"}-500/30 bg-slate-800/70 backdrop-blur-sm`}
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    {quest.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 flex-shrink-0" />}
-                    {quest.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />}
-                    {quest.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
-                    <span className="truncate">{quest.title}</span>
-                    {quest.completed && (
-                      <span className="ml-auto flex items-center text-green-400 text-sm font-normal whitespace-nowrap">
-                        <Check className="h-4 w-4 mr-1" /> Completed
-                      </span>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-400 mb-4 line-clamp-2">{quest.description}</p>
-
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span>Progress</span>
-                      <span>
-                        {quest.progress}/{quest.target}
-                      </span>
-                    </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="h-1.5 bg-gray-700 rounded-full">
-                          <div
-                            className={`h-full rounded-full transition-all duration-300 ${
-                              quest.type === "strength"
-                                ? "bg-gradient-to-r from-red-600 to-red-500"
-                                : quest.type === "intelligence"
-                                  ? "bg-gradient-to-r from-blue-600 to-blue-500"
-                                  : "bg-gradient-to-r from-purple-600 to-purple-500"
-                            }`}
-                            style={{ width: `${Math.min(100, (quest.progress / quest.target) * 100)}%` }}
-                          ></div>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          Progress: {quest.progress}/{quest.target} -{" "}
-                          {Math.round((quest.progress / quest.target) * 100)}% complete
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <div className="text-sm">
-                    <span className="text-yellow-400">Reward: </span>
-                    <span>
-                      +{quest.reward} {quest.type.charAt(0).toUpperCase() + quest.type.slice(1)}, +{quest.xpReward} XP
-                    </span>
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+    <div className="space-y-6">
+      {filter === "active" && (
+        <div className="flex justify-end">
+          <Button
+            onClick={handleRefreshQuests}
+            className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Refresh Quests
+          </Button>
         </div>
       )}
-    </TooltipProvider>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+        {quests.map((quest) => (
+          <Card
+            key={quest.id}
+            className={`border-${quest.type === "strength" ? "red" : quest.type === "intelligence" ? "blue" : "purple"}-500/30 bg-slate-800/70 backdrop-blur-sm`}
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                {quest.type === "strength" && <Dumbbell className="h-5 w-5 text-red-400 flex-shrink-0" />}
+                {quest.type === "intelligence" && <Brain className="h-5 w-5 text-blue-400 flex-shrink-0" />}
+                {quest.type === "mana" && <Sparkles className="h-5 w-5 text-purple-400 flex-shrink-0" />}
+                <span className="truncate">{quest.title}</span>
+                {quest.completed && (
+                  <span className="ml-auto flex items-center text-green-400 text-sm font-normal whitespace-nowrap">
+                    <Check className="h-4 w-4 mr-1" /> Completed
+                  </span>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-400 mb-4 line-clamp-2">{quest.description}</p>
+
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Progress</span>
+                  <span>
+                    {quest.progress}/{quest.target}
+                  </span>
+                </div>
+                <div className="h-1.5 bg-gray-700 rounded-full">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      quest.type === "strength"
+                        ? "bg-gradient-to-r from-red-600 to-red-500"
+                        : quest.type === "intelligence"
+                          ? "bg-gradient-to-r from-blue-600 to-blue-500"
+                          : "bg-gradient-to-r from-purple-600 to-purple-500"
+                    }`}
+                    style={{ width: `${Math.min(100, (quest.progress / quest.target) * 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <div className="text-sm">
+                <span className="text-yellow-400">Reward: </span>
+                <span>
+                  +{quest.reward} {quest.type.charAt(0).toUpperCase() + quest.type.slice(1)}, +{quest.xpReward} XP
+                </span>
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </div>
   )
 }
