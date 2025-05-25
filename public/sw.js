@@ -1,5 +1,9 @@
-const CACHE_NAME = "statuswindow-v1"
-const urlsToCache = [
+const CACHE_NAME = "statuswindow-v2"
+const STATIC_CACHE = "statuswindow-static-v2"
+const DYNAMIC_CACHE = "statuswindow-dynamic-v2"
+
+// Essential files that must be cached for offline functionality
+const ESSENTIAL_FILES = [
   "/",
   "/dashboard",
   "/activities",
@@ -10,77 +14,133 @@ const urlsToCache = [
   "/onboarding",
   "/login",
   "/manifest.json",
-  // Add static assets
+]
+
+// Static assets to cache
+const STATIC_ASSETS = [
   "/logo.png",
   "/character-creation.png",
   "/dashboard.png",
   "/mobile-view.png",
   "/quests.png",
+  "/icon-192x192.png",
+  "/icon-512x512.png",
+  "/textures/parchment.jpg",
 ]
 
-// Install event - cache resources
+// Install event - cache essential resources
 self.addEventListener("install", (event) => {
+  console.log("Service Worker installing...")
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        console.log("Opened cache")
-        return cache.addAll(urlsToCache)
+    Promise.all([
+      caches.open(STATIC_CACHE).then((cache) => {
+        console.log("Caching static assets...")
+        return cache.addAll(STATIC_ASSETS.concat(ESSENTIAL_FILES))
+      }),
+      caches.open(DYNAMIC_CACHE).then((cache) => {
+        console.log("Dynamic cache ready...")
+        return cache
+      }),
+    ])
+      .then(() => {
+        console.log("Service Worker installed successfully")
+        return self.skipWaiting()
       })
       .catch((error) => {
-        console.log("Cache install failed:", error)
+        console.error("Service Worker install failed:", error)
       }),
-  )
-})
-
-// Fetch event - serve from cache when offline
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached version or fetch from network
-      if (response) {
-        return response
-      }
-
-      // Clone the request because it's a stream
-      const fetchRequest = event.request.clone()
-
-      return fetch(fetchRequest)
-        .then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== "basic") {
-            return response
-          }
-
-          // Clone the response because it's a stream
-          const responseToCache = response.clone()
-
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache)
-          })
-
-          return response
-        })
-        .catch(() => {
-          // Return offline page or cached content
-          return caches.match("/")
-        })
-    }),
   )
 })
 
 // Activate event - clean up old caches
 self.addEventListener("activate", (event) => {
+  console.log("Service Worker activating...")
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("Deleting old cache:", cacheName)
-            return caches.delete(cacheName)
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+              console.log("Deleting old cache:", cacheName)
+              return caches.delete(cacheName)
+            }
+          }),
+        )
+      })
+      .then(() => {
+        console.log("Service Worker activated")
+        return self.clients.claim()
+      }),
+  )
+})
+
+// Fetch event - serve from cache, fallback to network
+self.addEventListener("fetch", (event) => {
+  const { request } = event
+  const url = new URL(request.url)
+
+  // Skip non-GET requests
+  if (request.method !== "GET") {
+    return
+  }
+
+  // Skip external requests
+  if (url.origin !== location.origin) {
+    return
+  }
+
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
+        console.log("Serving from cache:", request.url)
+        return cachedResponse
+      }
+
+      // Not in cache, fetch from network
+      return fetch(request)
+        .then((networkResponse) => {
+          // Check if we received a valid response
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== "basic") {
+            return networkResponse
           }
-        }),
-      )
+
+          // Clone the response
+          const responseToCache = networkResponse.clone()
+
+          // Determine which cache to use
+          const cacheToUse = STATIC_ASSETS.some((asset) => request.url.includes(asset)) ? STATIC_CACHE : DYNAMIC_CACHE
+
+          // Cache the response
+          caches.open(cacheToUse).then((cache) => {
+            console.log("Caching new resource:", request.url)
+            cache.put(request, responseToCache)
+          })
+
+          return networkResponse
+        })
+        .catch(() => {
+          console.log("Network failed, trying cache fallback for:", request.url)
+
+          // If it's a navigation request, return the cached index page
+          if (request.mode === "navigate") {
+            return caches.match("/").then((cachedIndex) => {
+              return (
+                cachedIndex ||
+                new Response("Offline - Please check your connection", {
+                  status: 503,
+                  statusText: "Service Unavailable",
+                })
+              )
+            })
+          }
+
+          // For other requests, return a generic offline response
+          return new Response("Offline", {
+            status: 503,
+            statusText: "Service Unavailable",
+          })
+        })
     }),
   )
 })
@@ -88,23 +148,37 @@ self.addEventListener("activate", (event) => {
 // Background sync for offline data
 self.addEventListener("sync", (event) => {
   if (event.tag === "background-sync") {
-    event.waitUntil(
-      // Sync offline data when connection is restored
-      syncOfflineData(),
-    )
+    event.waitUntil(syncOfflineData())
+  }
+})
+
+// Message handling for manual cache updates
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting()
   }
 })
 
 async function syncOfflineData() {
   try {
-    // Get offline data from IndexedDB or localStorage
     const offlineData = localStorage.getItem("statuswindow-offline-data")
     if (offlineData) {
-      // Sync with server when online
       console.log("Syncing offline data...")
-      // Implementation would depend on your backend API
+      // Sync implementation would go here
     }
   } catch (error) {
     console.log("Sync failed:", error)
   }
 }
+
+// Preload critical resources
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "CACHE_URLS") {
+    const urlsToCache = event.data.payload
+    event.waitUntil(
+      caches.open(DYNAMIC_CACHE).then((cache) => {
+        return cache.addAll(urlsToCache)
+      }),
+    )
+  }
+})
