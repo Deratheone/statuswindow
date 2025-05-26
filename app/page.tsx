@@ -5,41 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Award, Brain, Dumbbell, Sparkles } from "lucide-react"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
 
 export default function LandingPage() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
-  const [showInstallButton, setShowInstallButton] = useState(false)
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setShowInstallButton(true)
-    }
-
-    window.addEventListener("beforeinstallprompt", handler)
-
-    // Check if app is already installed
-    if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
-      setShowInstallButton(false)
-    }
-
-    return () => window.removeEventListener("beforeinstallprompt", handler)
-  }, [])
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return
-
-    deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
-
-    if (outcome === "accepted") {
-      setDeferredPrompt(null)
-      setShowInstallButton(false)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
       {/* Navigation */}
@@ -70,17 +37,6 @@ export default function LandingPage() {
               </Button>
             </motion.div>
           </Link>
-          {showInstallButton && (
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                onClick={handleInstallClick}
-                size="sm"
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-none ml-2"
-              >
-                📱 Install App
-              </Button>
-            </motion.div>
-          )}
         </div>
       </nav>
 
@@ -140,18 +96,6 @@ export default function LandingPage() {
                 </Button>
               </motion.div>
             </a>
-            {showInstallButton && (
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
-                <Button
-                  onClick={handleInstallClick}
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto mobile-button border-green-500 text-green-300 hover:bg-green-900/20"
-                >
-                  📱 Install as App
-                </Button>
-              </motion.div>
-            )}
           </div>
         </div>
         <motion.div
