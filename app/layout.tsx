@@ -21,22 +21,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
-      <body
-        className={`${inter.className} dark`}
-        style={{ backgroundColor: "hsl(222.2 84% 4.9%)", color: "hsl(210 40% 98%)" }}
-      >
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              document.documentElement.classList.add('dark');
-              document.body.style.backgroundColor = 'hsl(222.2 84% 4.9%)';
-              document.body.style.color = 'hsl(210 40% 98%)';
-              setTimeout(() => document.body.classList.add('loaded'), 100);
-            `,
-          }}
-        />
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
+    <html lang="en">
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Suspense>{children}</Suspense>
           <Analytics />
         </ThemeProvider>
