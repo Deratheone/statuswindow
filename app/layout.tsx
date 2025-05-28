@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "StatusWindow - Level Up Your Life",
   description: "Transform your self-improvement journey into an epic adventure with StatusWindow",
   viewport: "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({

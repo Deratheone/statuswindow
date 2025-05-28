@@ -139,7 +139,7 @@ StatusWindow brings the iconic blue status windows from manga and manhwa into re
 
 ### Local Development
 
-```bash
+\`\`\`bash
 # Clone the repository
 git clone https://github.com/Deratheone/statuswindow.git
 cd statuswindow
@@ -149,7 +149,7 @@ npm install
 
 # Start development server
 npm run dev
-```
+\`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -221,7 +221,7 @@ This project follows a **"vibe-first"** development approach:
 
 ## 🏗️ Project Architecture
 
-```
+\`\`\`
 statuswindow/
 ├── 📁 app/                    # Next.js App Router
 │   ├── 🎯 dashboard/          # Main dashboard
@@ -241,13 +241,13 @@ statuswindow/
 │   └── 🎯 quest-generator.tsx # Quest creation
 └── 📁 utils/                  # Helper functions
     └── 🔊 audio.ts            # Sound effects
-```
+\`\`\`
 
 ---
 
 ## 🎯 How It Works
 
-```mermaid
+\`\`\`mermaid
 graph TD
     A[Log Activity] --> B[Verify Completion]
     B --> C[Calculate XP & Stats]
@@ -256,7 +256,7 @@ graph TD
     E --> F[Show Celebration]
     F --> G[Save Progress]
     G --> H[Update Analytics]
-```
+\`\`\`
 
 1. **Activity Logging**: User logs completed real-world activities
 2. **XP Calculation**: System calculates experience points and stat gains
@@ -316,7 +316,7 @@ Since this is a learning project with known issues:
 
 Perfect for fellow beginners or anyone who wants to help improve the codebase:
 
-```bash
+\`\`\`bash
 # 1. Fork the repository
 # 2. Create a feature branch
 git checkout -b fix/some-bug
@@ -330,7 +330,7 @@ git commit -m "fix: resolve mobile navigation issue"
 
 # 6. Push and create PR
 git push origin fix/some-bug
-```
+\`\`\`
 
 ### 🎓 Learning Together
 - **Beginner-friendly**: Don't worry about perfect code - we're all learning!
