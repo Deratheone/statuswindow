@@ -18,7 +18,6 @@ import { useMobile } from "@/hooks/use-mobile"
 import { useSwipe } from "@/hooks/use-swipe"
 import { MobileNavWrapper } from "@/components/mobile-nav-wrapper"
 import { CelebrationEffect } from "@/components/celebration-effect"
-import { SkillsList } from "@/components/skills/skills-list"
 
 export default function DashboardPage() {
   const isMobile = useMobile()
@@ -585,7 +584,42 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                       {userData.unlockedSkills && userData.unlockedSkills.length > 0 ? (
-                        <SkillsList skills={userData.unlockedSkills.slice(0, 3)} compact />
+                        <div className="space-y-2">
+                          {userData.unlockedSkills.slice(0, 3).map((skill: any, index: number) => (
+                            <div
+                              key={index}
+                              className={`p-2 rounded-md border ${
+                                skill.rarity === "Common"
+                                  ? "border-gray-500 bg-gray-900/50"
+                                  : skill.rarity === "Rare"
+                                    ? "border-blue-500 bg-blue-900/50"
+                                    : skill.rarity === "Epic"
+                                      ? "border-purple-500 bg-purple-900/50"
+                                      : skill.rarity === "Legendary"
+                                        ? "border-orange-500 bg-orange-900/50"
+                                        : "border-pink-500 bg-pink-900/50" // Mythic
+                              }`}
+                            >
+                              <div className="font-bold mb-1 text-sm">{skill.name}</div>
+                              <div
+                                className={`text-xs mb-1 ${
+                                  skill.rarity === "Common"
+                                    ? "text-gray-400"
+                                    : skill.rarity === "Rare"
+                                      ? "text-blue-400"
+                                      : skill.rarity === "Epic"
+                                        ? "text-purple-400"
+                                        : skill.rarity === "Legendary"
+                                          ? "text-orange-400"
+                                          : "text-pink-400" // Mythic
+                                }`}
+                              >
+                                {skill.rarity}
+                              </div>
+                              <div className="text-xs text-gray-300">{skill.description}</div>
+                            </div>
+                          ))}
+                        </div>
                       ) : (
                         <div className="text-center text-blue-300 py-4">
                           No skills unlocked yet. Visit the Skills page to unlock skills!
