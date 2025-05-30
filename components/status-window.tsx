@@ -193,48 +193,61 @@ export function StatusWindow({ userData }: StatusWindowProps) {
     return () => clearInterval(interval)
   }, [])
 
-  // Get unlocked skills based on level and stats
-  const getUnlockedSkills = () => {
-    const skills = []
+  // Remove the entire getUnlockedSkills function and replace it with:
+  const getDisplaySkills = () => {
+    // First, show skills unlocked through the skill orb system
+    const orbSkills = userData.unlockedSkills || []
+
+    // Then add level/stat-based skills for backwards compatibility
+    const legacySkills = []
 
     // Level-based skills
     if (userData.level >= 5) {
-      skills.push({ name: "Night Owl", level: 1, description: "2X XP after midnight" })
+      legacySkills.push({ name: "Night Owl", level: 1, description: "2X XP after midnight", rarity: "Common" })
     }
 
     if (userData.level >= 10) {
-      skills.push({ name: "Gamer's Focus", level: 1, description: "Study timer with auto-breaks" })
+      legacySkills.push({
+        name: "Gamer's Focus",
+        level: 1,
+        description: "Study timer with auto-breaks",
+        rarity: "Common",
+      })
     }
 
     // Stat-based skills
     if (userData.stats.strength >= 30) {
-      skills.push({
+      legacySkills.push({
         name: "Iron Body",
         level: Math.floor(userData.stats.strength / 30),
         description: "Increased stamina recovery",
+        rarity: "Common",
       })
     }
 
     if (userData.stats.intelligence >= 30) {
-      skills.push({
+      legacySkills.push({
         name: "Quick Learning",
         level: Math.floor(userData.stats.intelligence / 30),
         description: "Faster skill acquisition",
+        rarity: "Common",
       })
     }
 
     if (userData.stats.mana >= 30) {
-      skills.push({
+      legacySkills.push({
         name: "Mental Clarity",
         level: Math.floor(userData.stats.mana / 30),
         description: "Enhanced focus duration",
+        rarity: "Common",
       })
     }
 
-    return skills
+    // Combine orb skills and legacy skills, prioritizing orb skills
+    return [...orbSkills, ...legacySkills]
   }
 
-  const skills = getUnlockedSkills()
+  const skills = getDisplaySkills()
 
   return (
     <div className="relative">
@@ -444,10 +457,37 @@ export function StatusWindow({ userData }: StatusWindowProps) {
               {skills.length > 0 ? (
                 <div className="space-y-2">
                   {skills.map((skill, index) => (
-                    <div key={index} className="bg-blue-900/30 border border-blue-800 rounded p-2">
+                    <div
+                      key={index}
+                      className={`border rounded p-2 ${
+                        skill.rarity === "Common" || !skill.rarity
+                          ? "bg-blue-900/30 border-blue-800"
+                          : skill.rarity === "Rare"
+                            ? "bg-blue-900/50 border-blue-600"
+                            : skill.rarity === "Epic"
+                              ? "bg-purple-900/50 border-purple-600"
+                              : skill.rarity === "Legendary"
+                                ? "bg-orange-900/50 border-orange-600"
+                                : "bg-pink-900/50 border-pink-600" // Mythic
+                      }`}
+                    >
                       <div className="flex justify-between">
                         <span className="font-medium truncate mr-2">{skill.name}</span>
-                        <span className="text-yellow-400 whitespace-nowrap">Lv {skill.level}</span>
+                        <span
+                          className={`whitespace-nowrap ${
+                            skill.rarity === "Common" || !skill.rarity
+                              ? "text-gray-300"
+                              : skill.rarity === "Rare"
+                                ? "text-blue-400"
+                                : skill.rarity === "Epic"
+                                  ? "text-purple-400"
+                                  : skill.rarity === "Legendary"
+                                    ? "text-orange-400"
+                                    : "text-pink-400" // Mythic
+                          }`}
+                        >
+                          {skill.level ? `Lv ${skill.level}` : skill.rarity}
+                        </span>
                       </div>
                       <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
                     </div>
