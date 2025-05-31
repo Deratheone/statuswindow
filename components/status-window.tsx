@@ -39,6 +39,7 @@ export function StatusWindow({ userData }: StatusWindowProps) {
   const [systemMessages, setSystemMessages] = useState<SystemMessage[]>([])
   const [soundEnabled, setSoundEnabled] = useState(true)
   const lastUpdateRef = useRef(Date.now())
+  const [showAllSkills, setShowAllSkills] = useState(false)
 
   // Calculate stat max based on level (100 base + 20 per level above 1)
   const statMax = 100 + (userData.level - 1) * 20
@@ -456,7 +457,8 @@ export function StatusWindow({ userData }: StatusWindowProps) {
 
               {skills.length > 0 ? (
                 <div className="space-y-2">
-                  {skills.map((skill, index) => (
+                  {/* Always show first 2 skills */}
+                  {skills.slice(0, 2).map((skill, index) => (
                     <div
                       key={index}
                       className={`border rounded p-2 ${
@@ -492,6 +494,69 @@ export function StatusWindow({ userData }: StatusWindowProps) {
                       <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
                     </div>
                   ))}
+
+                  {/* Collapsible section for remaining skills */}
+                  {skills.length > 2 && (
+                    <AnimatePresence>
+                      {showAllSkills && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-2 overflow-hidden"
+                        >
+                          {skills.slice(2).map((skill, index) => (
+                            <div
+                              key={index + 2}
+                              className={`border rounded p-2 ${
+                                skill.rarity === "Common" || !skill.rarity
+                                  ? "bg-blue-900/30 border-blue-800"
+                                  : skill.rarity === "Rare"
+                                    ? "bg-blue-900/50 border-blue-600"
+                                    : skill.rarity === "Epic"
+                                      ? "bg-purple-900/50 border-purple-600"
+                                      : skill.rarity === "Legendary"
+                                        ? "bg-orange-900/50 border-orange-600"
+                                        : "bg-pink-900/50 border-pink-600" // Mythic
+                              }`}
+                            >
+                              <div className="flex justify-between">
+                                <span className="font-medium truncate mr-2">{skill.name}</span>
+                                <span
+                                  className={`whitespace-nowrap ${
+                                    skill.rarity === "Common" || !skill.rarity
+                                      ? "text-gray-300"
+                                      : skill.rarity === "Rare"
+                                        ? "text-blue-400"
+                                        : skill.rarity === "Epic"
+                                          ? "text-purple-400"
+                                          : skill.rarity === "Legendary"
+                                            ? "text-orange-400"
+                                            : "text-pink-400" // Mythic
+                                  }`}
+                                >
+                                  {skill.level ? `Lv ${skill.level}` : skill.rarity}
+                                </span>
+                              </div>
+                              <div className="text-xs text-blue-300 line-clamp-1">{skill.description}</div>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+
+                  {/* Show More/Show Less button */}
+                  {skills.length > 2 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowAllSkills(!showAllSkills)}
+                      className="w-full mt-2 text-blue-300 hover:text-blue-100 hover:bg-blue-900/30"
+                    >
+                      {showAllSkills ? "Show Less" : `Show More (${skills.length - 2} more)`}
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="text-center text-blue-400 py-2 text-sm">
