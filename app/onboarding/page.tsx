@@ -119,6 +119,8 @@ export default function OnboardingPage() {
     // Basic info
     username: "",
     password: "",
+    securityQuestion: "",
+    securityAnswer: "",
     characterName: "",
     avatar: "🧙‍♂️",
     characterClass: "mystic",
@@ -222,6 +224,9 @@ export default function OnboardingPage() {
     if (step === 1) {
       if (!formData.username) newErrors.username = "A hero needs a username to be remembered in the scrolls"
       if (!formData.password) newErrors.password = "A secret password is required to protect your journey"
+      if (!formData.securityQuestion)
+        newErrors.securityQuestion = "Please select a security question for account recovery"
+      if (!formData.securityAnswer) newErrors.securityAnswer = "Please provide an answer to your security question"
       if (!formData.characterName) newErrors.characterName = "Every legend begins with a name"
     }
 
@@ -443,6 +448,40 @@ export default function OnboardingPage() {
                     placeholder="Enter a secure password"
                   />
                   {errors.password && <p className="text-red-400 text-sm">{errors.password}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="securityQuestion">Choose a security question</Label>
+                  <select
+                    id="securityQuestion"
+                    name="securityQuestion"
+                    value={formData.securityQuestion}
+                    onChange={(e) => setFormData({ ...formData, securityQuestion: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 text-white rounded-md"
+                  >
+                    <option value="">Select a security question</option>
+                    <option value="pet">What was the name of your first pet?</option>
+                    <option value="school">What was the name of your elementary school?</option>
+                    <option value="city">In what city were you born?</option>
+                    <option value="mother">What is your mother's maiden name?</option>
+                    <option value="friend">What was the name of your childhood best friend?</option>
+                    <option value="book">What is your favorite book?</option>
+                    <option value="food">What is your favorite food?</option>
+                  </select>
+                  {errors.securityQuestion && <p className="text-red-400 text-sm">{errors.securityQuestion}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="securityAnswer">Answer to your security question</Label>
+                  <Input
+                    id="securityAnswer"
+                    name="securityAnswer"
+                    value={formData.securityAnswer}
+                    onChange={handleInputChange}
+                    className="bg-slate-700/50 border-slate-600 text-white"
+                    placeholder="Enter your answer (case-insensitive)"
+                  />
+                  {errors.securityAnswer && <p className="text-red-400 text-sm">{errors.securityAnswer}</p>}
                 </div>
 
                 <div className="space-y-2">
