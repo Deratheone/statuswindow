@@ -2,206 +2,565 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Award, Brain, Dumbbell, Sparkles } from "lucide-react"
+import { ArrowRight, Award, Brain, Dumbbell, Sparkles, Star, Zap } from "lucide-react"
 import { ScrollToTop } from "@/components/scroll-to-top"
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useEffect, useState } from "react"
 
 export default function LandingPage() {
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 300], [0, -50])
+  const y2 = useTransform(scrollY, [0, 300], [0, -100])
+  const opacity = useTransform(scrollY, [0, 200], [1, 0])
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    setIsVisible(true)
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+
+  // Floating particles animation
+  const particles = Array.from({ length: 20 }, (_, i) => (
+    <motion.div
+      key={i}
+      className="absolute w-1 h-1 bg-purple-400 rounded-full opacity-30"
+      animate={{
+        y: [-20, -100],
+        x: [Math.random() * 100 - 50, Math.random() * 100 - 50],
+        opacity: [0, 1, 0],
+      }}
+      transition={{
+        duration: Math.random() * 3 + 2,
+        repeat: Number.POSITIVE_INFINITY,
+        delay: Math.random() * 2,
+      }}
+      style={{
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+      }}
+    />
+  ))
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-purple-950 text-white">
-      {/* Navigation */}
-      <nav className="container mx-auto p-4 flex flex-wrap justify-between items-center">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-white overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {particles}
+
+        {/* Floating orbs */}
         <motion.div
-          className="flex items-center gap-2"
+          className="absolute top-20 left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+        />
+        <motion.div
+          className="absolute top-40 right-20 w-24 h-24 bg-blue-500/10 rounded-full blur-xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.4, 0.7, 0.4],
+          }}
+          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-1/4 w-40 h-40 bg-yellow-500/10 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.5, 0.2],
+          }}
+          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
+        />
+      </div>
+
+      {/* Mouse follower effect */}
+      <motion.div
+        className="fixed w-6 h-6 bg-purple-400/20 rounded-full blur-sm pointer-events-none z-50"
+        animate={{
+          x: mousePosition.x - 12,
+          y: mousePosition.y - 12,
+        }}
+        transition={{ type: "spring", stiffness: 500, damping: 28 }}
+      />
+
+      {/* Navigation with enhanced styling */}
+      <motion.nav
+        className="container mx-auto p-4 flex flex-wrap justify-between items-center relative z-10"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.div
+          className="flex items-center gap-2 relative"
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <Sparkles className="h-6 w-6 text-yellow-400" />
-          <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-purple-400">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          >
+            <Sparkles className="h-6 w-6 text-yellow-400" />
+          </motion.div>
+          <h1 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-purple-400 to-blue-400">
             StatusWindow
           </h1>
+          <motion.div
+            className="absolute -inset-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg blur-sm"
+            animate={{ opacity: [0, 0.5, 0] }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+          />
         </motion.div>
         <div className="flex gap-2 sm:gap-4 mt-1 sm:mt-0">
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-white hover:text-yellow-400">
-              Login
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button variant="ghost" size="sm" className="text-white hover:text-yellow-400 hover:bg-purple-900/20">
+                Login
+              </Button>
+            </motion.div>
           </Link>
           <Link href="/onboarding">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(168,85,247,0.5)" }}
+              whileTap={{ scale: 0.95 }}
+            >
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none relative overflow-hidden"
               >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+                  animate={{ x: [-100, 100] }}
+                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                />
                 Get Started
               </Button>
             </motion.div>
           </Link>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-3 py-8 sm:px-4 sm:py-20 flex flex-col md:flex-row items-center gap-6 sm:gap-12">
-        <div className="flex-1 space-y-4 sm:space-y-6 mobile-text-container">
-          <motion.h1
-            className="text-3xl md:text-6xl font-bold leading-tight"
-            initial={{ opacity: 0.9 }}
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-          >
-            Level Up Your <span className="text-yellow-400">Real Life</span>
-          </motion.h1>
+      {/* Enhanced Hero Section */}
+      <section className="container mx-auto px-3 py-8 sm:px-4 sm:py-20 flex flex-col md:flex-row items-center gap-6 sm:gap-12 relative z-10">
+        <motion.div className="flex-1 space-y-4 sm:space-y-6 mobile-text-container" style={{ y: y1, opacity }}>
+          <AnimatePresence>
+            {isVisible && (
+              <motion.h1
+                className="text-3xl md:text-6xl font-bold leading-tight relative"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                <motion.span
+                  className="inline-block"
+                  whileHover={{
+                    scale: 1.05,
+                    textShadow: "0 0 20px rgba(168,85,247,0.8)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                >
+                  Level Up Your{" "}
+                </motion.span>
+                <motion.span
+                  className="text-yellow-400 inline-block relative"
+                  whileHover={{
+                    scale: 1.1,
+                    textShadow: "0 0 30px rgba(251,191,36,0.8)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                >
+                  Real Life
+                  <motion.div
+                    className="absolute -inset-2 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 rounded-lg blur-lg"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  />
+                </motion.span>
+
+                {/* Floating icons around the title */}
+                <motion.div
+                  className="absolute -top-4 -right-4 text-yellow-400"
+                  animate={{
+                    rotate: 360,
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    rotate: { duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+                    scale: { duration: 2, repeat: Number.POSITIVE_INFINITY },
+                  }}
+                >
+                  <Star className="w-6 h-6" />
+                </motion.div>
+                <motion.div
+                  className="absolute -bottom-2 -left-6 text-purple-400"
+                  animate={{
+                    y: [-5, 5, -5],
+                    rotate: [-10, 10, -10],
+                  }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+                >
+                  <Zap className="w-5 h-5" />
+                </motion.div>
+              </motion.h1>
+            )}
+          </AnimatePresence>
+
           <motion.p
-            className="text-base md:text-xl text-gray-300"
-            whileHover={{ x: 5 }}
+            className="text-base md:text-xl text-gray-300 relative"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+            whileHover={{
+              x: 5,
+              textShadow: "0 0 10px rgba(156,163,175,0.5)",
+            }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             Transform your self-improvement journey into an epic adventure with StatusWindow, your personal RPG-inspired
             progress tracker.
           </motion.p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+          >
             <Link href="/onboarding">
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(168,85,247,0.5)" }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 30px rgba(168,85,247,0.6)",
+                  y: -2,
+                }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full"
+                className="w-full relative group"
               >
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto mobile-button bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
+                  className="w-full sm:w-auto mobile-button bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none relative overflow-hidden"
                 >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent"
+                    animate={{ x: [-200, 200] }}
+                    transition={{
+                      duration: 3,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                      repeatDelay: 1,
+                    }}
+                  />
                   Start Your Journey <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </motion.div>
             </Link>
             <a href="#how-it-works">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+              <motion.div
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 20px rgba(168,85,247,0.3)",
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full"
+              >
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto mobile-button border-purple-500 text-purple-300 hover:bg-purple-900/20"
+                  className="w-full sm:w-auto mobile-button border-purple-500 text-purple-300 hover:bg-purple-900/20 relative overflow-hidden group"
                 >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100"
+                    transition={{ duration: 0.3 }}
+                  />
                   Learn More
                 </Button>
               </motion.div>
             </a>
             <a href="#about">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+              <motion.div
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 20px rgba(251,191,36,0.3)",
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full"
+              >
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto mobile-button border-yellow-500 text-yellow-300 hover:bg-yellow-900/20"
+                  className="w-full sm:w-auto mobile-button border-yellow-500 text-yellow-300 hover:bg-yellow-900/20 relative overflow-hidden group"
                 >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100"
+                    transition={{ duration: 0.3 }}
+                  />
                   About
                 </Button>
               </motion.div>
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Enhanced Character Status Card */}
         <motion.div
           className="flex-1 relative w-full max-w-full sm:max-w-md mx-auto md:mx-0"
-          whileHover={{ y: -5 }}
-          transition={{ type: "spring", stiffness: 300, damping: 10 }}
+          style={{ y: y2 }}
+          initial={{ opacity: 0, x: 50, rotateY: -15 }}
+          animate={{ opacity: 1, x: 0, rotateY: 0 }}
+          transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+          whileHover={{
+            y: -10,
+            rotateY: 5,
+            scale: 1.02,
+          }}
         >
           <motion.div
-            className="relative bg-slate-800/70 backdrop-blur-sm border border-purple-500/50 rounded-lg p-4 sm:p-6 shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.7)" }}
+            className="relative bg-slate-800/70 backdrop-blur-sm border border-purple-500/50 rounded-lg p-4 sm:p-6 shadow-[0_0_30px_rgba(168,85,247,0.5)] overflow-hidden"
+            whileHover={{
+              boxShadow: "0 0 50px rgba(168,85,247,0.8)",
+              borderColor: "rgba(168,85,247,0.8)",
+            }}
           >
+            {/* Animated background pattern */}
             <motion.div
-              className="absolute -top-3 -left-3 bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-1 rounded-md text-white text-xs sm:text-sm font-medium"
+              className="absolute inset-0 opacity-10"
+              style={{
+                backgroundImage: `radial-gradient(circle at 20% 50%, rgba(168,85,247,0.3) 0%, transparent 50%),
+                                 radial-gradient(circle at 80% 20%, rgba(59,130,246,0.3) 0%, transparent 50%),
+                                 radial-gradient(circle at 40% 80%, rgba(251,191,36,0.3) 0%, transparent 50%)`,
+              }}
+              animate={{
+                backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+              }}
+              transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+
+            <motion.div
+              className="absolute -top-3 -left-3 bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-1 rounded-md text-white text-xs sm:text-sm font-medium relative overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+                animate={{ x: [-100, 100] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              />
               Character Status
             </motion.div>
-            <div className="flex items-center gap-3 sm:gap-4 mb-4">
+
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 relative z-10">
               <motion.div
-                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"
-                whileHover={{ rotate: 5, scale: 1.1 }}
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative overflow-hidden"
+                whileHover={{
+                  rotate: 5,
+                  scale: 1.1,
+                  boxShadow: "0 0 20px rgba(168,85,247,0.6)",
+                }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
               >
-                <span className="text-xl sm:text-2xl">🧙</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                />
+                <span className="text-xl sm:text-2xl relative z-10">🧙</span>
               </motion.div>
               <div>
-                <h3 className="text-lg sm:text-xl font-bold">Mystic Seeker</h3>
+                <motion.h3
+                  className="text-lg sm:text-xl font-bold"
+                  whileHover={{
+                    scale: 1.05,
+                    textShadow: "0 0 10px rgba(255,255,255,0.5)",
+                  }}
+                >
+                  Mystic Seeker
+                </motion.h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-yellow-400 text-xs sm:text-sm">Level 12</span>
-                  <div className="h-1.5 w-16 sm:w-24 bg-gray-700 rounded-full">
+                  <motion.span
+                    className="text-yellow-400 text-xs sm:text-sm font-bold"
+                    animate={{
+                      textShadow: [
+                        "0 0 5px rgba(251,191,36,0.5)",
+                        "0 0 15px rgba(251,191,36,0.8)",
+                        "0 0 5px rgba(251,191,36,0.5)",
+                      ],
+                    }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  >
+                    Level 12
+                  </motion.span>
+                  <div className="h-1.5 w-16 sm:w-24 bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full w-3/4 bg-yellow-400 rounded-full"
+                      className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full relative"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "75%" }}
+                      transition={{ duration: 2, delay: 1, ease: "easeOut" }}
                       whileHover={{ width: "80%" }}
-                      transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                    ></motion.div>
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"
+                        animate={{ x: [-20, 100] }}
+                        transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      />
+                    </motion.div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="space-y-3 sm:space-y-4">
-              <div className="space-y-1">
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="flex items-center gap-1">
-                    <Dumbbell className="h-3 w-3 sm:h-4 sm:w-4 text-red-400" /> Strength
-                  </span>
-                  <span className="text-red-400">45/100</span>
-                </div>
-                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
-                  <motion.div
-                    className="h-full w-[45%] bg-gradient-to-r from-red-500 to-red-400 rounded-full"
-                    whileHover={{ width: "50%" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  ></motion.div>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="flex items-center gap-1">
-                    <Brain className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" /> Intelligence
-                  </span>
-                  <span className="text-blue-400">72/100</span>
-                </div>
-                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
-                  <motion.div
-                    className="h-full w-[72%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
-                    whileHover={{ width: "77%" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  ></motion.div>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between text-xs sm:text-sm">
-                  <span className="flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400" /> Mana
-                  </span>
-                  <span className="text-purple-400">58/100</span>
-                </div>
-                <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full">
-                  <motion.div
-                    className="h-full w-[58%] bg-gradient-to-r from-purple-500 to-purple-400 rounded-full"
-                    whileHover={{ width: "63%" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  ></motion.div>
-                </div>
-              </div>
+
+            {/* Enhanced stat bars */}
+            <div className="space-y-3 sm:space-y-4 relative z-10">
+              {[
+                { name: "Strength", value: 45, max: 100, color: "red", icon: Dumbbell },
+                { name: "Intelligence", value: 72, max: 100, color: "blue", icon: Brain },
+                { name: "Mana", value: 58, max: 100, color: "purple", icon: Sparkles },
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.name}
+                  className="space-y-1"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 1.2 + index * 0.2 }}
+                >
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="flex items-center gap-1">
+                      <motion.div
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                      >
+                        <stat.icon className={`h-3 w-3 sm:h-4 sm:w-4 text-${stat.color}-400`} />
+                      </motion.div>
+                      {stat.name}
+                    </span>
+                    <motion.span
+                      className={`text-${stat.color}-400 font-bold`}
+                      animate={{
+                        textShadow: [
+                          `0 0 5px rgba(${stat.color === "red" ? "239,68,68" : stat.color === "blue" ? "59,130,246" : "168,85,247"},0.5)`,
+                          `0 0 15px rgba(${stat.color === "red" ? "239,68,68" : stat.color === "blue" ? "59,130,246" : "168,85,247"},0.8)`,
+                          `0 0 5px rgba(${stat.color === "red" ? "239,68,68" : stat.color === "blue" ? "59,130,246" : "168,85,247"},0.5)`,
+                        ],
+                      }}
+                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: index * 0.5 }}
+                    >
+                      {stat.value}/{stat.max}
+                    </motion.span>
+                  </div>
+                  <div className="h-1.5 sm:h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <motion.div
+                      className={`h-full bg-gradient-to-r from-${stat.color}-500 to-${stat.color}-400 rounded-full relative`}
+                      initial={{ width: "0%" }}
+                      animate={{ width: `${stat.value}%` }}
+                      transition={{ duration: 1.5, delay: 1.5 + index * 0.3, ease: "easeOut" }}
+                      whileHover={{ width: `${Math.min(stat.value + 5, 100)}%` }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"
+                        animate={{ x: [-20, 100] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                          delay: index * 0.5,
+                        }}
+                      />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            <div className="mt-3 sm:mt-4 border-t border-gray-700 pt-2 sm:pt-4">
+
+            <motion.div
+              className="mt-3 sm:mt-4 border-t border-gray-700 pt-2 sm:pt-4 relative z-10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 2.5 }}
+            >
               <div className="flex justify-between text-xs sm:text-sm">
                 <span className="flex items-center gap-1">
-                  <Award className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400" /> Active Quests
+                  <motion.div
+                    whileHover={{ scale: 1.2, rotate: 10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                  >
+                    <Award className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400" />
+                  </motion.div>
+                  Active Quests
                 </span>
-                <span className="text-yellow-400">3</span>
+                <motion.span
+                  className="text-yellow-400 font-bold"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    textShadow: [
+                      "0 0 5px rgba(251,191,36,0.5)",
+                      "0 0 15px rgba(251,191,36,0.8)",
+                      "0 0 5px rgba(251,191,36,0.5)",
+                    ],
+                  }}
+                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                >
+                  3
+                </motion.span>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
+
+          {/* Enhanced floating XP notification */}
           <motion.div
-            className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-slate-800/70 backdrop-blur-sm border border-blue-500/50 rounded-lg p-3 sm:p-4 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-            whileHover={{ y: -5, x: -5, boxShadow: "0 0 20px rgba(59,130,246,0.7)" }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-slate-800/70 backdrop-blur-sm border border-blue-500/50 rounded-lg p-3 sm:p-4 shadow-[0_0_20px_rgba(59,130,246,0.5)] overflow-hidden"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 3 }}
+            whileHover={{
+              y: -5,
+              x: -5,
+              boxShadow: "0 0 30px rgba(59,130,246,0.8)",
+              scale: 1.05,
+            }}
           >
-            <div className="text-xs sm:text-sm font-medium text-blue-400">+15 XP</div>
-            <div className="text-xs text-gray-400">Completed meditation</div>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+            />
+            <div className="relative z-10">
+              <motion.div
+                className="text-xs sm:text-sm font-medium text-blue-400 flex items-center gap-1"
+                animate={{
+                  textShadow: [
+                    "0 0 5px rgba(59,130,246,0.5)",
+                    "0 0 15px rgba(59,130,246,0.8)",
+                    "0 0 5px rgba(59,130,246,0.5)",
+                  ],
+                }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+              >
+                <motion.div
+                  animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+                  transition={{
+                    rotate: { duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+                    scale: { duration: 1, repeat: Number.POSITIVE_INFINITY },
+                  }}
+                >
+                  <Sparkles className="w-3 h-3" />
+                </motion.div>
+                +15 XP
+              </motion.div>
+              <div className="text-xs text-gray-400">Completed meditation</div>
+            </div>
           </motion.div>
         </motion.div>
       </section>
 
+      {/* Rest of the sections remain the same but with enhanced animations... */}
+      {/* I'll continue with the other sections if you want them enhanced too */}
       {/* Features Section */}
       <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <motion.h2
