@@ -86,35 +86,35 @@ export function SkillOrb({
 
       // Batch keyframes into a single style element for better performance
       styleRules += `
-        @keyframes ${animName} {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 0, 0);
-            background-color: hsla(190, 100%, 70%, 0);
-            box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
-          }
-          10% {
-            opacity: 1;
-            transform: translate3d(${x}px, ${y}px, ${z}px);
-            background-color: hsla(190, 100%, 70%, 0.9);
-            box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
-          }
-          50% {
-            background-color: hsla(30, 100%, 60%, 0.9);
-            box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
-          }
-          85% {
-            opacity: 1;
-            transform: translate3d(${x}px, ${y}px, ${z}px);
-          }
-          100% {
-            opacity: 0;
-            transform: translate3d(${x * 0.5}px, ${y * 0.5}px, ${z * 0.5}px);
-            background-color: hsla(30, 100%, 60%, 0);
-            box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
-          }
-        }
-      `
+       @keyframes ${animName} {
+         0% {
+           opacity: 0;
+           transform: translate3d(0, 0, 0);
+           background-color: hsla(190, 100%, 70%, 0);
+           box-shadow: 0 0 5px hsla(190, 100%, 70%, 0);
+         }
+         10% {
+           opacity: 1;
+           transform: translate3d(${x}px, ${y}px, ${z}px);
+           background-color: hsla(190, 100%, 70%, 0.9);
+           box-shadow: 0 0 12px hsla(190, 100%, 70%, 0.9);
+         }
+         50% {
+           background-color: hsla(30, 100%, 60%, 0.9);
+           box-shadow: 0 0 15px hsla(30, 100%, 60%, 0.9);
+         }
+         85% {
+           opacity: 1;
+           transform: translate3d(${x}px, ${y}px, ${z}px);
+         }
+         100% {
+           opacity: 0;
+           transform: translate3d(${x * 0.5}px, ${y * 0.5}px, ${z * 0.5}px);
+           background-color: hsla(30, 100%, 60%, 0);
+           box-shadow: 0 0 5px hsla(30, 100%, 60%, 0);
+         }
+       }
+     `
 
       // Use staggered delays to prevent GPU overload
       const delay = i * (isMobile ? 0.01 : 0.005)
@@ -166,118 +166,91 @@ export function SkillOrb({
       orbContainerRef.current.classList.add(styles.active)
     }
 
-    // Use requestAnimationFrame for more consistent timing
-    const orbAnimationDuration = 4000
-    const animationStartTime = performance.now()
-
-    const animationStep = (currentTime: number) => {
-      const elapsedTime = currentTime - animationStartTime
-
-      if (elapsedTime >= orbAnimationDuration) {
-        // Animation complete, trigger next phase
-        completeOrbAnimation()
-      } else {
-        // Continue animation
-        requestAnimationFrame(animationStep)
-      }
-    }
-
-    // Start the animation loop
-    requestAnimationFrame(animationStep)
-  }
-
-  // Add this new function to handle the completion phase
-  const completeOrbAnimation = () => {
-    // Show electric pulse
-    if (electricPulseRef.current) {
-      electricPulseRef.current.classList.add(styles.active)
-    }
-
-    // Start holographic box expansion
-    if (holoBoxRef.current) {
-      holoBoxRef.current.classList.add(styles.active)
-    }
-
-    // Hide orb container after pulse
+    // After orb animation completes (4s)
     setTimeout(() => {
-      if (orbContainerRef.current) {
-        orbContainerRef.current.style.display = "none"
+      // Show electric pulse
+      if (electricPulseRef.current) {
+        electricPulseRef.current.classList.add(styles.active)
       }
-    }, 600)
 
-    // Trigger glitch effect when box is fully visible
-    setTimeout(() => {
-      if (glitchOverlayRef.current) {
-        glitchOverlayRef.current.style.display = "block"
+      // Start holographic box expansion
+      if (holoBoxRef.current) {
+        holoBoxRef.current.classList.add(styles.active)
+      }
 
-        requestAnimationFrame(() => {
-          if (glitchOverlayRef.current) {
-            glitchOverlayRef.current.style.opacity = "1"
-          }
+      // Trigger glitch effect when box is fully visible
+      setTimeout(() => {
+        if (glitchOverlayRef.current) {
+          glitchOverlayRef.current.style.display = "block"
 
-          // Hide glitch after animation
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             if (glitchOverlayRef.current) {
-              glitchOverlayRef.current.style.display = "none"
+              glitchOverlayRef.current.style.opacity = "1"
             }
 
-            // Call onComplete to unlock a random skill
-            if (onComplete) {
-              onComplete()
-            }
+            // Hide glitch after animation
+            setTimeout(() => {
+              if (glitchOverlayRef.current) {
+                glitchOverlayRef.current.style.display = "none"
+              }
 
-            // Show skill result
-            setSkillResultVisible(true)
-          }, 500)
-        })
-      }
-    }, 800) // Match box expansion time
+              // Call onComplete to unlock a random skill
+              if (onComplete) {
+                onComplete()
+              }
+
+              // Show skill result
+              setSkillResultVisible(true)
+
+              // Auto-reset after 1 second
+              setTimeout(() => {
+                resetAnimation()
+              }, 1000)
+            }, 500)
+          })
+        }
+      }, 800) // Match box expansion time
+
+      // Hide orb container after pulse
+      setTimeout(() => {
+        if (orbContainerRef.current) {
+          orbContainerRef.current.style.display = "none"
+        }
+      }, 600)
+    }, 4000) // Orb animation duration
   }
 
   // Reset animation
   const resetAnimation = () => {
-    // First ensure all animations are complete
-    const completeAllAnimations = () => {
-      setAnimationTriggered(false)
-      setSkillResultVisible(false)
+    setAnimationTriggered(false)
+    setSkillResultVisible(false)
 
-      // Reset all elements to initial state
-      if (startButtonRef.current) {
-        startButtonRef.current.classList.remove(styles.fade)
-      }
-
-      if (orbContainerRef.current) {
-        orbContainerRef.current.classList.remove(styles.active)
-        orbContainerRef.current.style.display = "block"
-        orbContainerRef.current.style.opacity = "0"
-
-        // Force a repaint before making visible again
-        void orbContainerRef.current.offsetWidth
-        orbContainerRef.current.style.opacity = "1"
-      }
-
-      if (electricPulseRef.current) {
-        electricPulseRef.current.classList.remove(styles.active)
-      }
-
-      if (holoBoxRef.current) {
-        holoBoxRef.current.classList.remove(styles.active)
-      }
-
-      if (glitchOverlayRef.current) {
-        glitchOverlayRef.current.style.opacity = "0"
-        glitchOverlayRef.current.style.display = "none"
-      }
-
-      if (onReset) {
-        onReset()
-      }
+    // Reset all elements
+    if (startButtonRef.current) {
+      startButtonRef.current.classList.remove(styles.fade)
     }
 
-    // Use requestAnimationFrame to ensure DOM updates are complete
-    requestAnimationFrame(() => {
-      requestAnimationFrame(completeAllAnimations)
-    })
+    if (orbContainerRef.current) {
+      orbContainerRef.current.classList.remove(styles.active)
+      orbContainerRef.current.style.display = "block"
+    }
+
+    if (electricPulseRef.current) {
+      electricPulseRef.current.classList.remove(styles.active)
+    }
+
+    if (holoBoxRef.current) {
+      holoBoxRef.current.classList.remove(styles.active)
+    }
+
+    if (glitchOverlayRef.current) {
+      glitchOverlayRef.current.style.opacity = "0"
+      glitchOverlayRef.current.style.display = "none"
+    }
+
+    if (onReset) {
+      onReset()
+    }
   }
 
   // Get color based on rarity
