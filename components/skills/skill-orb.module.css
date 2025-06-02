@@ -55,7 +55,13 @@
 .orbContainer.active {
   opacity: 1;
   visibility: visible;
-  animation: rotateOrb 4s linear forwards;
+  transform: rotateY(0deg) rotateX(0deg);
+  transition: transform 4s linear;
+  animation: none;
+}
+
+.orbContainer.completed {
+  transform: rotateY(720deg) rotateX(720deg);
 }
 
 @keyframes rotateOrb {
@@ -91,6 +97,7 @@
 
 .electricPulse.active {
   animation: electricPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform, opacity;
 }
 
 @keyframes electricPulse {
@@ -125,6 +132,8 @@
   transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   will-change: transform, opacity, width, height;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .holographicBox.active {

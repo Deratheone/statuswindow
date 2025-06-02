@@ -166,86 +166,118 @@ export function SkillOrb({
       orbContainerRef.current.classList.add(styles.active)
     }
 
-    // After orb animation completes (4s)
+    // Use requestAnimationFrame for more consistent timing
+    const orbAnimationDuration = 4000
+    const animationStartTime = performance.now()
+
+    const animationStep = (currentTime: number) => {
+      const elapsedTime = currentTime - animationStartTime
+
+      if (elapsedTime >= orbAnimationDuration) {
+        // Animation complete, trigger next phase
+        completeOrbAnimation()
+      } else {
+        // Continue animation
+        requestAnimationFrame(animationStep)
+      }
+    }
+
+    // Start the animation loop
+    requestAnimationFrame(animationStep)
+  }
+
+  // Add this new function to handle the completion phase
+  const completeOrbAnimation = () => {
+    // Show electric pulse
+    if (electricPulseRef.current) {
+      electricPulseRef.current.classList.add(styles.active)
+    }
+
+    // Start holographic box expansion
+    if (holoBoxRef.current) {
+      holoBoxRef.current.classList.add(styles.active)
+    }
+
+    // Hide orb container after pulse
     setTimeout(() => {
-      // Show electric pulse
-      if (electricPulseRef.current) {
-        electricPulseRef.current.classList.add(styles.active)
+      if (orbContainerRef.current) {
+        orbContainerRef.current.style.display = "none"
       }
+    }, 600)
 
-      // Start holographic box expansion
-      if (holoBoxRef.current) {
-        holoBoxRef.current.classList.add(styles.active)
-      }
+    // Trigger glitch effect when box is fully visible
+    setTimeout(() => {
+      if (glitchOverlayRef.current) {
+        glitchOverlayRef.current.style.display = "block"
 
-      // Trigger glitch effect when box is fully visible
-      setTimeout(() => {
-        if (glitchOverlayRef.current) {
-          glitchOverlayRef.current.style.display = "block"
+        requestAnimationFrame(() => {
+          if (glitchOverlayRef.current) {
+            glitchOverlayRef.current.style.opacity = "1"
+          }
 
-          requestAnimationFrame(() => {
+          // Hide glitch after animation
+          setTimeout(() => {
             if (glitchOverlayRef.current) {
-              glitchOverlayRef.current.style.opacity = "1"
+              glitchOverlayRef.current.style.display = "none"
             }
 
-            // Hide glitch after animation
-            setTimeout(() => {
-              if (glitchOverlayRef.current) {
-                glitchOverlayRef.current.style.display = "none"
-              }
+            // Call onComplete to unlock a random skill
+            if (onComplete) {
+              onComplete()
+            }
 
-              // Call onComplete to unlock a random skill
-              if (onComplete) {
-                onComplete()
-              }
-
-              // Show skill result
-              setSkillResultVisible(true)
-
-              // Auto-reset after 1 second
-              setTimeout(() => {
-                resetAnimation()
-              }, 1000)
-            }, 500)
-          })
-        }
-      }, 800) // Match box expansion time
-
-      // Hide orb container after pulse
-      setTimeout(() => {
-        if (orbContainerRef.current) {
-          orbContainerRef.current.style.display = "none"
-        }
-      }, 600)
-    }, 4000) // Orb animation duration
+            // Show skill result
+            setSkillResultVisible(true)
+          }, 500)
+        })
+      }
+    }, 800) // Match box expansion time
   }
 
   // Reset animation
   const resetAnimation = () => {
-    setAnimationTriggered(false)
-    setSkillResultVisible(false)
+    // First ensure all animations are complete
+    const completeAllAnimations = () => {
+      setAnimationTriggered(false)
+      setSkillResultVisible(false)
 
-    // Reset all elements
-    if (startButtonRef.current) {
-      startButtonRef.current.classList.remove(styles.fade)
+      // Reset all elements to initial state
+      if (startButtonRef.current) {
+        startButtonRef.current.classList.remove(styles.fade)
+      }
+
+      if (orbContainerRef.current) {
+        orbContainerRef.current.classList.remove(styles.active)
+        orbContainerRef.current.style.display = "block"
+        orbContainerRef.current.style.opacity = "0"
+
+        // Force a repaint before making visible again
+        void orbContainerRef.current.offsetWidth
+        orbContainerRef.current.style.opacity = "1"
+      }
+
+      if (electricPulseRef.current) {
+        electricPulseRef.current.classList.remove(styles.active)
+      }
+
+      if (holoBoxRef.current) {
+        holoBoxRef.current.classList.remove(styles.active)
+      }
+
+      if (glitchOverlayRef.current) {
+        glitchOverlayRef.current.style.opacity = "0"
+        glitchOverlayRef.current.style.display = "none"
+      }
+
+      if (onReset) {
+        onReset()
+      }
     }
 
-    if (orbContainerRef.current) {
-      orbContainerRef.current.classList.remove(styles.active)
-      orbContainerRef.current.style.display = "block"
-    }
-
-    if (electricPulseRef.current) {
-      electricPulseRef.current.classList.remove(styles.active)
-    }
-
-    if (holoBoxRef.current) {
-      holoBoxRef.current.classList.remove(styles.active)
-    }
-
-    if (onReset) {
-      onReset()
-    }
+    // Use requestAnimationFrame to ensure DOM updates are complete
+    requestAnimationFrame(() => {
+      requestAnimationFrame(completeAllAnimations)
+    })
   }
 
   // Get color based on rarity
@@ -267,6 +299,17 @@ export function SkillOrb({
         return "#ffffff"
     }
   }
+
+  // Add this useEffect for proper cleanup
+  useEffect(() => {
+    return () => {
+      // Clear any potential timeouts when component unmounts
+      const allTimeouts = window.setTimeout(() => {}, 0)
+      for (let i = 0; i < allTimeouts; i++) {
+        window.clearTimeout(i)
+      }
+    }
+  }, [])
 
   return (
     <div className={styles.centerContainer}>
