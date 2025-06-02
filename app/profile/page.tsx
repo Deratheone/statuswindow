@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast"
 import { AvatarUpload } from "@/components/avatar-upload"
 import { motion } from "framer-motion"
 import { logoutUser } from "@/utils/auth"
+import { DataManager } from "@/components/data-manager"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -395,6 +396,10 @@ export default function ProfilePage() {
                   )}
                 </motion.div>
               </form>
+              <div className="border-t border-slate-700 pt-6 mt-6">
+                <h3 className="text-lg font-medium mb-4">Data Management</h3>
+                <DataManager onDataImported={() => window.location.reload()} />
+              </div>
             </CardContent>
           </Card>
         </Suspense>
