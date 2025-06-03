@@ -9,12 +9,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { Download, Upload, FileText, Users, Calendar, AlertCircle, CheckCircle, Info } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Download, Upload, FileText, Users, Calendar, AlertCircle, CheckCircle, Info, Sparkles } from "lucide-react"
 import { downloadBackup, importUserData, getBackupInfo, createAutoBackup } from "@/utils/data-backup"
 import { useToast } from "@/hooks/use-toast"
 
 interface DataManagerProps {
   onDataImported?: () => void
+}
+
+interface UserDetail {
+  username: string
+  characterName: string
+  characterClass: string
+  level: number
+  avatar: string
 }
 
 export function DataManager({ onDataImported }: DataManagerProps) {
@@ -27,6 +36,9 @@ export function DataManager({ onDataImported }: DataManagerProps) {
     importedUsers: string[]
   } | null>(null)
   const [backupInfo, setBackupInfo] = useState<any>(null)
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
+  const [selectAll, setSelectAll] = useState(true)
+  const [showUserSelection, setShowUserSelection] = useState(false)
 
   const handleExport = async () => {
     try {
@@ -48,7 +60,7 @@ export function DataManager({ onDataImported }: DataManagerProps) {
     const file = event.target.files?.[0]
     if (!file) return
 
-    if (file.type !== "application/json") {
+    if (file.type !== "application/json" && !file.name.endsWith(".json")) {
       toast({
         title: "Invalid File Type",
         description: "Please select a JSON backup file.",
@@ -65,6 +77,10 @@ export function DataManager({ onDataImported }: DataManagerProps) {
         const info = getBackupInfo(content)
         if (info.valid) {
           setBackupInfo({ content, info: info.info })
+          // Pre-select all users by default
+          setSelectedUsers(info.info.users)
+          setSelectAll(true)
+          setShowUserSelection(true)
         } else {
           toast({
             title: "Invalid Backup File",
@@ -86,7 +102,8 @@ export function DataManager({ onDataImported }: DataManagerProps) {
       // Create auto backup before importing
       createAutoBackup()
 
-      const result = importUserData(backupInfo.content)
+      // Import only selected users
+      const result = importUserData(backupInfo.content, selectedUsers)
       setImportResult(result)
 
       if (result.success) {
@@ -103,6 +120,7 @@ export function DataManager({ onDataImported }: DataManagerProps) {
           fileInputRef.current.value = ""
         }
         setBackupInfo(null)
+        setShowUserSelection(false)
       } else {
         toast({
           title: "Import Failed",
@@ -124,9 +142,52 @@ export function DataManager({ onDataImported }: DataManagerProps) {
   const handleCancel = () => {
     setBackupInfo(null)
     setImportResult(null)
+    setShowUserSelection(false)
+    setSelectedUsers([])
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
+  }
+
+  const handleUserSelect = (username: string) => {
+    setSelectedUsers((prev) => {
+      if (prev.includes(username)) {
+        const newSelected = prev.filter((u) => u !== username)
+        setSelectAll(newSelected.length === backupInfo.info.users.length)
+        return newSelected
+      } else {
+        const newSelected = [...prev, username]
+        setSelectAll(newSelected.length === backupInfo.info.users.length)
+        return newSelected
+      }
+    })
+  }
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      // Deselect all
+      setSelectedUsers([])
+      setSelectAll(false)
+    } else {
+      // Select all
+      setSelectedUsers([...backupInfo.info.users])
+      setSelectAll(true)
+    }
+  }
+
+  const getClassColor = (characterClass: string) => {
+    const classColors: Record<string, string> = {
+      Warrior: "bg-red-500/20 text-red-200",
+      Mage: "bg-blue-500/20 text-blue-200",
+      Rogue: "bg-green-500/20 text-green-200",
+      Cleric: "bg-yellow-500/20 text-yellow-200",
+      Ranger: "bg-purple-500/20 text-purple-200",
+      Bard: "bg-pink-500/20 text-pink-200",
+      Paladin: "bg-orange-500/20 text-orange-200",
+      Druid: "bg-emerald-500/20 text-emerald-200",
+    }
+
+    return classColors[characterClass] || "bg-gray-500/20 text-gray-200"
   }
 
   return (
@@ -179,7 +240,7 @@ export function DataManager({ onDataImported }: DataManagerProps) {
           )}
 
           {/* Backup Info Preview */}
-          {backupInfo && (
+          {backupInfo && !showUserSelection && (
             <div className="space-y-4">
               <Alert className="border-blue-500/30 bg-blue-900/20">
                 <Info className="h-4 w-4" />
@@ -200,29 +261,76 @@ export function DataManager({ onDataImported }: DataManagerProps) {
                         <span>Version: {backupInfo.info.version}</span>
                       </div>
                     </div>
-                    {backupInfo.info.users.length > 0 && (
-                      <div>
-                        <div className="text-sm font-medium mb-1">Characters:</div>
-                        <div className="flex flex-wrap gap-1">
-                          {backupInfo.info.users.map((username: string) => (
-                            <Badge key={username} variant="secondary" className="text-xs">
-                              {username}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </AlertDescription>
               </Alert>
 
               <div className="flex gap-2">
+                <Button onClick={() => setShowUserSelection(true)} className="flex-1 bg-purple-600 hover:bg-purple-700">
+                  Select Characters to Import
+                </Button>
+                <Button onClick={handleCancel} variant="outline" className="border-slate-600">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* User Selection UI */}
+          {backupInfo && showUserSelection && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-gray-300">Select Characters to Import</h3>
+                <div className="flex items-center">
+                  <Checkbox id="select-all" checked={selectAll} onCheckedChange={handleSelectAll} />
+                  <label htmlFor="select-all" className="ml-2 text-sm text-gray-300">
+                    Select All
+                  </label>
+                </div>
+              </div>
+
+              <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                {backupInfo.info.userDetails.map((user: UserDetail) => (
+                  <div
+                    key={user.username}
+                    className={`flex items-center justify-between p-3 rounded-md border ${
+                      selectedUsers.includes(user.username)
+                        ? "border-purple-500/50 bg-purple-900/20"
+                        : "border-slate-700 bg-slate-800/50"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-700">
+                        <span className="text-lg">{user.avatar}</span>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-200">{user.characterName}</div>
+                        <div className="flex items-center space-x-2 text-xs">
+                          <Badge className={`${getClassColor(user.characterClass)}`}>{user.characterClass}</Badge>
+                          <span className="text-gray-400 flex items-center">
+                            <Sparkles className="h-3 w-3 mr-1" />
+                            Level {user.level}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <Checkbox
+                      checked={selectedUsers.includes(user.username)}
+                      onCheckedChange={() => handleUserSelect(user.username)}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2 mt-4">
                 <Button
                   onClick={handleImport}
-                  disabled={isImporting}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700"
+                  disabled={isImporting || selectedUsers.length === 0}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-900/30"
                 >
-                  {isImporting ? "Importing..." : "Import Data"}
+                  {isImporting
+                    ? "Importing..."
+                    : `Import ${selectedUsers.length} Character${selectedUsers.length !== 1 ? "s" : ""}`}
                 </Button>
                 <Button onClick={handleCancel} variant="outline" className="border-slate-600">
                   Cancel
@@ -281,8 +389,8 @@ export function DataManager({ onDataImported }: DataManagerProps) {
             <ol className="list-decimal list-inside space-y-1 ml-2">
               <li>Transfer the backup file to your new device</li>
               <li>Click "Select Backup File" and choose your backup</li>
-              <li>Review the backup information</li>
-              <li>Click "Import Data" to restore your progress</li>
+              <li>Select which characters you want to import</li>
+              <li>Click "Import" to restore your selected characters</li>
             </ol>
           </div>
 

@@ -68,9 +68,12 @@ export function downloadBackup(): void {
 }
 
 /**
- * Import user data from backup file
+ * Import selected user data from backup file
  */
-export function importUserData(jsonString: string): { success: boolean; message: string; importedUsers: string[] } {
+export function importUserData(
+  jsonString: string,
+  selectedUsers: string[] = [],
+): { success: boolean; message: string; importedUsers: string[] } {
   try {
     const data: BackupData = JSON.parse(jsonString)
 
@@ -92,53 +95,75 @@ export function importUserData(jsonString: string): { success: boolean; message:
       }
     }
 
-    // Validate each user's data
-    const usernames = Object.keys(data.users)
-    const invalidUsers: string[] = []
+    // Get all usernames from backup
+    const allUsernames = Object.keys(data.users)
 
-    usernames.forEach((username) => {
-      if (!validateUserData(data.users[username])) {
-        invalidUsers.push(username)
-      }
-    })
+    // If no specific users selected, import all users
+    const usersToImport = selectedUsers.length > 0 ? selectedUsers : allUsernames
 
+    // Validate selected users exist in backup
+    const invalidUsers = usersToImport.filter((username) => !allUsernames.includes(username))
     if (invalidUsers.length > 0) {
       return {
         success: false,
-        message: `Invalid user data found for: ${invalidUsers.join(", ")}`,
+        message: `Selected users not found in backup: ${invalidUsers.join(", ")}`,
         importedUsers: [],
       }
     }
 
-    // Check for existing users and handle conflicts
+    // Validate each selected user's data
+    const invalidDataUsers: string[] = []
+    usersToImport.forEach((username) => {
+      if (!validateUserData(data.users[username])) {
+        invalidDataUsers.push(username)
+      }
+    })
+
+    if (invalidDataUsers.length > 0) {
+      return {
+        success: false,
+        message: `Invalid user data found for: ${invalidDataUsers.join(", ")}`,
+        importedUsers: [],
+      }
+    }
+
+    // Get existing users from localStorage
     const existingUsers = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
-    const conflictingUsers = usernames.filter((username) => existingUsers[username])
+
+    // Check for conflicts with existing users
+    const conflictingUsers = usersToImport.filter((username) => existingUsers[username])
+
+    // Create a subset of users to import
+    const selectedUserData: Record<string, any> = {}
+    usersToImport.forEach((username) => {
+      selectedUserData[username] = data.users[username]
+    })
 
     // Merge data (imported data takes precedence for conflicts)
-    const mergedUsers = { ...existingUsers, ...data.users }
+    const mergedUsers = { ...existingUsers, ...selectedUserData }
 
     // Save merged data
     localStorage.setItem("statusWindowUsers", JSON.stringify(mergedUsers))
 
-    // Restore current user if it exists in the backup
-    if (data.currentUser && mergedUsers[data.currentUser]) {
+    // Restore current user if it exists in the backup and was selected for import
+    if (data.currentUser && selectedUserData[data.currentUser]) {
       localStorage.setItem("statusWindowCurrentUser", data.currentUser)
     }
 
-    // Restore remembered user if it exists
-    if (data.rememberedUser && mergedUsers[data.rememberedUser]) {
+    // Restore remembered user if it exists and was selected for import
+    if (data.rememberedUser && selectedUserData[data.rememberedUser]) {
       localStorage.setItem("statusWindowRememberedUser", data.rememberedUser)
     }
 
     const message =
       conflictingUsers.length > 0
-        ? `Successfully imported ${usernames.length} users. Overwrote existing data for: ${conflictingUsers.join(", ")}`
-        : `Successfully imported ${usernames.length} users.`
+        ? `Successfully imported ${usersToImport.length} users. Overwrote existing data for: ${conflictingUsers.join(", ")}`
+        : `Successfully imported ${usersToImport.length} users.`
 
     return {
       success: true,
       message,
-      importedUsers: usernames,
+      importedUsers: usersToImport,
     }
   } catch (error) {
     console.error("Import failed:", error)
@@ -204,7 +229,12 @@ function isVersionCompatible(version: string): boolean {
 /**
  * Get backup file info without importing
  */
-export function getBackupInfo(jsonString: string): { valid: boolean; info?: any; error?: string } {
+export function getBackupInfo(jsonString: string): {
+  valid: boolean
+  info?: any
+  error?: string
+  userData?: Record<string, any>
+} {
   try {
     const data: BackupData = JSON.parse(jsonString)
 
@@ -215,6 +245,15 @@ export function getBackupInfo(jsonString: string): { valid: boolean; info?: any;
     const userCount = Object.keys(data.users).length
     const exportDate = new Date(data.exportDate).toLocaleDateString()
 
+    // Extract user details for selection UI
+    const userDetails = Object.entries(data.users).map(([username, userData]: [string, any]) => ({
+      username,
+      characterName: userData.characterName || username,
+      characterClass: userData.characterClass || "Unknown",
+      level: userData.level || 1,
+      avatar: userData.avatar || "👤",
+    }))
+
     return {
       valid: true,
       info: {
@@ -222,8 +261,10 @@ export function getBackupInfo(jsonString: string): { valid: boolean; info?: any;
         exportDate,
         userCount,
         users: Object.keys(data.users),
+        userDetails,
         deviceInfo: data.deviceInfo,
       },
+      userData: data.users,
     }
   } catch (error) {
     return { valid: false, error: "Invalid JSON format" }

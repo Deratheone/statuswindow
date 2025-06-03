@@ -749,7 +749,7 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h4 className="text-xl font-semibold mb-4 text-yellow-400">How StatusWindow Helps You</h4>
+                <h4 className="text-xl font-semibold mb-4 text-yellow-400">Core Features</h4>
                 <ul className="space-y-3 text-gray-300">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
@@ -775,32 +775,389 @@ export default function LandingPage() {
               </div>
 
               <div>
-                <h4 className="text-xl font-semibold mb-4 text-purple-400">Our Commitment</h4>
-                <div className="space-y-4 text-gray-300">
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <h5 className="font-semibold text-blue-400 mb-2">🚧 Under Active Development</h5>
-                    <p className="text-sm">
-                      StatusWindow is continuously evolving with new features, improvements, and optimizations being
-                      added regularly based on user feedback.
-                    </p>
-                  </div>
+                <h4 className="text-xl font-semibold mb-4 text-purple-400">Advanced Features</h4>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">🔄</span>
+                    <span>
+                      <strong>Data Export/Import:</strong> Transfer your progress between devices with complete backup
+                      files
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">👥</span>
+                    <span>
+                      <strong>Selective Character Import:</strong> Choose specific characters to import from backup
+                      files
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">🔐</span>
+                    <span>
+                      <strong>Password Recovery:</strong> Secure account recovery using personalized security questions
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">📱</span>
+                    <span>
+                      <strong>Cross-Device Sync:</strong> Continue your adventure seamlessly across all your devices
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">🎮</span>
+                    <span>
+                      <strong>Multiple Characters:</strong> Create and manage multiple characters with different goals
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
 
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <h5 className="font-semibold text-green-400 mb-2">💰 Completely Free</h5>
-                    <p className="text-sm">
-                      StatusWindow will always remain free to use. No hidden costs, no premium tiers - just pure
-                      self-improvement gaming.
-                    </p>
-                  </div>
+          <motion.div
+            className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-8 mb-8"
+            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-center text-cyan-400">Data Management & Security</h3>
 
-                  <div className="bg-slate-700/50 rounded-lg p-4">
-                    <h5 className="font-semibold text-yellow-400 mb-2">🔓 Open Source</h5>
-                    <p className="text-sm">
-                      Our code is open for everyone to see, contribute to, and learn from. Transparency and community
-                      collaboration drive our development.
-                    </p>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-xl font-semibold mb-4 text-green-400">📤 Export Your Progress</h4>
+                <div className="space-y-3 text-gray-300 text-sm">
+                  <p>Never lose your progress again! StatusWindow allows you to:</p>
+                  <ul className="space-y-2 ml-4">
+                    <li>• Export complete character data as JSON backup files</li>
+                    <li>• Download timestamped backups for easy organization</li>
+                    <li>• Include all progress, stats, quests, and achievements</li>
+                    <li>• Create automatic backups before major changes</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xl font-semibold mb-4 text-blue-400">📥 Import & Restore</h4>
+                <div className="space-y-3 text-gray-300 text-sm">
+                  <p>Seamlessly transfer your adventure to any device:</p>
+                  <ul className="space-y-2 ml-4">
+                    <li>• Import backup files with full data validation</li>
+                    <li>• Select specific characters to import</li>
+                    <li>• Preview backup contents before importing</li>
+                    <li>• Automatic conflict resolution and error handling</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-slate-700/50 rounded-lg">
+              <h5 className="font-semibold text-yellow-400 mb-2">🔒 Account Security</h5>
+              <p className="text-sm text-gray-300">
+                Forgot your password? No problem! StatusWindow includes a secure password recovery system using
+                personalized security questions that you set during character creation. Your account is protected while
+                remaining easily recoverable.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-8 mb-8"
+            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-center text-orange-400">Our Commitment</h3>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-slate-700/50 rounded-lg p-4">
+                <h5 className="font-semibold text-blue-400 mb-2">🚧 Under Active Development</h5>
+                <p className="text-sm text-gray-300">
+                  StatusWindow is continuously evolving with new features, improvements, and optimizations being added
+                  regularly based on user feedback.
+                </p>
+              </div>
+
+              <div className="bg-slate-700/50 rounded-lg p-4">
+                <h5 className="font-semibold text-green-400 mb-2">💰 Completely Free</h5>
+                <p className="text-sm text-gray-300">
+                  StatusWindow will always remain free to use. No hidden costs, no premium tiers - just pure
+                  self-improvement gaming.
+                </p>
+              </div>
+
+              <div className="bg-slate-700/50 rounded-lg p-4">
+                <h5 className="font-semibold text-yellow-400 mb-2">🔓 Open Source</h5>
+                <p className="text-sm text-gray-300">
+                  Our code is open for everyone to see, contribute to, and learn from. Transparency and community
+                  collaboration drive our development.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-8 mb-8"
+            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-center text-cyan-400">🗺️ Development Roadmap</h3>
+
+            <div className="space-y-8">
+              {/* Current Quarter */}
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                  <h4 className="text-xl font-semibold text-green-400">Q1 2025 - Current Focus</h4>
+                  <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">In Progress</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 ml-7">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✅</span>
+                      <span className="text-sm text-gray-300">Data Export/Import System</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✅</span>
+                      <span className="text-sm text-gray-300">Password Recovery System</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✅</span>
+                      <span className="text-sm text-gray-300">Selective Character Import</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-yellow-400">🔄</span>
+                      <span className="text-sm text-gray-300">Enhanced Mobile Experience</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-yellow-400">🔄</span>
+                      <span className="text-sm text-gray-300">Achievement System Expansion</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-yellow-400">🔄</span>
+                      <span className="text-sm text-gray-300">Performance Optimizations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-400">📋</span>
+                      <span className="text-sm text-gray-300">Dark/Light Mode Toggle</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-400">📋</span>
+                      <span className="text-sm text-gray-300">Sound Effects Integration</span>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Next Quarter */}
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                  <h4 className="text-xl font-semibold text-blue-400">Q2 2025 - Social & Collaboration</h4>
+                  <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">Planned</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 ml-7">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Friend System & Social Features</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Leaderboards & Competitions</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Guild/Party System</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Shared Quests & Challenges</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Activity Sharing & Inspiration</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Mentor/Mentee Connections</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Community Challenges</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">🎯</span>
+                      <span className="text-sm text-gray-300">Progress Celebrations</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Q3 */}
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
+                  <h4 className="text-xl font-semibold text-purple-400">Q3 2025 - Advanced Analytics</h4>
+                  <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full">Planned</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 ml-7">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Advanced Progress Analytics</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Habit Tracking & Insights</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">AI-Powered Recommendations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Skill Tree Visualization</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Goal Setting & Tracking</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Productivity Metrics</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Weekly/Monthly Reports</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">📊</span>
+                      <span className="text-sm text-gray-300">Data Export to External Tools</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Q4 */}
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                  <h4 className="text-xl font-semibold text-yellow-400">Q4 2025 - Platform Expansion</h4>
+                  <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">Future</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 ml-7">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Mobile App (iOS & Android)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Cloud Sync & Backup</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Wearable Device Integration</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">API for Third-party Integrations</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Offline Mode Support</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Multi-language Support</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Advanced Customization</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">🚀</span>
+                      <span className="text-sm text-gray-300">Enterprise Features</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Community Input Section */}
+            <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg border border-purple-500/30">
+              <h5 className="text-lg font-semibold text-center mb-4 text-yellow-400">🗳️ Community-Driven Development</h5>
+              <p className="text-sm text-gray-300 text-center mb-4">
+                Our roadmap is shaped by community feedback! Join our development process and help prioritize features.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="https://github.com/Deratheone/statuswindow/discussions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-purple-400 text-purple-300 hover:bg-purple-900/20"
+                    >
+                      💬 Join Discussions
+                    </Button>
+                  </motion.div>
+                </a>
+                <a href="https://github.com/Deratheone/statuswindow/issues" target="_blank" rel="noopener noreferrer">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button variant="outline" size="sm" className="border-blue-400 text-blue-300 hover:bg-blue-900/20">
+                      🐛 Report Issues
+                    </Button>
+                  </motion.div>
+                </a>
+                <a href="https://github.com/Deratheone/statuswindow" target="_blank" rel="noopener noreferrer">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-green-400 text-green-300 hover:bg-green-900/20"
+                    >
+                      🤝 Contribute
+                    </Button>
+                  </motion.div>
+                </a>
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-green-400">✅</span>
+                <span className="text-gray-400">Completed</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-400">🔄</span>
+                <span className="text-gray-400">In Progress</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-blue-400">📋</span>
+                <span className="text-gray-400">Next Up</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-purple-400">🎯</span>
+                <span className="text-gray-400">Planned</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-orange-400">📊</span>
+                <span className="text-gray-400">Research Phase</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-cyan-400">🚀</span>
+                <span className="text-gray-400">Future Vision</span>
               </div>
             </div>
           </motion.div>
