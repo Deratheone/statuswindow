@@ -225,8 +225,8 @@ export default function LandingPage() {
             }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            Transform your self-improvement journey into an epic adventure with StatusWindow, your personal RPG-inspired
-            progress tracker.
+            Transform your self-improvement journey into an epic adventure with StatusWindow, your personal
+            manga-inspired progress tracker.
           </motion.p>
 
           <motion.div
@@ -353,7 +353,7 @@ export default function LandingPage() {
                 animate={{ x: [-100, 100] }}
                 transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
               />
-              Character Status
+              Status Window
             </motion.div>
 
             <div className="flex items-center gap-3 sm:gap-4 mb-4 relative z-10">
@@ -559,8 +559,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Rest of the sections remain the same but with enhanced animations... */}
-      {/* I'll continue with the other sections if you want them enhanced too */}
       {/* Features Section */}
       <section className="container mx-auto px-3 py-12 sm:px-4 sm:py-20">
         <motion.h2
@@ -588,9 +586,10 @@ export default function LandingPage() {
             >
               <Dumbbell className="h-10 w-10 text-red-400 mb-4" />
             </motion.div>
-            <h3 className="text-xl font-bold mb-2">Character Development</h3>
+            <h3 className="text-xl font-bold mb-2">Status Window Progression</h3>
             <p className="text-gray-300">
-              Create your character, track your stats, and watch yourself level up as you complete real-life activities.
+              Track your real-life activities and watch your stats grow like a manhwa protagonist awakening their
+              abilities.
             </p>
           </motion.div>
           <motion.div
@@ -610,7 +609,7 @@ export default function LandingPage() {
             </motion.div>
             <h3 className="text-xl font-bold mb-2">Quest System</h3>
             <p className="text-gray-300">
-              Take on weekly challenges tailored to your goals and earn rewards for completing them.
+              Complete daily challenges and missions that align with your personal growth goals.
             </p>
           </motion.div>
           <motion.div
@@ -630,7 +629,7 @@ export default function LandingPage() {
             </motion.div>
             <h3 className="text-xl font-bold mb-2">Progress Analytics</h3>
             <p className="text-gray-300">
-              Track your growth over time with beautiful visualizations and detailed statistics.
+              Visualize your growth journey with detailed charts and statistics like a status window interface.
             </p>
           </motion.div>
         </div>
@@ -664,8 +663,8 @@ export default function LandingPage() {
             >
               <span className="text-2xl">1</span>
             </motion.div>
-            <h3 className="text-xl font-bold mb-2">Create Character</h3>
-            <p className="text-gray-300">Answer a few questions to establish your starting stats.</p>
+            <h3 className="text-xl font-bold mb-2">Awaken Your Status Window</h3>
+            <p className="text-gray-300">Answer questions to establish your starting abilities and traits.</p>
           </motion.div>
           <motion.div
             className="text-center"
@@ -684,7 +683,7 @@ export default function LandingPage() {
               <span className="text-2xl">2</span>
             </motion.div>
             <h3 className="text-xl font-bold mb-2">Log Activities</h3>
-            <p className="text-gray-300">Record your daily activities to gain XP and improve stats.</p>
+            <p className="text-gray-300">Record your daily activities to gain experience and improve your abilities.</p>
           </motion.div>
           <motion.div
             className="text-center"
@@ -703,7 +702,7 @@ export default function LandingPage() {
               <span className="text-2xl">3</span>
             </motion.div>
             <h3 className="text-xl font-bold mb-2">Complete Quests</h3>
-            <p className="text-gray-300">Take on challenges to earn bonus rewards and level up faster.</p>
+            <p className="text-gray-300">Take on challenges to earn bonus rewards and accelerate your growth.</p>
           </motion.div>
           <motion.div
             className="text-center"
@@ -722,7 +721,7 @@ export default function LandingPage() {
               <span className="text-2xl">4</span>
             </motion.div>
             <h3 className="text-xl font-bold mb-2">Track Progress</h3>
-            <p className="text-gray-300">Watch your character grow and evolve as you improve in real life.</p>
+            <p className="text-gray-300">Watch your abilities evolve as you improve yourself in real life.</p>
           </motion.div>
         </div>
       </section>
@@ -745,7 +744,7 @@ export default function LandingPage() {
             whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            <h3 className="text-2xl font-bold mb-6 text-center">Transform Your Life Into an Epic Adventure</h3>
+            <h3 className="text-2xl font-bold mb-6 text-center">Experience Your Own Manga-Style Status Window</h3>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div>
@@ -753,23 +752,23 @@ export default function LandingPage() {
                 <ul className="space-y-3 text-gray-300">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Gamify your self-improvement journey with RPG-style progression</span>
+                    <span>Experience your own blue status window like manhwa protagonists</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Track real-life activities and watch your character grow</span>
+                    <span>Track real-life activities and watch your abilities grow</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Complete quests that align with your personal goals</span>
+                    <span>Complete quests that align with your personal development goals</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Visualize your progress with beautiful charts and statistics</span>
+                    <span>Visualize your progress with manga-inspired interface design</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Stay motivated with achievements and skill unlocks</span>
+                    <span>Unlock skills and abilities as you level up in real life</span>
                   </li>
                 </ul>
               </div>
@@ -785,7 +784,7 @@ export default function LandingPage() {
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">👥</span>
+                    <span className="text-blue-400 mt-1">👤</span>
                     <span>
                       <strong>Selective Character Import:</strong> Choose specific characters to import from backup
                       files
@@ -798,15 +797,16 @@ export default function LandingPage() {
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">📱</span>
+                    <span className="text-blue-400 mt-1">🎮</span>
                     <span>
-                      <strong>Cross-Device Sync:</strong> Continue your adventure seamlessly across all your devices
+                      <strong>Manhwa-Style Progression:</strong> Level up your abilities as you improve yourself in real
+                      life
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">🎮</span>
+                    <span className="text-blue-400 mt-1">📱</span>
                     <span>
-                      <strong>Multiple Characters:</strong> Create and manage multiple characters with different goals
+                      <strong>Mobile Optimized:</strong> Fully responsive design that works seamlessly on all devices
                     </span>
                   </li>
                 </ul>
@@ -841,9 +841,9 @@ export default function LandingPage() {
                   <p>Seamlessly transfer your adventure to any device:</p>
                   <ul className="space-y-2 ml-4">
                     <li>• Import backup files with full data validation</li>
-                    <li>• Select specific characters to import</li>
                     <li>• Preview backup contents before importing</li>
                     <li>• Automatic conflict resolution and error handling</li>
+                    <li>• Restore your complete progress and achievements</li>
                   </ul>
                 </div>
               </div>
@@ -879,7 +879,7 @@ export default function LandingPage() {
                 <h5 className="font-semibold text-green-400 mb-2">💰 Completely Free</h5>
                 <p className="text-sm text-gray-300">
                   StatusWindow will always remain free to use. No hidden costs, no premium tiers - just pure
-                  self-improvement gaming.
+                  self-improvement focused on your personal journey.
                 </p>
               </div>
 
@@ -894,281 +894,13 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div
-            className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-8 mb-8"
-            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-cyan-400">🗺️ Development Roadmap</h3>
-
-            <div className="space-y-8">
-              {/* Current Quarter */}
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
-                  <h4 className="text-xl font-semibold text-green-400">Q1 2025 - Current Focus</h4>
-                  <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">In Progress</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6 ml-7">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✅</span>
-                      <span className="text-sm text-gray-300">Data Export/Import System</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✅</span>
-                      <span className="text-sm text-gray-300">Password Recovery System</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✅</span>
-                      <span className="text-sm text-gray-300">Selective Character Import</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-yellow-400">🔄</span>
-                      <span className="text-sm text-gray-300">Enhanced Mobile Experience</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-yellow-400">🔄</span>
-                      <span className="text-sm text-gray-300">Achievement System Expansion</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-yellow-400">🔄</span>
-                      <span className="text-sm text-gray-300">Performance Optimizations</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-400">📋</span>
-                      <span className="text-sm text-gray-300">Dark/Light Mode Toggle</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-400">📋</span>
-                      <span className="text-sm text-gray-300">Sound Effects Integration</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Next Quarter */}
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                  <h4 className="text-xl font-semibold text-blue-400">Q2 2025 - Social & Collaboration</h4>
-                  <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">Planned</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6 ml-7">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Friend System & Social Features</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Leaderboards & Competitions</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Guild/Party System</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Shared Quests & Challenges</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Activity Sharing & Inspiration</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Mentor/Mentee Connections</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Community Challenges</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400">🎯</span>
-                      <span className="text-sm text-gray-300">Progress Celebrations</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Q3 */}
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-                  <h4 className="text-xl font-semibold text-purple-400">Q3 2025 - Advanced Analytics</h4>
-                  <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full">Planned</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6 ml-7">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Advanced Progress Analytics</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Habit Tracking & Insights</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">AI-Powered Recommendations</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Skill Tree Visualization</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Goal Setting & Tracking</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Productivity Metrics</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Weekly/Monthly Reports</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-400">📊</span>
-                      <span className="text-sm text-gray-300">Data Export to External Tools</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Q4 */}
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                  <h4 className="text-xl font-semibold text-yellow-400">Q4 2025 - Platform Expansion</h4>
-                  <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">Future</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6 ml-7">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Mobile App (iOS & Android)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Cloud Sync & Backup</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Wearable Device Integration</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">API for Third-party Integrations</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Offline Mode Support</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Multi-language Support</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Advanced Customization</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-cyan-400">🚀</span>
-                      <span className="text-sm text-gray-300">Enterprise Features</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Community Input Section */}
-            <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg border border-purple-500/30">
-              <h5 className="text-lg font-semibold text-center mb-4 text-yellow-400">🗳️ Community-Driven Development</h5>
-              <p className="text-sm text-gray-300 text-center mb-4">
-                Our roadmap is shaped by community feedback! Join our development process and help prioritize features.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href="https://github.com/Deratheone/statuswindow/discussions"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-purple-400 text-purple-300 hover:bg-purple-900/20"
-                    >
-                      💬 Join Discussions
-                    </Button>
-                  </motion.div>
-                </a>
-                <a href="https://github.com/Deratheone/statuswindow/issues" target="_blank" rel="noopener noreferrer">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button variant="outline" size="sm" className="border-blue-400 text-blue-300 hover:bg-blue-900/20">
-                      🐛 Report Issues
-                    </Button>
-                  </motion.div>
-                </a>
-                <a href="https://github.com/Deratheone/statuswindow" target="_blank" rel="noopener noreferrer">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-green-400 text-green-300 hover:bg-green-900/20"
-                    >
-                      🤝 Contribute
-                    </Button>
-                  </motion.div>
-                </a>
-              </div>
-            </div>
-
-            {/* Legend */}
-            <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="text-green-400">✅</span>
-                <span className="text-gray-400">Completed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-400">🔄</span>
-                <span className="text-gray-400">In Progress</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-blue-400">📋</span>
-                <span className="text-gray-400">Next Up</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-purple-400">🎯</span>
-                <span className="text-gray-400">Planned</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-orange-400">📊</span>
-                <span className="text-gray-400">Research Phase</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-cyan-400">🚀</span>
-                <span className="text-gray-400">Future Vision</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
             className="text-center"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             <p className="text-lg text-gray-300 mb-6">
-              Join our growing community of adventurers who are leveling up their real lives, one quest at a time.
+              Join our growing community of people who are leveling up their real lives with their own status window,
+              one quest at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="https://github.com/Deratheone/statuswindow" target="_blank" rel="noopener noreferrer">
@@ -1212,15 +944,15 @@ export default function LandingPage() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            Ready to Begin Your Adventure?
+            Ready to Awaken Your Status Window?
           </motion.h2>
           <motion.p
             className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            Join thousands of others who are transforming their self-improvement journey into an epic quest for personal
-            growth.
+            Join thousands of others who are experiencing their own manga-style status window and transforming their
+            self-improvement journey.
           </motion.p>
           <Link href="/onboarding">
             <motion.div whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}>
@@ -1228,7 +960,7 @@ export default function LandingPage() {
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white border-none"
               >
-                Create Your Character <ArrowRight className="ml-2 h-5 w-5" />
+                Awaken Your Abilities <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </motion.div>
           </Link>
