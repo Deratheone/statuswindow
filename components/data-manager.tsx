@@ -56,9 +56,21 @@ export function DataManager({ onDataImported }: DataManagerProps) {
     }
   }
 
+  const MAX_BACKUP_SIZE = 10 * 1024 * 1024 // 10MB limit
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
+
+    // Check file size first
+    if (file.size > MAX_BACKUP_SIZE) {
+      toast({
+        title: "File Too Large",
+        description: "Backup file must be smaller than 10MB.",
+        variant: "destructive",
+      })
+      return
+    }
 
     if (file.type !== "application/json" && !file.name.endsWith(".json")) {
       toast({
