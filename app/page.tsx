@@ -50,35 +50,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-white overflow-hidden relative">
       {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {particles}
-
-        {/* Floating orbs */}
-        <motion.div
-          className="absolute top-20 left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-        />
-        <motion.div
-          className="absolute top-40 right-20 w-24 h-24 bg-blue-500/10 rounded-full blur-xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
-        />
-        <motion.div
-          className="absolute bottom-40 left-1/4 w-40 h-40 bg-yellow-500/10 rounded-full blur-xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
-        />
-      </div>
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">{particles}</div>
 
       {/* Mouse follower effect */}
       <motion.div
@@ -573,12 +545,34 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           <motion.div
             className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all"
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
             whileHover={{
               y: -10,
+              rotateX: 5,
+              rotateY: 5,
+              scale: 1.02,
               boxShadow: "0 0 25px rgba(168,85,247,0.5)",
               backgroundColor: "rgba(30, 41, 59, 0.7)",
             }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 10,
+              // Disable 3D effects on mobile for performance
+              ...(typeof window !== "undefined" && window.innerWidth < 768
+                ? {
+                    whileHover: {
+                      y: -5,
+                      scale: 1.01,
+                      boxShadow: "0 0 15px rgba(168,85,247,0.4)",
+                      backgroundColor: "rgba(30, 41, 59, 0.7)",
+                    },
+                  }
+                : {}),
+            }}
           >
             <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
@@ -594,12 +588,34 @@ export default function LandingPage() {
           </motion.div>
           <motion.div
             className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all"
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
             whileHover={{
               y: -10,
+              rotateX: 5,
+              rotateY: 5,
+              scale: 1.02,
               boxShadow: "0 0 25px rgba(168,85,247,0.5)",
               backgroundColor: "rgba(30, 41, 59, 0.7)",
             }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 10,
+              // Disable 3D effects on mobile for performance
+              ...(typeof window !== "undefined" && window.innerWidth < 768
+                ? {
+                    whileHover: {
+                      y: -5,
+                      scale: 1.01,
+                      boxShadow: "0 0 15px rgba(168,85,247,0.4)",
+                      backgroundColor: "rgba(30, 41, 59, 0.7)",
+                    },
+                  }
+                : {}),
+            }}
           >
             <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
@@ -614,12 +630,34 @@ export default function LandingPage() {
           </motion.div>
           <motion.div
             className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all"
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
             whileHover={{
               y: -10,
+              rotateX: 5,
+              rotateY: 5,
+              scale: 1.02,
               boxShadow: "0 0 25px rgba(168,85,247,0.5)",
               backgroundColor: "rgba(30, 41, 59, 0.7)",
             }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 10,
+              // Disable 3D effects on mobile for performance
+              ...(typeof window !== "undefined" && window.innerWidth < 768
+                ? {
+                    whileHover: {
+                      y: -5,
+                      scale: 1.01,
+                      boxShadow: "0 0 15px rgba(168,85,247,0.4)",
+                      backgroundColor: "rgba(30, 41, 59, 0.7)",
+                    },
+                  }
+                : {}),
+            }}
           >
             <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
