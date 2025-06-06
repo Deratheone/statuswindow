@@ -49,10 +49,27 @@ export default function PathTesting() {
   const [currentUser, setCurrentUser] = useState<string | null>(null)
   const [testResults, setTestResults] = useState<{ [key: string]: any }>({})
 
+  const [browserChecks, setBrowserChecks] = useState({
+    favicon: false,
+    localStorage: false,
+    serviceWorker: false,
+    isMobile: false,
+  })
+
   useEffect(() => {
     // Check if user is logged in
-    const user = localStorage.getItem("statusWindowCurrentUser")
-    setCurrentUser(user)
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("statusWindowCurrentUser")
+      setCurrentUser(user)
+
+      // Perform browser-specific checks
+      setBrowserChecks({
+        favicon: !!document.querySelector('link[rel="icon"]'),
+        localStorage: typeof Storage !== "undefined",
+        serviceWorker: "serviceWorker" in navigator,
+        isMobile: window.innerWidth < 768,
+      })
+    }
   }, [])
 
   const testPath = async (pathTest: PathTest) => {
@@ -126,6 +143,8 @@ export default function PathTesting() {
   }
 
   const createTestUser = () => {
+    if (typeof window === "undefined") return
+
     const testUser = {
       username: "testuser",
       password: "testpass",
@@ -151,6 +170,8 @@ export default function PathTesting() {
   }
 
   const clearTestUser = () => {
+    if (typeof window === "undefined") return
+
     localStorage.removeItem("statusWindowCurrentUser")
     const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
     delete users["testuser"]
@@ -295,26 +316,26 @@ export default function PathTesting() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Favicon loaded:</span>
-                    <span className={document.querySelector('link[rel="icon"]') ? "text-green-400" : "text-red-400"}>
-                      {document.querySelector('link[rel="icon"]') ? "✓" : "✗"}
+                    <span className={browserChecks.favicon ? "text-green-400" : "text-red-400"}>
+                      {browserChecks.favicon ? "✓" : "✗"}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Local Storage available:</span>
-                    <span className={typeof Storage !== "undefined" ? "text-green-400" : "text-red-400"}>
-                      {typeof Storage !== "undefined" ? "✓" : "✗"}
+                    <span className={browserChecks.localStorage ? "text-green-400" : "text-red-400"}>
+                      {browserChecks.localStorage ? "✓" : "✗"}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Service Worker support:</span>
-                    <span className={"serviceWorker" in navigator ? "text-green-400" : "text-yellow-400"}>
-                      {"serviceWorker" in navigator ? "✓" : "Not supported"}
+                    <span className={browserChecks.serviceWorker ? "text-green-400" : "text-yellow-400"}>
+                      {browserChecks.serviceWorker ? "✓" : "Not supported"}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Mobile viewport:</span>
-                    <span className={window.innerWidth < 768 ? "text-blue-400" : "text-gray-400"}>
-                      {window.innerWidth < 768 ? "Mobile" : "Desktop"}
+                    <span className={browserChecks.isMobile ? "text-blue-400" : "text-gray-400"}>
+                      {browserChecks.isMobile ? "Mobile" : "Desktop"}
                     </span>
                   </div>
                 </div>
