@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Check, Save, Sparkles } from "lucide-react"
+import { ArrowLeft, Check, Save, Sparkles, AlertTriangle, Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { AvatarUpload } from "@/components/avatar-upload"
 import { motion } from "framer-motion"
 import { logoutUser } from "@/utils/auth"
 import { DataManager } from "@/components/data-manager"
+import { DeleteAccountModal } from "@/components/delete-account-modal"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -56,6 +57,8 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false)
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState("")
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in
@@ -202,6 +205,63 @@ export default function ProfilePage() {
     localStorage.removeItem("statusWindowRememberedUser")
     setShowToast(true)
     setToastMessage("Auto-login cleared successfully")
+  }
+
+  const handleDeleteAccount = (password: string) => {
+    setIsDeleting(true)
+
+    // Verify password
+    if (password !== userData.password) {
+      toast({
+        title: "Error",
+        description: "Incorrect password",
+        variant: "destructive",
+      })
+      setIsDeleting(false)
+      return
+    }
+
+    // Simulate deletion process
+    setTimeout(() => {
+      try {
+        // Get current user
+        const currentUser = localStorage.getItem("statusWindowCurrentUser")
+        if (!currentUser) return
+
+        // Get users data
+        const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+
+        // Delete user
+        delete users[currentUser]
+
+        // Save updated users data
+        localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+
+        // Clear current user
+        localStorage.removeItem("statusWindowCurrentUser")
+        localStorage.removeItem("statusWindowRememberedUser")
+
+        // Show success toast
+        toast({
+          title: "Account Deleted",
+          description: "Your account has been permanently deleted",
+          variant: "default",
+        })
+
+        // Redirect to login page
+        setTimeout(() => {
+          window.location.href = "/login"
+        }, 1500)
+      } catch (error) {
+        console.error("Error deleting account:", error)
+        toast({
+          title: "Error",
+          description: "Failed to delete account. Please try again.",
+          variant: "destructive",
+        })
+        setIsDeleting(false)
+      }
+    }, 1500)
   }
 
   if (loading) {
@@ -395,6 +455,23 @@ export default function ProfilePage() {
                     </motion.div>
                   )}
                 </motion.div>
+                <div className="border-t border-slate-700 pt-6 mt-6">
+                  <h3 className="text-lg font-medium mb-2 flex items-center gap-2 text-red-400">
+                    <AlertTriangle className="h-5 w-5" />
+                    Danger Zone
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-4">
+                    Once you delete your account, there is no going back. Please be certain.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-red-500/30 text-red-400 hover:bg-red-900/20 w-full"
+                    onClick={() => setDeleteModalOpen(true)}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" /> Delete Account
+                  </Button>
+                </div>
               </form>
               <div className="border-t border-slate-700 pt-6 mt-6">
                 <h3 className="text-lg font-medium mb-4">Data Management</h3>
@@ -403,6 +480,13 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </Suspense>
+        {/* Delete Account Modal */}
+        <DeleteAccountModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirmDelete={handleDeleteAccount}
+          isDeleting={isDeleting}
+        />
       </div>
     </div>
   )
