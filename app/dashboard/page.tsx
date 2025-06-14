@@ -94,8 +94,14 @@ export default function DashboardPage() {
     }
 
     // Get user data
+    const crypto = require('crypto');
+    const secretKey = 'your-secret-key'; // Replace with a securely managed key
     const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
     const user = users[currentUser]
+    if (user && user.password) {
+      const decipher = crypto.createDecipher('aes-256-ctr', secretKey);
+      user.password = decipher.update(user.password, 'hex', 'utf8') + decipher.final('utf8');
+    }
 
     if (!user) {
       window.location.href = "/login"

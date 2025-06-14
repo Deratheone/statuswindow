@@ -159,7 +159,11 @@ export default function ProfilePage() {
     user.characterClass = formData.characterClass
 
     if (formData.newPassword) {
-      user.password = formData.newPassword
+      const crypto = require('crypto');
+      const secretKey = 'your-secret-key'; // Replace with a securely managed key
+      const cipher = crypto.createCipher('aes-256-ctr', secretKey);
+      const encryptedPassword = cipher.update(formData.newPassword, 'utf8', 'hex') + cipher.final('hex');
+      user.password = encryptedPassword;
     }
 
     // Save updated user data
