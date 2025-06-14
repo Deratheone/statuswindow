@@ -1,14 +1,16 @@
+import { secureGet, secureRemove } from './secure-storage';
+
 /**
  * Logs out the current user and optionally clears the remembered user
  * @param clearRemembered - Whether to clear the remembered user credentials
  */
 export function logoutUser(clearRemembered = true) {
   // Remove current user
-  localStorage.removeItem("statusWindowCurrentUser")
+  secureRemove("statusWindowCurrentUser")
 
   // Clear remembered user by default
   if (clearRemembered) {
-    localStorage.removeItem("statusWindowRememberedUser")
+    secureRemove("statusWindowRememberedUser")
   }
 }
 
@@ -18,6 +20,7 @@ export function logoutUser(clearRemembered = true) {
  */
 export function isLoggedIn(): boolean {
   if (typeof window === "undefined") return false
+  // Use regular localStorage for this check since we just need to know if it exists
   return !!localStorage.getItem("statusWindowCurrentUser")
 }
 
@@ -27,5 +30,6 @@ export function isLoggedIn(): boolean {
  */
 export function getCurrentUser(): string | null {
   if (typeof window === "undefined") return null
+  // For username, which is less sensitive, we can use regular localStorage
   return localStorage.getItem("statusWindowCurrentUser")
 }

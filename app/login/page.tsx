@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Sparkles, ArrowLeft } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { secureSet, secureGet } from "@/utils/secure-storage"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -81,8 +82,8 @@ export default function LoginPage() {
       return
     }
 
-    // Check if user exists in localStorage
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    // Check if user exists using secure storage
+    const users = secureGet("statusWindowUsers", {})
 
     if (users[username] && users[username].password === password) {
       // Set current user
@@ -90,12 +91,12 @@ export default function LoginPage() {
 
       // Store credentials if remember me is checked
       if (rememberMe) {
-        localStorage.setItem(
+        secureSet(
           "statusWindowRememberedUser",
-          JSON.stringify({
+          {
             username,
             timestamp: Date.now(),
-          }),
+          }
         )
       }
 
@@ -113,7 +114,7 @@ export default function LoginPage() {
       return
     }
 
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const users = secureGet("statusWindowUsers", {})
 
     if (!users[forgotUsername]) {
       setError("Username not found")
@@ -138,7 +139,7 @@ export default function LoginPage() {
       return
     }
 
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const users = secureGet("statusWindowUsers", {})
     const storedAnswer = users[forgotUsername].securityAnswer.toLowerCase().trim()
     const providedAnswer = securityAnswer.toLowerCase().trim()
 
@@ -170,9 +171,9 @@ export default function LoginPage() {
     }
 
     // Update password
-    const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+    const users = secureGet("statusWindowUsers", {})
     users[forgotUsername].password = newPassword
-    localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+    secureSet("statusWindowUsers", users)
 
     // Reset form
     setShowForgotPassword(false)

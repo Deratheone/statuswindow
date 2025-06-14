@@ -16,6 +16,7 @@ import { motion } from "framer-motion"
 import { logoutUser } from "@/utils/auth"
 import { DataManager } from "@/components/data-manager"
 import { DeleteAccountModal } from "@/components/delete-account-modal"
+import { secureSet, secureGet, secureRemove } from "@/utils/secure-storage"
 
 // Avatar options
 const avatarOptions = ["🧙‍♂️", "🧙‍♀️", "🦸‍♂️", "🦸‍♀️", "🧝‍♂️", "🧝‍♀️", "🧚‍♂️", "🧚‍♀️", "👨‍🚀", "👩‍🚀"]
@@ -228,18 +229,18 @@ export default function ProfilePage() {
         const currentUser = localStorage.getItem("statusWindowCurrentUser")
         if (!currentUser) return
 
-        // Get users data
-        const users = JSON.parse(localStorage.getItem("statusWindowUsers") || "{}")
+        // Get users data securely
+        const users = secureGet("statusWindowUsers", {})
 
         // Delete user
         delete users[currentUser]
 
-        // Save updated users data
-        localStorage.setItem("statusWindowUsers", JSON.stringify(users))
+        // Save updated users data securely
+        secureSet("statusWindowUsers", users)
 
         // Clear current user
-        localStorage.removeItem("statusWindowCurrentUser")
-        localStorage.removeItem("statusWindowRememberedUser")
+        secureRemove("statusWindowCurrentUser")
+        secureRemove("statusWindowRememberedUser")
 
         // Show success toast
         toast({
