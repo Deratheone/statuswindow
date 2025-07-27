@@ -247,7 +247,7 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto mobile-button border-purple-500 text-purple-300 hover:bg-purple-900/20 relative overflow-hidden group"
+                  className="w-full sm:w-auto mobile-button border-purple-500 text-purple-300 hover:bg-purple-900/20 relative overflow-hidden group bg-transparent"
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100"
@@ -269,7 +269,7 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto mobile-button border-yellow-500 text-yellow-300 hover:bg-yellow-900/20 relative overflow-hidden group"
+                  className="w-full sm:w-auto mobile-button border-yellow-500 text-yellow-300 hover:bg-yellow-900/20 relative overflow-hidden group bg-transparent"
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100"
@@ -782,7 +782,7 @@ export default function LandingPage() {
             whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            <h3 className="text-2xl font-bold mb-6 text-center">Experience Your Own Manga-Style Status Window</h3>
+            <h3 className="text-2xl font-bold mb-6 text-center">Your Personal Manga-Style Status Window</h3>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div>
@@ -790,23 +790,19 @@ export default function LandingPage() {
                 <ul className="space-y-3 text-gray-300">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Experience your own blue status window like manhwa protagonists</span>
+                    <span>Track real-life activities and watch your stats grow</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Track real-life activities and watch your abilities grow</span>
+                    <span>Complete quests aligned with your personal goals</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Complete quests that align with your personal development goals</span>
+                    <span>Unlock skills and abilities as you level up</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">✓</span>
-                    <span>Visualize your progress with manga-inspired interface design</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-400 mt-1">✓</span>
-                    <span>Unlock skills and abilities as you level up in real life</span>
+                    <span>Manga-inspired interface design</span>
                   </li>
                 </ul>
               </div>
@@ -816,36 +812,19 @@ export default function LandingPage() {
                 <ul className="space-y-3 text-gray-300">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 mt-1">🔄</span>
-                    <span>
-                      <strong>Data Export/Import:</strong> Transfer your progress between devices with complete backup
-                      files
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">👤</span>
-                    <span>
-                      <strong>Selective Character Import:</strong> Choose specific characters to import from backup
-                      files
-                    </span>
+                    <span>Data export/import for device transfers</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 mt-1">🔐</span>
-                    <span>
-                      <strong>Password Recovery:</strong> Secure account recovery using personalized security questions
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">🎮</span>
-                    <span>
-                      <strong>Manhwa-Style Progression:</strong> Level up your abilities as you improve yourself in real
-                      life
-                    </span>
+                    <span>Secure password recovery system</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 mt-1">📱</span>
-                    <span>
-                      <strong>Mobile Optimized:</strong> Fully responsive design that works seamlessly on all devices
-                    </span>
+                    <span>Fully responsive mobile design</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-1">🎮</span>
+                    <span>Real-life progression system</span>
                   </li>
                 </ul>
               </div>
@@ -857,76 +836,24 @@ export default function LandingPage() {
             whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
-            <h3 className="text-2xl font-bold mb-6 text-center text-cyan-400">Data Management & Security</h3>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h4 className="text-xl font-semibold mb-4 text-green-400">📤 Export Your Progress</h4>
-                <div className="space-y-3 text-gray-300 text-sm">
-                  <p>Never lose your progress again! StatusWindow allows you to:</p>
-                  <ul className="space-y-2 ml-4">
-                    <li>• Export complete character data as JSON backup files</li>
-                    <li>• Download timestamped backups for easy organization</li>
-                    <li>• Include all progress, stats, quests, and achievements</li>
-                    <li>• Create automatic backups before major changes</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-xl font-semibold mb-4 text-blue-400">📥 Import & Restore</h4>
-                <div className="space-y-3 text-gray-300 text-sm">
-                  <p>Seamlessly transfer your adventure to any device:</p>
-                  <ul className="space-y-2 ml-4">
-                    <li>• Import backup files with full data validation</li>
-                    <li>• Preview backup contents before importing</li>
-                    <li>• Automatic conflict resolution and error handling</li>
-                    <li>• Restore your complete progress and achievements</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 p-4 bg-slate-700/50 rounded-lg">
-              <h5 className="font-semibold text-yellow-400 mb-2">🔒 Account Security</h5>
-              <p className="text-sm text-gray-300">
-                Forgot your password? No problem! StatusWindow includes a secure password recovery system using
-                personalized security questions that you set during character creation. Your account is protected while
-                remaining easily recoverable.
-              </p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 rounded-lg p-8 mb-8"
-            whileHover={{ boxShadow: "0 0 25px rgba(168,85,247,0.3)" }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-orange-400">Our Commitment</h3>
+            <h3 className="text-2xl font-bold mb-6 text-center text-orange-400">Our Promise</h3>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-slate-700/50 rounded-lg p-4">
-                <h5 className="font-semibold text-blue-400 mb-2">🚧 Under Active Development</h5>
+              <div className="bg-slate-700/50 rounded-lg p-4 text-center">
+                <h5 className="font-semibold text-green-400 mb-2">💰 Always Free</h5>
                 <p className="text-sm text-gray-300">
-                  StatusWindow is continuously evolving with new features, improvements, and optimizations being added
-                  regularly based on user feedback.
+                  No hidden costs or premium tiers. Pure self-improvement focused on your journey.
                 </p>
               </div>
 
-              <div className="bg-slate-700/50 rounded-lg p-4">
-                <h5 className="font-semibold text-green-400 mb-2">💰 Completely Free</h5>
-                <p className="text-sm text-gray-300">
-                  StatusWindow will always remain free to use. No hidden costs, no premium tiers - just pure
-                  self-improvement focused on your personal journey.
-                </p>
+              <div className="bg-slate-700/50 rounded-lg p-4 text-center">
+                <h5 className="font-semibold text-blue-400 mb-2">🚧 Active Development</h5>
+                <p className="text-sm text-gray-300">Continuously evolving with new features based on user feedback.</p>
               </div>
 
-              <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="bg-slate-700/50 rounded-lg p-4 text-center">
                 <h5 className="font-semibold text-yellow-400 mb-2">🔓 Open Source</h5>
-                <p className="text-sm text-gray-300">
-                  Our code is open for everyone to see, contribute to, and learn from. Transparency and community
-                  collaboration drive our development.
-                </p>
+                <p className="text-sm text-gray-300">Transparent development with community collaboration.</p>
               </div>
             </div>
           </motion.div>
@@ -937,13 +864,15 @@ export default function LandingPage() {
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             <p className="text-lg text-gray-300 mb-6">
-              Join our growing community of people who are leveling up their real lives with their own status window,
-              one quest at a time.
+              Join our community of people leveling up their real lives, one quest at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="https://github.com/Deratheone/statuswindow" target="_blank" rel="noopener noreferrer">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button variant="outline" className="border-purple-500 text-purple-300 hover:bg-purple-900/20">
+                  <Button
+                    variant="outline"
+                    className="border-purple-500 text-purple-300 hover:bg-purple-900/20 bg-transparent"
+                  >
                     <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
