@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://statuswindow.vercel.app/" target="_blank">
+  <a href="https://github.com/Deratheone/statuswindow" target="_blank">
     <img src="https://img.shields.io/badge/🚀_Live_Demo-4F46E5?style=for-the-badge&labelColor=1F2937" alt="Live Demo" />
   </a>
   <a href="#getting-started">
